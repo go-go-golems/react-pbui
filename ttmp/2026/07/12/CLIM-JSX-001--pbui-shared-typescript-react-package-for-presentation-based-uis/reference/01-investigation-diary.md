@@ -388,3 +388,113 @@ context.
 - Doc structure follows the skill's writing-style order: summary → problem →
   theory → current state → gaps → architecture → decisions → flows → phases
   → tests → risks → references.
+
+## Step 5: Implementation Phases 0–1 — workspace and @pbui/core
+
+Implementation began. Phase 0 scaffolded a pnpm workspace (TS-source
+monorepo: packages export `src/index.ts` directly, Vite/vitest consume TS
+without a build step, `tsc --noEmit` per package for types). Phase 1
+implemented `@pbui/core` exactly along the design doc's Section 6.2–6.5 API
+sketches and landed with 27 passing vitest cases on the first run (two
+type-only fixes needed afterwards for `tsc --noEmit`).
+
+### Prompt Context
+
+**User prompt (verbatim):** "ok, let's implement this, commit at appropriat
+eintervals, keep a detailed diary as you work, and make a whole set of demos
+/ port over the original examples to this new package layout."
+
+**Assistant interpretation:** Execute the design doc's phased plan: build the
+@pbui packages, keep committing and diarying, and port the prototypes as
+demo apps in the new layout.
+
+**Inferred user intent:** A working monorepo where the design is validated by
+runnable demos, not just prose.
+
+**Commit (code):** 19f80a6 — ":inbox_tray: Import PBUI prototypes, AITR-794
+thesis, and CLIM-JSX-001 ticket docs"
+
+**Commit (code):** 52befca — ":sparkles: @pbui/core: ptype lattice, registry,
+command tables, accept-loop engine"
+
+### What I did
+
+- Scaffolding: `pnpm-workspace.yaml` (packages/*, apps/*), root
+  `package.json`, strict `tsconfig.base.json` (ES2022, bundler resolution,
+  noUncheckedIndexedAccess), `.gitignore`.
+- `packages/core/src/`: `types.ts` (ObjectRef/valueRef/refEquals, Resolver,
+  PresentationRecord, ArgValue, OutputPart algebra S/B/E/P), `ptype.ts`
+  (PTypes lattice with subtypep/latticeLabel, builtin number/string codecs),
+  `registry.ts` (PresentationRegistry with byRef/byType/at smallest-wins),
+  `command.ts` (CommandTable, ArgSpec with
+  options/default/distinct/where/validate, match with ambiguity,
+  completions), `transcript.ts` (capped, subscribable), `engine.ts`
+  (PbuiEngine: accept FSM, coercions, gestures, menus, describe, typed
+  input + command line, promise facade), `docline.ts` (pointerDoc/modeLabel
+  as pure pulls), `index.ts`.
+- `core.test.ts`: 27 cases covering lattice, registry hit-testing, seeded
+  partial commands, eligible/inert partitioning, distinct rejection, typed
+  parse + default-on-empty, abort at every stage, right-click-aborts, menus
+  (object/global/…-marker), coercions, command line
+  (prefix/ambiguity/positional/completions), adhoc promise accept, doc-line
+  derivations, transcript capping.
+
+### Why
+
+- Engine as one class (rather than the doc's separate input-context.ts)
+  keeps FSM + echo + menus coherent; docline/menu derivations stayed pure
+  functions per D8.
+
+### What worked
+
+- All 27 tests green on first execution; the design doc's API sketches
+  translated almost 1:1 into code.
+
+### What didn't work
+
+- `pnpm install` failed twice before succeeding:
+  1. `ERR_PNPM_EROFS ... /home/manuel/workspaces/2026-05-03/add-upload-sync/
+     remarquee/.../.pnpm-store` — the global pnpm config had a stale
+     absolute `store-dir` pointing into a read-only old workspace.
+  2. Overriding to `~/.pnpm-store` hit `EROFS: read-only file system`
+     because the sandbox keeps `$HOME` read-only.
+  Fix: repo-local `.npmrc` with `store-dir=.pnpm-store` (gitignored).
+- `tsc --noEmit` flagged two test commands whose arrow bodies returned
+  `Array.push`'s number where `void` was declared; wrapped in braces.
+
+### What I learned
+
+- The `run: (args, api) => world.log.push(...)` shorthand is a recurring
+  strict-TS trap for command bodies returning non-void; worth a note in
+  package docs.
+
+### What was tricky to build
+
+- Coercion-aware eligibility: `eligible()` must apply coercions, `where`,
+  and `distinct` *before* the click, so the marching-ants highlighting is
+  honest — the corpus checks some of these only at supply time, which lets
+  users click things that then get rejected. Centralizing all three in
+  `coerceFor`+`eligible` fixed that asymmetry.
+- Menu-valued arguments need the *last pointer position* at advance time;
+  `notePointer` deliberately mutates without notifying to avoid re-render
+  storms on mousemove.
+
+### What warrants a second pair of eyes
+
+- `PbuiEngine.startCommand` aborts any pending context silently
+  (`abort(true)`); verify that matches expectations when a menu-launched
+  command interrupts an accept.
+- `submitCommandLine`'s longest-prefix loop tries progressively shorter
+  word prefixes; ambiguity is only reported when the *full* text is
+  ambiguous — check the UX feels right in demos.
+
+### What should be done in the future
+
+- Invocation records (pending/executing/completed) are stubbed via direct
+  execution; add them when a demo needs presentable command state.
+
+### Code review instructions
+
+- Start at `packages/core/src/engine.ts` (FSM) and `core.test.ts` (behavior
+  spec). Validate: `pnpm --filter @pbui/core test && pnpm --filter
+  @pbui/core typecheck`.

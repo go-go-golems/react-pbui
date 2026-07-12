@@ -1,0 +1,281 @@
+/* @pbui/theme-genera — the shared monochrome Genera/Dynamic-Windows look.
+ *
+ * Tokens first; chrome stays monochrome, accent colors are text-only
+ * (repl-ide.jsx:7-9 / presentation-metrics(2).jsx:1426-1431). */
+
+:root {
+  --pbui-ink: #000;
+  --pbui-paper: #fff;
+  --pbui-desk: #d9d9d9;
+  --pbui-teal: #00655f;
+  --pbui-coral: #a03623;
+  --pbui-gold: #7a5d00;
+  --pbui-font:
+    "Lucida Console", "IBM Plex Mono", Menlo, Consolas, monospace;
+  --pbui-font-size: 12px;
+}
+
+.pbui-root {
+  background: var(--pbui-paper);
+  color: var(--pbui-ink);
+  font-family: var(--pbui-font);
+  font-size: var(--pbui-font-size);
+  -webkit-font-smoothing: none;
+  user-select: none;
+}
+
+/* ------------------------- presentation states --------------------------- */
+
+.pbui-pres {
+  outline: 2px solid transparent;
+  outline-offset: 0px;
+  cursor: default;
+}
+
+.pbui-hover {
+  outline-color: var(--pbui-ink);
+}
+
+.pbui-related {
+  outline: 2px dotted var(--pbui-ink);
+}
+
+@keyframes pbui-ants {
+  to {
+    outline-offset: 2px;
+    outline-color: var(--pbui-ink);
+  }
+}
+
+.pbui-eligible {
+  outline: 2px dashed var(--pbui-ink);
+  animation: pbui-ants 0.6s steps(2, jump-none) infinite alternate;
+}
+
+.pbui-inert {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.pbui-svg-hover-ring {
+  stroke: var(--pbui-ink);
+  stroke-width: 2;
+}
+
+.pbui-svg-eligible-ring {
+  stroke: var(--pbui-ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+}
+
+/* --------------------------------- menus --------------------------------- */
+
+.pbui-menu {
+  position: fixed;
+  z-index: 1000;
+  min-width: 200px;
+  max-width: 320px;
+  background: var(--pbui-paper);
+  border: 2px solid var(--pbui-ink);
+  box-shadow: 4px 4px 0 var(--pbui-ink);
+  padding-bottom: 2px;
+}
+
+.pbui-menu-title {
+  background: var(--pbui-ink);
+  color: var(--pbui-paper);
+  padding: 2px 8px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pbui-menu-item {
+  padding: 2px 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: default;
+}
+
+.pbui-menu-item:hover {
+  background: var(--pbui-ink);
+  color: var(--pbui-paper);
+}
+
+.pbui-menu-disabled {
+  opacity: 0.45;
+}
+
+.pbui-menu-sep {
+  border-top: 1px solid var(--pbui-ink);
+  margin: 2px 0;
+}
+
+.pbui-menu-abort {
+  font-style: italic;
+}
+
+/* --------------------------- doc bar / status ----------------------------- */
+
+.pbui-docbar {
+  background: var(--pbui-ink);
+  color: var(--pbui-paper);
+  padding: 2px 8px;
+  display: flex;
+  gap: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.pbui-docbar-text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: bold;
+}
+
+.pbui-status {
+  display: flex;
+  gap: 12px;
+  padding: 2px 8px;
+  border-top: 1px solid var(--pbui-ink);
+  background: var(--pbui-paper);
+}
+
+.pbui-status-mode {
+  font-weight: bold;
+}
+
+.pbui-status-host {
+  margin-left: auto;
+}
+
+/* ---------------------------------- pane ---------------------------------- */
+
+.pbui-pane {
+  border: 2px solid var(--pbui-ink);
+  background: var(--pbui-paper);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.pbui-pane-title {
+  border-bottom: 1px solid var(--pbui-ink);
+  padding: 1px 6px;
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.pbui-pane-title-text {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.pbui-pane-subtitle {
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.pbui-pane-extra {
+  margin-left: auto;
+}
+
+.pbui-pane-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 4px 6px;
+}
+
+/* -------------------------------- listener -------------------------------- */
+
+.pbui-listener {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--pbui-paper);
+}
+
+.pbui-listener-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 4px 6px;
+  cursor: text;
+}
+
+.pbui-line {
+  white-space: pre-wrap;
+  line-height: 1.45;
+}
+
+.pbui-line-echo {
+  font-weight: bold;
+}
+
+.pbui-line-err,
+.pbui-line-errpart {
+  font-style: italic;
+}
+
+.pbui-line-err::before {
+  content: ">>Error: ";
+  font-weight: bold;
+}
+
+.pbui-prompt-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+}
+
+.pbui-prompt-label {
+  font-weight: bold;
+  white-space: pre;
+}
+
+.pbui-prompt-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  caret-shape: block;
+}
+
+.pbui-prompt-hint {
+  font-style: italic;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+/* ------------------------------- scrollbars ------------------------------- */
+
+.pbui-root ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.pbui-root ::-webkit-scrollbar-track {
+  background: var(--pbui-paper);
+  border-left: 1px solid var(--pbui-ink);
+}
+
+.pbui-root ::-webkit-scrollbar-thumb {
+  background: var(--pbui-ink);
+}
+
+/* ---------------------------- reduced motion ------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .pbui-eligible {
+    animation: none;
+  }
+}

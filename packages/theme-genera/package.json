@@ -1,0 +1,8 @@
+{
+  "name": "@pbui/theme-genera",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    "./genera.css": "./src/genera.css"
+  }
+}
