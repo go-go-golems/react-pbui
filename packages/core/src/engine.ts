@@ -82,6 +82,10 @@ export class PbuiEngine<W = unknown> {
   readonly resolver: Resolver;
   readonly idleDoc: string;
 
+  /** bound resolver passthrough handed to spec callbacks (ResolveFn) */
+  readonly resolveFn = (ref: ObjectRef): unknown | undefined =>
+    this.resolver.resolve(ref);
+
   private coercions: Coercion[] = [];
   private listeners = new Set<() => void>();
   private state: EngineState = {
@@ -127,6 +131,12 @@ export class PbuiEngine<W = unknown> {
     this.transcript.err(...parts);
   }
 
+  /** standardized command failure (stale arguments etc.): prints the error;
+   * the invocation log (CLIM-JSX-004 §7) also records it once it exists */
+  failInvocation(cmdName: string, ...reason: PartLike[]): void {
+    this.transcript.err(...reason, ` ${cmdName} aborted.`);
+  }
+
   /* ------------------------------- coercions ------------------------------- */
 
   defineCoercion(c: Coercion): void {
@@ -158,7 +168,7 @@ export class PbuiEngine<W = unknown> {
     const rec = pres as PresentationRecord;
     const v = this.coerceFor(acc.spec, rec);
     if (!v) return false;
-    if (acc.spec.where && !acc.spec.where(rec, acc.values, this.world))
+    if (acc.spec.where && !acc.spec.where(rec, acc.values, this.world, this.resolveFn))
       return false;
     if (acc.spec.distinct) {
       for (const prev of Object.values(acc.values))
@@ -233,7 +243,7 @@ export class PbuiEngine<W = unknown> {
     if (!acc) return;
     const v = this.coerceFor(acc.spec, pres);
     if (!v) return; // ineligible click — coached via the doc line, not errors
-    if (acc.spec.where && !acc.spec.where(pres, acc.values, this.world)) return;
+    if (acc.spec.where && !acc.spec.where(pres, acc.values, this.world, this.resolveFn)) return;
     this.supplyValue(v);
   }
 
@@ -250,7 +260,7 @@ export class PbuiEngine<W = unknown> {
       }
     }
     if (acc.spec.validate) {
-      const r = acc.spec.validate(v, acc.values, this.world);
+      const r = acc.spec.validate(v, acc.values, this.world, this.resolveFn);
       if (r !== true) {
         this.transcript.err(r);
         return;
@@ -282,16 +292,17 @@ export class PbuiEngine<W = unknown> {
 
   private async execute(cmd: CommandSpec<W>, values: ArgValues): Promise<void> {
     try {
-      await cmd.run(values, this.makeApi());
+      await cmd.run(values, this.makeApi(cmd));
     } catch (e) {
       this.transcript.err(`Error in ${cmd.name}: ${e instanceof Error ? e.message : String(e)}`);
     }
   }
 
-  private makeApi(): CommandApi<W> {
+  private makeApi(cmd?: CommandSpec<W>): CommandApi<W> {
     return {
       print: (...parts) => this.print(...parts),
       printErr: (...parts) => this.printErr(...parts),
+      fail: (...parts) => this.failInvocation(cmd?.name ?? "Command", ...parts),
       world: this.world,
       resolve: (v) => this.resolver.resolve(v.ref),
       accept: (spec) => this.acceptAdhoc(spec),
@@ -326,7 +337,7 @@ export class PbuiEngine<W = unknown> {
     if (acc) {
       const trimmed = text.trim();
       if (!trimmed) {
-        const dflt = acc.spec.default?.(acc.values, this.world);
+        const dflt = acc.spec.default?.(acc.values, this.world, this.resolveFn);
         if (dflt) {
           this.supplyValue(dflt);
           return true;
@@ -384,7 +395,7 @@ export class PbuiEngine<W = unknown> {
             }
           }
           if (spec.validate) {
-            const ok = spec.validate(v, values, this.world);
+            const ok = spec.validate(v, values, this.world, this.resolveFn);
             if (ok !== true) {
               this.transcript.err(ok);
               return true;
@@ -511,8 +522,8 @@ export class PbuiEngine<W = unknown> {
     const first = cmd.args![0]!;
     const v = this.coerceFor(first, pres);
     if (!v) return false;
-    if (first.where && !first.where(pres, {}, this.world)) return false;
-    if (cmd.appliesTo && !cmd.appliesTo(pres, this.world)) return false;
+    if (first.where && !first.where(pres, {}, this.world, this.resolveFn)) return false;
+    if (cmd.appliesTo && !cmd.appliesTo(pres, this.world, this.resolveFn)) return false;
     return true;
   }
 
@@ -548,7 +559,7 @@ export class PbuiEngine<W = unknown> {
   }
 
   private openChoiceMenu(spec: ArgSpec, soFar: ArgValues): void {
-    const choices = spec.options?.(soFar, this.world) ?? [];
+    const choices = spec.options?.(soFar, this.world, this.resolveFn) ?? [];
     const { x, y } = this.state.pointer;
     this.setState({
       menu: {
@@ -580,7 +591,7 @@ export class PbuiEngine<W = unknown> {
     const acc = this.state.accept;
     if (!acc)
       return { accepting: false, filled: [], typedInput: false };
-    const dflt = acc.spec.default?.(acc.values, this.world);
+    const dflt = acc.spec.default?.(acc.values, this.world, this.resolveFn);
     const pt = this.ptypes.get(acc.spec.type);
     return {
       accepting: true,

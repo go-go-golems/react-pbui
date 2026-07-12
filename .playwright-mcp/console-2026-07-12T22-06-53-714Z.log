@@ -255,3 +255,564 @@ Visit https://reactjs.org/link/error-boundaries to learn more about error bounda
     at EcommerceDemo (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:139:29)
     at Suspense
     at Launcher (http://localhost:5199/src/main.tsx?t=1783896843024:25:27) @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:518
+[ 4265291ms] [ERROR] Warning: Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.%s  
+    at tr
+    at thead
+    at table
+    at Table (http://localhost:5199/src/demos/ecommerce/views.tsx:100:18)
+    at div
+    at div
+    at div
+    at Pane (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/chrome/src/pane.tsx:18:71)
+    at div
+    at ProductsView (http://localhost:5199/src/demos/ecommerce/views.tsx:555:32)
+    at ActiveView (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:26:23)
+    at div
+    at div
+    at BackOfficeApp (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:66:26)
+    at PbuiProvider (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/react/src/provider.tsx:27:11)
+    at EcommerceDemo (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:139:29)
+    at Suspense
+    at Launcher (http://localhost:5199/src/main.tsx?t=1783896843024:25:27) @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:518
+[ 4617854ms] [ERROR] Warning: Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.%s  
+    at tr
+    at thead
+    at table
+    at Table (http://localhost:5199/src/demos/ecommerce/views.tsx:100:18)
+    at div
+    at div
+    at div
+    at Pane (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/chrome/src/pane.tsx:18:71)
+    at div
+    at ProductsView (http://localhost:5199/src/demos/ecommerce/views.tsx:555:32)
+    at ActiveView (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:26:23)
+    at div
+    at div
+    at BackOfficeApp (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:66:26)
+    at PbuiProvider (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/react/src/provider.tsx:27:11)
+    at EcommerceDemo (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:139:29)
+    at Suspense
+    at Launcher (http://localhost:5199/src/main.tsx?t=1783896843024:25:27) @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:518
+[ 4621241ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:21548
+[ 4876276ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5199/@vite/client:559
+[ 4876279ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4877280ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4878281ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4879283ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4880285ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4881286ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4882287ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4883289ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4884290ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4885291ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4886293ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4887294ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4888296ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4889297ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4890298ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4891299ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4892301ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4893302ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4894303ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4895305ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4896306ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4897307ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4898309ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4899310ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4900311ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4901313ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4902314ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4903315ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4904317ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4905318ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4906319ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4907321ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4908322ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4909323ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4910324ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4911326ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4912327ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4913329ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4914330ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4915331ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4916332ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4917333ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4918335ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4919336ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4920337ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4921339ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4922340ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4923342ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4924343ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4925344ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4926345ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4927347ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4928348ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4929349ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4930350ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4931352ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4932353ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4933354ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4934356ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4935357ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4936358ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4937359ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4938361ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4939362ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4940364ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4941365ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4942366ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4943368ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4944369ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4945370ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4946372ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4947373ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4948375ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4949376ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4950377ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4951378ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4952380ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4953382ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4954383ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4955384ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4956386ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4957387ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4958388ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4959389ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4960391ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4961394ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4962395ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4963397ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4964398ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4965399ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4966402ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4967404ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4968405ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4969406ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4970407ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4971409ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4972410ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4973411ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4974412ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4975414ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4976415ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4977416ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4978418ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4979419ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4980421ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4981422ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4982423ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4983425ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4984426ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4985427ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4986429ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4987430ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4988431ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4989432ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4990434ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4991435ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4992436ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4993437ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4994439ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4995440ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4996441ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4997443ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4998444ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 4999446ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5000447ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5001448ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5002450ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5003451ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5004452ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5005454ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5006455ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5007456ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5008458ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5009459ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5010460ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5011462ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5012463ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5013465ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5014466ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5015468ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5016469ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5017471ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5018473ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5019474ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5020476ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5021477ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5022478ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5023479ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5024482ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5025488ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5026490ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5027491ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5028492ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5029493ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5030495ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5031496ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5032497ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5033498ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5034501ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5035503ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5036504ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5037505ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5038507ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5039508ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5040509ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5041511ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5042512ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5043514ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5044515ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5045517ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5046518ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5047519ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5048520ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5049522ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5050523ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5051524ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5052525ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5053526ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5054527ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5055529ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5056530ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5057531ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5058532ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5059533ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5060535ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5061536ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5062537ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5063539ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5064540ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5065541ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5066542ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5067544ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5068545ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5069546ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5070548ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5071549ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5072550ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5073552ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5074553ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5075554ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5076555ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5077557ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5078558ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5079559ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5080560ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5081561ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5082562ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5083564ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5084565ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5085568ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5086569ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5087570ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5088571ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5089573ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5090574ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5091575ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5092576ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5093577ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5094579ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5095580ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5096581ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5097583ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5098584ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5099585ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5100587ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5101591ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5102601ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5103603ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5104607ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5105609ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5106611ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5107612ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5108613ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5109614ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5110615ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5111616ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5112618ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5113619ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5114620ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5115622ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5116623ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5117624ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5118625ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5119627ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5120628ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5121629ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5122630ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5123631ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5124632ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5125633ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5126635ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5127636ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5128638ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5129639ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5130640ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5131641ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5132642ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5133644ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5134645ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5135647ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5136648ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5137649ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5138650ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5139651ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5140653ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5141654ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5142655ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5143656ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5144658ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5145659ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5146660ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5147661ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5148662ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5149663ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5150664ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5151665ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5152667ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5153668ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5154669ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5155671ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5156672ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5157673ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5158675ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5159676ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5160677ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5161679ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5162680ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5163681ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5164682ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5165683ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5166685ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5167686ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5168687ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5169689ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5170690ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5171691ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5172692ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5173693ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5174695ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5175696ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5176697ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5177699ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5178700ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5179701ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5180703ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5181704ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5182705ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5183706ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5184707ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5185708ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5186710ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5187711ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5188712ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5189713ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5190715ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5190819ms] [ERROR] Warning: Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.%s  
+    at tr
+    at thead
+    at table
+    at Table (http://localhost:5199/src/demos/ecommerce/views.tsx:100:18)
+    at div
+    at div
+    at div
+    at Pane (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/chrome/src/pane.tsx:18:71)
+    at div
+    at ProductsView (http://localhost:5199/src/demos/ecommerce/views.tsx:555:32)
+    at ActiveView (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:26:23)
+    at div
+    at div
+    at BackOfficeApp (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:66:26)
+    at PbuiProvider (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/react/src/provider.tsx:27:11)
+    at EcommerceDemo (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:139:29)
+    at Suspense
+    at Launcher (http://localhost:5199/src/main.tsx?t=1783896843024:25:27) @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:518
+[ 5191716ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5192718ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5193570ms] [ERROR] Warning: Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.%s  
+    at tr
+    at thead
+    at table
+    at Table (http://localhost:5199/src/demos/ecommerce/views.tsx:100:18)
+    at div
+    at div
+    at div
+    at Pane (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/chrome/src/pane.tsx:18:71)
+    at div
+    at ProductsView (http://localhost:5199/src/demos/ecommerce/views.tsx:555:32)
+    at ActiveView (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:26:23)
+    at div
+    at div
+    at BackOfficeApp (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:66:26)
+    at PbuiProvider (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/react/src/provider.tsx:27:11)
+    at EcommerceDemo (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:139:29)
+    at Suspense
+    at Launcher (http://localhost:5199/src/main.tsx?t=1783896843024:25:27) @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:518
+[ 5193719ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5194721ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5194872ms] [ERROR] Warning: Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.%s  
+    at tr
+    at thead
+    at table
+    at Table (http://localhost:5199/src/demos/ecommerce/views.tsx:100:18)
+    at div
+    at div
+    at div
+    at Pane (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/chrome/src/pane.tsx:18:71)
+    at div
+    at ProductsView (http://localhost:5199/src/demos/ecommerce/views.tsx:555:32)
+    at ActiveView (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:26:23)
+    at div
+    at div
+    at BackOfficeApp (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:66:26)
+    at PbuiProvider (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/react/src/provider.tsx:27:11)
+    at EcommerceDemo (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:139:29)
+    at Suspense
+    at Launcher (http://localhost:5199/src/main.tsx?t=1783896843024:25:27) @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:518
+[ 5195722ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5196724ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5197250ms] [ERROR] Warning: Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.%s  
+    at tr
+    at thead
+    at table
+    at Table (http://localhost:5199/src/demos/ecommerce/views.tsx:100:18)
+    at div
+    at div
+    at div
+    at Pane (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/chrome/src/pane.tsx:18:71)
+    at div
+    at ProductsView (http://localhost:5199/src/demos/ecommerce/views.tsx:555:32)
+    at ActiveView (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:26:23)
+    at div
+    at div
+    at BackOfficeApp (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:66:26)
+    at PbuiProvider (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/react/src/provider.tsx:27:11)
+    at EcommerceDemo (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:139:29)
+    at Suspense
+    at Launcher (http://localhost:5199/src/main.tsx?t=1783896843024:25:27) @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:518
+[ 5197725ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5198727ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5199728ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5200729ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5201137ms] [ERROR] Warning: Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.%s  
+    at tr
+    at thead
+    at table
+    at Table (http://localhost:5199/src/demos/ecommerce/views.tsx:100:18)
+    at div
+    at div
+    at div
+    at Pane (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/chrome/src/pane.tsx:18:71)
+    at div
+    at ProductsView (http://localhost:5199/src/demos/ecommerce/views.tsx:555:32)
+    at ActiveView (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:26:23)
+    at div
+    at div
+    at BackOfficeApp (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:66:26)
+    at PbuiProvider (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/react/src/provider.tsx:27:11)
+    at EcommerceDemo (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:139:29)
+    at Suspense
+    at Launcher (http://localhost:5199/src/main.tsx?t=1783896843024:25:27) @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:518
+[ 5201730ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5202731ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5203732ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5204733ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5205735ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5206736ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5207737ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5208738ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5209739ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5210740ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5211741ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5212743ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5213744ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5214745ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5215746ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5216748ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5217749ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5218750ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5219751ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5220753ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5221754ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5222755ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5223756ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5224758ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5225759ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5226760ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5227761ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5228762ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5229763ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5230765ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5231766ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5232767ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5233768ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5234770ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5235771ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5236772ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5237777ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5238779ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5239780ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5240781ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5241783ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5242784ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5243786ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5244788ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5245789ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5246790ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5247791ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5248793ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5249794ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5250797ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5251798ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5252800ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5253802ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5254804ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5255805ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5256806ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5257808ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5258809ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5259811ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5260812ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5261813ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5262815ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5263818ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5264820ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5265824ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5266826ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5267828ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5268829ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5269830ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5270831ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5271832ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5272834ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5273835ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5274837ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5275838ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5276839ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5277841ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5278842ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5279843ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5280845ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5281847ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5282848ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5283850ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5284851ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5285852ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5286853ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5287855ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5288856ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5289857ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5290858ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5291860ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5292861ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5293862ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5294863ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5295864ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5296866ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5297867ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5298869ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5299870ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5300873ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0
+[ 5301875ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost:5199/:0

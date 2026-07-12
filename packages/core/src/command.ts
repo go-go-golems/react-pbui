@@ -13,6 +13,10 @@ export interface Choice {
   ref: ObjectRef;
 }
 
+/** engine-supplied ref resolution, passed to spec callbacks so layered
+ * authoring APIs (the typed builder) can hand user code live objects */
+export type ResolveFn = (ref: ObjectRef) => unknown | undefined;
+
 export interface ArgSpec {
   name: string;
   /** ptype name; "number"/"string" use typed input by default */
@@ -22,20 +26,22 @@ export interface ArgSpec {
   input?: "presentation" | "typed" | "menu";
   prompt?: string;
   /** dependent choices for menu-valued args (design-kit.jsx:253) */
-  options?: (soFar: ArgValues, world: unknown) => Choice[];
+  options?: (soFar: ArgValues, world: unknown, resolve?: ResolveFn) => Choice[];
   /** CLIM-style default, offered as `[default …]` and taken on empty Enter */
-  default?: (soFar: ArgValues, world: unknown) => ArgValue | undefined;
+  default?: (soFar: ArgValues, world: unknown, resolve?: ResolveFn) => ArgValue | undefined;
   /** must differ from every previously collected arg (scheduler:296) */
   distinct?: boolean;
   /** extra predicate on candidate presentations (e.g. port direction) */
-  where?: (pres: PresentationRecord, soFar: ArgValues, world: unknown) => boolean;
+  where?: (pres: PresentationRecord, soFar: ArgValues, world: unknown, resolve?: ResolveFn) => boolean;
   /** validate a supplied value; return an error string to reject */
-  validate?: (v: ArgValue, soFar: ArgValues, world: unknown) => true | string;
+  validate?: (v: ArgValue, soFar: ArgValues, world: unknown, resolve?: ResolveFn) => true | string;
 }
 
 export interface CommandApi<W> {
   print: (...parts: PartLike[]) => void;
   printErr: (...parts: PartLike[]) => void;
+  /** standardized command failure ("<reason> <Command> aborted.") */
+  fail: (...parts: PartLike[]) => void;
   world: W;
   /** resolve a collected ArgValue to the live domain object (undefined = stale) */
   resolve: (v: ArgValue) => unknown | undefined;
@@ -50,7 +56,7 @@ export interface CommandSpec<W = unknown> {
   doc?: string;
   args?: ArgSpec[];
   /** extra applicability beyond first-arg type matching (metrics(2):1043) */
-  appliesTo?: (pres: PresentationRecord, world: W) => boolean;
+  appliesTo?: (pres: PresentationRecord, world: W, resolve?: ResolveFn) => boolean;
   /** ptypes this command is the left-click default for; first match wins */
   isDefaultFor?: string[];
   /** reachable from the background menu / command line only */

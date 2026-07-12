@@ -1,0 +1,7 @@
+[echo] **Command:** Compare Sites
+[echo] [Abort]
+[echo] **Command:** Compare Sites (site-a) {site SITE-ALPHA}
+[err ] SITE-ALPHA was already supplied — pick a distinct SITE.
+[echo] [Abort]
+[echo] **Command:** Set Update Interval
+[echo] [Abort]

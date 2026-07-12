@@ -5,3 +5,6 @@ dist/
 coverage/
 .pnpm-store/
 .npmrc
+.playwright-browsers/
+test-results/
+playwright-report/

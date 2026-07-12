@@ -1,0 +1,9 @@
+[echo] **Command:** Compare Sites (site-a) SITE-ALPHA (site-b) SITE-BETA
+[out ] Compared {site SITE-ALPHA} with **SITE-BETA**.
+[err ] interval must be at least 100
+[echo] **Command:** Set Update Interval (interval) 300
+[out ] Interval set to 300.
+[echo] **Command:** Set Update Interval
+[echo]   interval (a NUMBER) ⇒ {number 650}
+[out ] Interval set to 650.
+[err ] Unknown command: frobnicate

@@ -1,0 +1,3 @@
+[echo] **Command:** Compare Sites (site-a) {site SITE-ALPHA}
+[echo]   site-b (a SITE) ⇒ {site SITE-BETA}
+[out ] Compared {site SITE-ALPHA} with **SITE-BETA**.

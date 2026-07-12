@@ -5,3 +5,5 @@ export * from "./command.js";
 export * from "./transcript.js";
 export * from "./engine.js";
 export * from "./docline.js";
+export * from "./transcript-text.js";
+export * from "./builder.js";
