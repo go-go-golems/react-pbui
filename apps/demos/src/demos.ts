@@ -40,6 +40,13 @@ export const DEMOS: DemoEntry[] = [
     component: lazy(() => import("./demos/metrics/MetricsDemo.js")),
   },
   {
+    slug: "gallery",
+    title: "Gallery (are.na style)",
+    blurb: "image browser with tags, channels, and attribute editing — cards, chips and channels are all presentations",
+    original: "(new app, no original)",
+    component: lazy(() => import("./demos/gallery/GalleryDemo.js")),
+  },
+  {
     slug: "schema",
     title: "Schema Schematic Editor",
     blurb: "schematic capture: place components at accepted LOCATIONs, draw rubber-band wires, probe nodes into wave panes",
