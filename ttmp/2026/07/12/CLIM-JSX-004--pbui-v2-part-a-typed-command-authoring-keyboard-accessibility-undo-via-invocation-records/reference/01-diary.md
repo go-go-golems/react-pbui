@@ -110,3 +110,76 @@ builder, golden transcripts, CI workflow"
 - `packages/core/src/builder.ts` top-to-bottom (~280 lines), then
   `builder.test.ts`. Validate: `pnpm --filter @pbui/core test &&
   pnpm --filter @pbui/core typecheck`.
+
+## Step 2: Phase A3 — invocation records, linear undo, live history
+
+Implemented out of the doc's order (A3 before A2) because the e2e agent
+still owned `apps/demos` — the invocation layer is core/chrome/listener
+only, and it was designed to make **zero transcript text changes** so the
+goldens and the in-flight e2e transcription stayed valid.
+
+### Prompt Context
+
+**User prompt (verbatim):** (see Step 1)
+
+**Commit (code):** 017b51d — ":sparkles: A3: invocation records, linear
+undo, ActivityPane, live command history"
+
+### What I did
+
+- `core/src/invocation.ts`: `CommandInvocation` (clock-free `seq` per
+  decision D5, `echoLineId` linkage) + capped, subscribable
+  `InvocationLog`.
+- Engine: `execute` brackets `cmd.run` with record/complete/fail;
+  `startCommand*` capture their echo line's id; `api.undoable(capture)`
+  and `api.snapshotUndo(store)` collect the inverse;
+  `engine.undoInvocation(id?)` is linear-only with coaching ("Undo is
+  linear — undo X first"); `api.fail` marks the invocation failed.
+- Invocation refs resolve from the engine's own log (`resolveFn` checks
+  `kind === "invocation"` before delegating) — **no app resolver changes
+  needed** for invocation presentations to work.
+- `installUndoCommands(engine)`: global `Undo`, the `invocation` ptype
+  (print/describe), and `Undo Invocation` whose `appliesTo` checks
+  undoability through the new resolve parameter.
+- Listener: echo lines with invocations render as `quiet` invocation
+  presentations — right-click a past command in the transcript to undo
+  it (the "history is made of presentations" move).
+- `chrome/src/activity.tsx`: `<ActivityPane>` with status glyphs.
+- 7 tests: lifecycle + echo linkage, thrown-error failures, non-opt-in
+  commands not undoable, snapshot undo restoring the **identical** state
+  object, explicit-inverse undo, linearity refusal then sequential
+  unwinding, nothing-to-undo.
+
+### Why (design deviation worth knowing)
+
+- The design doc floated an invocation *part* inside every echo line and
+  flagged noise as an open question. Implemented the fallback instead:
+  the transcript record carries no extra text; the listener wraps the
+  whole line as a quiet presentation via `invocations.byEchoLine`. Zero
+  golden churn, and hovering a past command self-documents in the doc
+  line.
+
+### What was tricky to build
+
+- Echo-to-invocation linkage across the accept loop: the echo happens at
+  `startCommand` but execution may happen much later (after arguments).
+  A `pendingEchoLineId` field bridges them; it is consumed exactly once
+  at `execute`.
+- Undo capture with async runs: a per-execution `undoRef` closure passed
+  through `makeApi`, read after `await cmd.run` — avoids any
+  "current invocation" mutable engine state.
+
+### What warrants a second pair of eyes
+
+- Snapshot undo restores the WHOLE store — concurrent tick mutations
+  revert too (documented in the design doc §7.4); live-tick demos should
+  use explicit inverses.
+- Every echo line now sets hover state when moused (doc line shows
+  `#<INVOCATION …>`); verify this reads as self-documenting rather than
+  noisy in real use.
+
+### Code review instructions
+
+- `core/src/invocation.ts` + engine execute/makeApi diff +
+  `invocation.test.ts`; then `listener.tsx` line-wrapping and
+  `chrome/activity.tsx`.
