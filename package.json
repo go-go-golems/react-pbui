@@ -1,0 +1,14 @@
+{
+  "name": "pbui-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Presentation-based UI (CLIM/Genera Dynamic Windows style) packages for TypeScript + React",
+  "scripts": {
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "demos": "pnpm --filter @pbui/demos dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}
