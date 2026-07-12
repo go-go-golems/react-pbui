@@ -20,6 +20,7 @@ import { CommandTable, takesPresentationFirst } from "./command.js";
 import { PTypes } from "./ptype.js";
 import { PresentationRegistry } from "./registry.js";
 import { Transcript } from "./transcript.js";
+import { InvocationLog } from "./invocation.js";
 import type { Resolver } from "./types.js";
 
 /* ------------------------------- state types ------------------------------ */
@@ -82,9 +83,19 @@ export class PbuiEngine<W = unknown> {
   readonly resolver: Resolver;
   readonly idleDoc: string;
 
-  /** bound resolver passthrough handed to spec callbacks (ResolveFn) */
-  readonly resolveFn = (ref: ObjectRef): unknown | undefined =>
-    this.resolver.resolve(ref);
+  /** every executed command, with lifecycle state (CLIM-JSX-004 §7) */
+  readonly invocations = new InvocationLog();
+
+  /** transcript echo line awaiting its invocation (set by startCommand*) */
+  private pendingEchoLineId: string | undefined;
+
+  /** bound resolver passthrough handed to spec callbacks (ResolveFn).
+   * Invocation refs resolve from the engine's own log; everything else
+   * delegates to the app resolver. */
+  readonly resolveFn = (ref: ObjectRef): unknown | undefined => {
+    if ("id" in ref && ref.kind === "invocation") return this.invocations.byId(ref.id);
+    return this.resolver.resolve(ref);
+  };
 
   private coercions: Coercion[] = [];
   private listeners = new Set<() => void>();
@@ -210,7 +221,7 @@ export class PbuiEngine<W = unknown> {
         });
       }
     }
-    this.transcript.echo(...echoParts.map(toPart));
+    this.pendingEchoLineId = this.transcript.echo(...echoParts.map(toPart)).id;
     this.advance(cmd, values);
   }
 
@@ -221,7 +232,7 @@ export class PbuiEngine<W = unknown> {
     const parts: PartLike[] = [B("Command:"), S(" " + cmd.name)];
     for (const [name, v] of Object.entries(values))
       parts.push(S(` (${name}) ${v.label}`));
-    this.transcript.echo(...parts.map(toPart));
+    this.pendingEchoLineId = this.transcript.echo(...parts.map(toPart)).id;
     this.advance(cmd, values);
   }
 
@@ -291,20 +302,47 @@ export class PbuiEngine<W = unknown> {
   }
 
   private async execute(cmd: CommandSpec<W>, values: ArgValues): Promise<void> {
+    const inv = this.invocations.record(cmd.name, values, this.pendingEchoLineId);
+    this.pendingEchoLineId = undefined;
+    const undoRef: { undo?: () => void | Promise<void> } = {};
     try {
-      await cmd.run(values, this.makeApi(cmd));
+      await cmd.run(values, this.makeApi(cmd, inv.id, undoRef));
+      if (this.invocations.byId(inv.id)?.status === "executing")
+        this.invocations.complete(inv.id, undoRef.undo);
     } catch (e) {
-      this.transcript.err(`Error in ${cmd.name}: ${e instanceof Error ? e.message : String(e)}`);
+      const msg = e instanceof Error ? e.message : String(e);
+      this.invocations.fail(inv.id, msg);
+      this.transcript.err(`Error in ${cmd.name}: ${msg}`);
     }
   }
 
-  private makeApi(cmd?: CommandSpec<W>): CommandApi<W> {
+  private makeApi(
+    cmd?: CommandSpec<W>,
+    invocationId?: string,
+    undoRef?: { undo?: () => void | Promise<void> },
+  ): CommandApi<W> {
     return {
       print: (...parts) => this.print(...parts),
       printErr: (...parts) => this.printErr(...parts),
-      fail: (...parts) => this.failInvocation(cmd?.name ?? "Command", ...parts),
+      fail: (...parts) => {
+        this.failInvocation(cmd?.name ?? "Command", ...parts);
+        if (invocationId)
+          this.invocations.fail(
+            invocationId,
+            parts.map((p) => (typeof p === "string" ? p : "s" in p ? p.s : p.label)).join(""),
+          );
+      },
+      undoable: (capture) => {
+        if (undoRef) undoRef.undo = capture();
+      },
+      snapshotUndo: (store) => {
+        if (undoRef) {
+          const prev = store.get();
+          undoRef.undo = () => store.set(prev as never);
+        }
+      },
       world: this.world,
-      resolve: (v) => this.resolver.resolve(v.ref),
+      resolve: (v) => this.resolveFn(v.ref),
       accept: (spec) => this.acceptAdhoc(spec),
       invoke: (name, preset) => {
         const cmd = this.commands.get(name);
@@ -500,7 +538,7 @@ export class PbuiEngine<W = unknown> {
   /* -------------------------------- describe ------------------------------- */
 
   describePres(pres: Pick<PresentationRecord, "type" | "ref" | "label">): void {
-    const obj = this.resolver.resolve(pres.ref);
+    const obj = this.resolveFn(pres.ref);
     if (obj === undefined && !("value" in pres.ref)) {
       this.transcript.err(`${pres.label} no longer exists — presentation was stale.`);
       return;
@@ -578,6 +616,30 @@ export class PbuiEngine<W = unknown> {
     if (this.state.menu) this.setState({ menu: null });
   }
 
+  /* ---------------------------------- undo ---------------------------------- */
+
+  /** Undo the most recent undoable invocation. Linear-only (D4): passing an
+   * id that is not the last undoable is refused with a coaching message. */
+  async undoInvocation(id?: string): Promise<boolean> {
+    const last = this.invocations.lastUndoable();
+    if (!last) {
+      this.transcript.err("Nothing to undo.");
+      return false;
+    }
+    if (id && id !== last.id) {
+      const target = this.invocations.byId(id);
+      this.transcript.err(
+        `Undo is linear — undo ${last.name} first${target ? ` (requested: ${target.name})` : ""}.`,
+      );
+      return false;
+    }
+    const undo = last.undo!;
+    this.invocations.markUndone(last.id);
+    await undo();
+    this.transcript.echo(B("Undid:"), S(` ${last.name}`));
+    return true;
+  }
+
   /* ----------------------------- prompt / status ---------------------------- */
 
   promptInfo(): {
@@ -603,4 +665,48 @@ export class PbuiEngine<W = unknown> {
         (acc.spec.input ?? "presentation") === "typed" || !!pt?.parse,
     };
   }
+}
+
+/* ------------------------------ undo commands ------------------------------ */
+
+/** Register the builtin Undo command, the "invocation" ptype, and the
+ * per-invocation Undo command (used by transcript/activity menus). */
+export function installUndoCommands<W>(engine: PbuiEngine<W>): void {
+  engine.commands.define({
+    name: "Undo",
+    doc: "Undo the most recent undoable command.",
+    global: true,
+    run: async () => {
+      await engine.undoInvocation();
+    },
+  });
+  if (!engine.ptypes.get("invocation")) {
+    engine.ptypes.define<import("./invocation.js").CommandInvocation>({
+      name: "invocation",
+      print: (inv) => `#<INVOCATION ${inv.name} ${inv.status}>`,
+      describe: (inv) => [
+        { t: "bold", s: inv.name },
+        {
+          t: "text",
+          s: ` — ${inv.status}${inv.error ? ` (${inv.error})` : ""}${
+            inv.undo ? ", undoable" : ""
+          }; args: ${Object.values(inv.argValues).map((v) => v.label).join(", ") || "none"}.`,
+        },
+      ],
+    });
+  }
+  engine.commands.define({
+    name: "Undo Invocation",
+    doc: "Undo this command (must be the most recent undoable one).",
+    hidden: false,
+    args: [{ name: "invocation", type: "invocation" }],
+    appliesTo: (pres, _world, resolve) => {
+      const inv = resolve?.(pres.ref) as import("./invocation.js").CommandInvocation | undefined;
+      return !!inv && inv.status === "completed" && !!inv.undo;
+    },
+    run: async (args) => {
+      const ref = args["invocation"]!.ref;
+      if ("id" in ref) await engine.undoInvocation(ref.id);
+    },
+  });
 }

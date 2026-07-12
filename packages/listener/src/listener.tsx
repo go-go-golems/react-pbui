@@ -2,8 +2,8 @@
  * morphs between idle command line, typed-argument input, and
  * "accepting TYPE (point at a highlighted object)" banner. */
 
-import { useEffect, useRef, useState } from "react";
-import { useEngine, useEngineState, useTranscript } from "@pbui/react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { Presentation, useEngine, useEngineState, useTranscript } from "@pbui/react";
 import { PartView } from "./parts.js";
 
 export function Listener(props: {
@@ -15,6 +15,12 @@ export function Listener(props: {
   const engine = useEngine();
   useEngineState();
   const lines = useTranscript();
+  // re-render when invocations change so echo lines become menuable
+  useSyncExternalStore(
+    (fn) => engine.invocations.subscribe(fn),
+    () => engine.invocations.list(),
+    () => engine.invocations.list(),
+  );
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [text, setText] = useState("");
@@ -59,13 +65,33 @@ export function Listener(props: {
   return (
     <div className={`pbui-listener${props.className ? " " + props.className : ""}`} style={props.style}>
       <div className="pbui-listener-scroll" ref={scrollRef} onClick={() => inputRef.current?.focus()}>
-        {lines.map((l) => (
-          <div key={l.id} className={`pbui-line pbui-line-${l.kind}`}>
-            {l.parts.map((p, i) => (
-              <PartView key={i} part={p} />
-            ))}
-          </div>
-        ))}
+        {lines.map((l) => {
+          const inv = engine.invocations.byEchoLine(l.id);
+          const body = l.parts.map((p, i) => <PartView key={i} part={p} />);
+          if (inv) {
+            // command history is made of presentations: right-click a past
+            // command's echo line for Undo Invocation / Describe (quiet:
+            // no hover flash over transcript text)
+            return (
+              <Presentation
+                key={l.id}
+                type="invocation"
+                object={{ kind: "invocation", id: inv.id }}
+                label={inv.name}
+                quiet
+                block
+                className={`pbui-line pbui-line-${l.kind}`}
+              >
+                {body}
+              </Presentation>
+            );
+          }
+          return (
+            <div key={l.id} className={`pbui-line pbui-line-${l.kind}`}>
+              {body}
+            </div>
+          );
+        })}
         <div className="pbui-prompt-line">
           <span className="pbui-prompt-label">{promptLabel}</span>
           <input

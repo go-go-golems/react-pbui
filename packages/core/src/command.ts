@@ -42,6 +42,10 @@ export interface CommandApi<W> {
   printErr: (...parts: PartLike[]) => void;
   /** standardized command failure ("<reason> <Command> aborted.") */
   fail: (...parts: PartLike[]) => void;
+  /** opt this invocation into undo: capture runs now, returns the inverse */
+  undoable: (capture: () => () => void | Promise<void>) => void;
+  /** snapshot-undo sugar for immutable stores: undo restores the pre-run state */
+  snapshotUndo: <S>(store: { get(): S; set(state: S): void }) => void;
   world: W;
   /** resolve a collected ArgValue to the live domain object (undefined = stale) */
   resolve: (v: ArgValue) => unknown | undefined;
