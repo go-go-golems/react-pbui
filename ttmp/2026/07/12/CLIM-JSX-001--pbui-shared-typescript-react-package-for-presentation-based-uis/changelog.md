@@ -39,3 +39,13 @@ Implementation phases 0-4 complete: pnpm workspace; @pbui/core (28 tests), @pbui
 - /home/manuel/code/wesen/2026-07-12--clim-jsx/apps/demos/src/demos/care-examiner/CareExaminerDemo.tsx — Phase 4 proving-ground port
 - /home/manuel/code/wesen/2026-07-12--clim-jsx/packages/core/src/engine.ts — Accept-loop FSM, gestures, menus, coercions
 
+
+## 2026-07-12
+
+Phases 5-6: ported scheduler, presenta-metrics, schema editor demos (3 parallel agents, conflict-free via pre-registered demos.ts + PORTING-NOTES.md); all 5 demos Playwright-verified; screenshots archived; repo README added. Commit 35892c3. One core gap recorded: presentations swallow canvas clicks during LOCATION accepts (worked around with coercions).
+
+### Related Files
+
+- /home/manuel/code/wesen/2026-07-12--clim-jsx/apps/demos/PORTING-NOTES.md — Porting recipe used by all agents
+- /home/manuel/code/wesen/2026-07-12--clim-jsx/apps/demos/src/demos/schema/SchemaDemo.tsx — Heaviest port; PORTING-GAPS comments
+

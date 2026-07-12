@@ -11,6 +11,10 @@ DocType: reference
 Intent: long-term
 Owners: []
 RelatedFiles:
+    - Path: repo://apps/demos/PORTING-NOTES.md
+      Note: Porting recipe from step 8
+    - Path: repo://packages/core/src/engine.ts
+      Note: Accept-loop FSM implemented in step 5
     - Path: repo://sources/presentation-metrics(2).jsx
       Note: Most mature variant; evolution endpoint analyzed in step 2
     - Path: repo://ttmp/2026/07/12/CLIM-JSX-001--pbui-shared-typescript-react-package-for-presentation-based-uis/sources/aitr-794.md
@@ -21,6 +25,7 @@ LastUpdated: 2026-07-12T17:08:59.638621397-04:00
 WhatFor: Record how the CLIM-JSX-001 investigation unfolded, including failures and verification steps.
 WhenToUse: Read before continuing or reviewing the CLIM-JSX-001 work.
 ---
+
 
 
 # Diary
@@ -627,3 +632,72 @@ tutorial, CARE Examiner port"
   suites with `pnpm test && pnpm typecheck`.
 - Screenshot archived at `various/care-examiner-port-screenshot.png` in the
   ticket.
+
+## Step 8: Phases 5–6 — three parallel ports (scheduler, metrics, schema)
+
+With the API proven by care-examiner, the remaining ports were fanned out
+to three parallel agents. To make that safe: the demo registry entries were
+pre-registered in `demos.ts` (lazy imports) so no agent touches shared
+files, and `apps/demos/PORTING-NOTES.md` was written as the porting recipe
+(world-in-Store, ptypes, commands, shell composition, location-accept
+technique, strict-TS traps, "don't patch packages — record PORTING-GAPS").
+
+All three ports landed typecheck-clean and were then browser-verified with
+Playwright in one pass each.
+
+### Prompt Context
+
+**User prompt (verbatim):** (see Step 5)
+
+**Commit (code):** 35892c3 — ":sparkles: port scheduler, presenta-metrics,
+and schema editor demos"
+
+### What I did
+
+- `src/demos/scheduler/SchedulerDemo.tsx`: STS-31 Gantt; verified lattice
+  menu title `MILESTONE ⊂ TASK ⊂ ANY`, Move Task partial command with 18
+  eligible month headers, move narration, and a task ref printed to the
+  transcript remaining clickable/describable.
+- `src/demos/metrics/MetricsDemo.tsx`: 18 gauges × wedge dials, viewport
+  polylines, ports strip; verified the two-click Assign Port (19 eligible
+  gauge presentations — the 18 grid cells plus a plotted viewport lane
+  label, proving multi-presentation-per-object), plot toggle via ordered
+  `isDefaultFor`, unicode hardcopy sparkline from the command line.
+- `src/demos/schema/{SchemaDemo,sim,symbols}`: netlist union-find +
+  single-corner Euler SPICE; verified Run Spice printing all nodes as live
+  presentations, Probe Node from a transcript node ref's menu, and Draw
+  Instance via menu-choice arg (NMOS/PMOS/CAP/RES/PAD/VDD/GND chooser) +
+  snapped LOCATION accept ("Placed R1 (RES 10) at (440,120)."), with the
+  sim correctly invalidated to "unsimulated" after the edit.
+
+### What worked
+
+- Pre-registering demos.ts entries + PORTING-NOTES made three agents fully
+  conflict-free; all three returned typecheck-clean code.
+
+### What didn't work / gaps recorded
+
+- Schema PORTING-GAPS: @pbui presentations stop click propagation, so
+  clicks on presentation bodies during a LOCATION accept can't fall
+  through to the canvas (the original's SPres allowed it). Worked around
+  with pin→location and wire→node coercions. Candidate core feature:
+  a "transparent during non-matching accepts" presentation mode.
+- Cosmetic: schema's "Nodes:" line lists GND/VDD once per device (dupes).
+
+### What warrants a second pair of eyes
+
+- The schema sim's electrical plausibility (agent smoke-tested: pass-gate
+  Vth drop visible at 3.57V peak on N1).
+- Metrics deviations (menubar → background menu; alarm event log dropped)
+  documented in the file header.
+
+### What should be done in the future
+
+- Consider the click-fall-through presentation mode in core (from the
+  schema gap); consider a canvas hit-layer demo (metrics(3)'s 3D scene)
+  and the metrics(2) window manager as a later phase.
+
+### Code review instructions
+
+- `pnpm demos` → walk all five demos; screenshots in ticket `various/`
+  (launcher, care-examiner, scheduler, metrics, schema).

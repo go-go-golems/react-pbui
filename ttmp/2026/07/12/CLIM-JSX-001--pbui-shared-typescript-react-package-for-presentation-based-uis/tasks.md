@@ -9,3 +9,4 @@
 - [x] Write intern-level analysis/design/implementation guide <!-- t:d9qg -->
 - [x] Relate files, changelog, doctor validation <!-- t:6le4 -->
 - [x] Upload bundle to reMarkable <!-- t:xkt5 -->
+- [x] Implement @pbui packages and demo ports (phases 0-6) <!-- t:jvrm -->
