@@ -48,6 +48,11 @@ export interface PresentationRecord {
   label: string;
   paneId?: string;
   parentId?: PresId;
+  /** participation during a foreign input context (CLIM-JSX-005 §5):
+   *  gated (default) — dimmed and swallowed; active — stays interactive,
+   *  left-click may run a duringAccept command without aborting the
+   *  context; fallthrough — gesture-transparent (canvas overlays) */
+  mode?: "gated" | "active" | "fallthrough";
   /** lazily measured screen bounds; null/undefined = not hit-testable */
   bounds?: () => Rect | null;
 }

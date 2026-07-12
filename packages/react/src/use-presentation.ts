@@ -21,6 +21,11 @@ export interface UsePresentationInput {
   /** container presentations: still menuable, but don't flash hover
    * outlines over their contents, and never dim inert (metrics(3) quiet) */
   quiet?: boolean;
+  /** participation during a foreign input context (CLIM-JSX-005 §5):
+   * "gated" (default) dims + swallows; "active" stays interactive and may
+   * run duringAccept commands; "fallthrough" goes gesture-transparent so
+   * clicks reach the canvas beneath */
+  duringAccept?: "gated" | "active" | "fallthrough";
   /** render-only: no registration, no gestures */
   disabled?: boolean;
 }
@@ -63,6 +68,7 @@ export function usePresentation(input: UsePresentationInput): PresentationHandle
   const [, force] = useReducer((n: number) => n + 1, 0);
 
   const { type, ref, label, pane, quiet, disabled } = input;
+  const mode = input.duringAccept ?? "gated";
   const key = refKey(ref);
 
   useEffect(() => {
@@ -72,6 +78,7 @@ export function usePresentation(input: UsePresentationInput): PresentationHandle
       ref,
       label,
       paneId: pane,
+      mode,
       bounds: () => {
         const el = elRef.current;
         if (!el) return null;
@@ -88,7 +95,7 @@ export function usePresentation(input: UsePresentationInput): PresentationHandle
       engine.registry.unregister(id);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [engine, type, key, label, pane, disabled]);
+  }, [engine, type, key, label, pane, mode, disabled]);
 
   const rec = (): PresentationRecord => ({
     id: idRef.current ?? `anon:${type}:${key}`,
@@ -96,6 +103,7 @@ export function usePresentation(input: UsePresentationInput): PresentationHandle
     ref,
     label,
     paneId: pane,
+    mode,
   });
 
   const st = engine.getState();
@@ -103,8 +111,11 @@ export function usePresentation(input: UsePresentationInput): PresentationHandle
   const hovered = !disabled && id != null && st.hover?.id === id;
   const eligible =
     !disabled && engine.eligible({ id: id ?? undefined, type, ref, label });
-  const inert =
-    !disabled && !quiet && !eligible && st.accept != null;
+  const inContext = !disabled && !eligible && st.accept != null;
+  // gated: dim + block; active: fully interactive; fallthrough: invisible
+  // to gestures so events reach whatever is underneath (§5.4)
+  const inert = inContext && !quiet && mode === "gated";
+  const passthru = inContext && mode === "fallthrough";
   const relatedHover =
     !disabled && !hovered && st.hover != null && refKey(st.hover.ref) === key;
 
@@ -149,6 +160,7 @@ export function usePresentation(input: UsePresentationInput): PresentationHandle
     hovered && !quiet ? "pbui-hover" : "",
     eligible ? "pbui-eligible" : "",
     inert ? "pbui-inert" : "",
+    passthru ? "pbui-passthru" : "",
     relatedHover && !quiet ? "pbui-related" : "",
   ]
     .filter(Boolean)

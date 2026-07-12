@@ -104,6 +104,8 @@ export interface BuiltCommand<A extends Record<string, ArgDesc<any>>, W> {
   isDefaultFor?: string[];
   global?: boolean;
   hidden?: boolean;
+  /** see CommandSpec.duringAccept (seed-complete rule applies) */
+  duringAccept?: boolean;
   run: (args: ResolvedArgs<A>, api: CommandApi<W>) => void | Promise<void>;
 }
 
@@ -245,6 +247,7 @@ export class CommandBuilder<W> {
       isDefaultFor: built.isDefaultFor,
       global: built.global,
       hidden: built.hidden,
+      duringAccept: built.duringAccept,
       run: async (values, api) => {
         const r = resolveAll(descs, values, (ref) => api.resolve({ type: "", ref, label: "" }));
         if (!r.ok) {

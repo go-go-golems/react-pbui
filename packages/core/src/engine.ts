@@ -545,8 +545,18 @@ export class PbuiEngine<W = unknown> {
         break;
       case "click": {
         if (this.state.accept) {
-          if (this.eligible(pres)) this.supply(pres);
-          // ineligible: swallow (the doc line explains why)
+          if (this.eligible(pres)) {
+            this.supply(pres);
+            return;
+          }
+          // active presentations may run duringAccept-safe commands
+          // without aborting the pending context (CLIM-JSX-005 §5.2)
+          if (pres.mode === "active") {
+            const cmd = this.defaultCommandFor(pres);
+            if (cmd?.duringAccept) this.executeImmediate(cmd, pres);
+            return;
+          }
+          // gated: swallow (the doc line explains why)
           return;
         }
         this.defaultAction(pres);
@@ -557,6 +567,10 @@ export class PbuiEngine<W = unknown> {
         break;
       case "context": {
         if (this.state.accept) {
+          if (pres.mode === "active") {
+            this.openDuringAcceptMenu(pres, x ?? this.state.pointer.x, y ?? this.state.pointer.y);
+            return;
+          }
           this.abort();
           return;
         }
@@ -607,6 +621,55 @@ export class PbuiEngine<W = unknown> {
       if (cmd && this.commandApplies(cmd, pres)) return cmd;
     }
     return undefined;
+  }
+
+  /** run a seed-complete duringAccept command WITHOUT touching the pending
+   * input context; eligibility recomputes afterwards in case the command's
+   * effects changed where-clauses */
+  private executeImmediate(cmd: CommandSpec<W>, seed: PresentationRecord): void {
+    const values: ArgValues = {};
+    const echoParts: PartLike[] = [B("Command:"), S(" " + cmd.name)];
+    const first = cmd.args?.[0];
+    if (first) {
+      const v = this.coerceFor(first, seed);
+      if (!v) return;
+      values[first.name] = v;
+      echoParts.push(S(` (${first.name}) `), {
+        t: "pres",
+        type: v.type,
+        ref: v.ref,
+        label: v.label,
+      });
+    }
+    if ((cmd.args ?? []).some((a) => !(a.name in values))) return; // not seed-complete
+    this.closeMenu();
+    this.pendingEchoLineId = this.transcript.echo(...echoParts.map(toPart)).id;
+    void this.execute(cmd, values).then(() => {
+      if (this.state.accept) {
+        this.recomputeEligible();
+        this.registry.notifyAllPres();
+      }
+    });
+  }
+
+  /** reduced menu on active presentations mid-accept: duringAccept commands
+   * only (plus the chrome's Abort footer) */
+  private openDuringAcceptMenu(pres: PresentationRecord, x: number, y: number): void {
+    const items: MenuItem[] = this.applicableCommands(pres)
+      .filter((c) => c.duringAccept)
+      .map((cmd) => ({
+        label: cmd.name,
+        doc: cmd.doc,
+        run: () => this.executeImmediate(cmd, pres),
+      }));
+    this.setState({
+      menu: {
+        x,
+        y,
+        title: `${this.ptypes.latticeLabel(pres.type)}  ${pres.label}`,
+        items,
+      },
+    });
   }
 
   /* -------------------------------- describe ------------------------------- */

@@ -9,7 +9,7 @@ export function MouseDocBar(props: { right?: string }) {
   const engine = useEngine();
   useEngineState(); // re-render on engine changes
   return (
-    <div className="pbui-docbar">
+    <div className="pbui-docbar" role="status" aria-live="polite">
       <span className="pbui-docbar-text">{pointerDoc(engine)}</span>
       {props.right && <span className="pbui-docbar-right">{props.right}</span>}
     </div>

@@ -47,6 +47,28 @@ describe("ContextMenuHost", () => {
     expect(document.querySelector(".pbui-menu")).toBeNull();
   });
 
+  it("is a keyboard-operable ARIA menu: roles, arrows, type-ahead, Enter, focus return", () => {
+    const { engine, world, stage } = setup();
+    const invoker = within(stage).getByText("SITE-ALPHA");
+    (invoker as HTMLElement).focus?.();
+    fireEvent.contextMenu(invoker, { clientX: 40, clientY: 40 });
+    const menu = menuEl();
+    expect(menu).toHaveAttribute("role", "menu");
+    const items = menu.querySelectorAll('[role="menuitem"]');
+    expect(items.length).toBeGreaterThan(1);
+    // arrows move the focus highlight
+    fireEvent.keyDown(menu, { key: "ArrowDown" });
+    expect(menu.querySelectorAll(".pbui-menu-focus")).toHaveLength(1);
+    // type-ahead jumps to "Reset Site"
+    fireEvent.keyDown(menu, { key: "r" });
+    const focused = menu.querySelector(".pbui-menu-focus");
+    expect(focused?.textContent).toBe("Reset Site");
+    // Enter activates it and the menu closes
+    fireEvent.keyDown(menu, { key: "Enter" });
+    expect(world.log).toEqual(["reset SITE-ALPHA"]);
+    expect(engine.getState().menu).toBeNull();
+  });
+
   it("the Abort footer aborts a pending accept", () => {
     const { engine } = setup();
     act(() => engine.startCommand("Compare Sites", sitePres("s1", "SITE-ALPHA")));
@@ -59,6 +81,6 @@ describe("ContextMenuHost", () => {
     expect(engine.getState().accept).toBeNull();
     expect(engine.getState().menu).toBeNull();
     expect(document.querySelector(".pbui-menu")).toBeNull();
-    expect(screen.getByText("[Abort]")).toBeInTheDocument();
+    expect(within(document.querySelector(".pbui-listener-scroll") as HTMLElement).getByText("[Abort]")).toBeInTheDocument();
   });
 });

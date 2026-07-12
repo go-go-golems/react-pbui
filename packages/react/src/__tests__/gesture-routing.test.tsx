@@ -30,7 +30,7 @@ describe("gesture routing", () => {
     const listener = document.querySelector(".pbui-listener");
     expect(listener).not.toBeNull();
     expect(
-      within(listener as HTMLElement).getByText("#<SITE SITE-ALPHA>"),
+      within(document.querySelector(".pbui-listener-scroll") as HTMLElement).getByText("#<SITE SITE-ALPHA>"),
     ).toBeInTheDocument();
   });
 
@@ -62,6 +62,6 @@ describe("gesture routing", () => {
     });
     expect(engine.getState().accept).toBeNull();
     expect(document.querySelector(".pbui-menu")).toBeNull();
-    expect(screen.getByText("[Abort]")).toBeInTheDocument();
+    expect(within(document.querySelector(".pbui-listener-scroll") as HTMLElement).getByText("[Abort]")).toBeInTheDocument();
   });
 });

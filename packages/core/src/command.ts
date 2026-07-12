@@ -67,6 +67,10 @@ export interface CommandSpec<W = unknown> {
   global?: boolean;
   /** hide from menus entirely (command line only) */
   hidden?: boolean;
+  /** may run while an input context is pending, without aborting it —
+   * must be seed-complete: at most one argument, supplied by the invoking
+   * presentation (CLIM-JSX-005 D2: one input context at a time) */
+  duringAccept?: boolean;
   run: (args: ArgValues, api: CommandApi<W>) => void | Promise<void>;
 }
 
@@ -77,6 +81,16 @@ export class CommandTable<W = unknown> {
   define(spec: CommandSpec<W>): CommandSpec<W> {
     if (this.byName.has(spec.name))
       throw new Error(`duplicate command "${spec.name}"`);
+    if (spec.duringAccept) {
+      const args = spec.args ?? [];
+      const seedable =
+        args.length === 0 ||
+        (args.length === 1 && (args[0]!.input ?? "presentation") === "presentation");
+      if (!seedable)
+        throw new Error(
+          `duringAccept command "${spec.name}" must be seed-complete: at most one presentation argument (decision D2, one input context at a time)`,
+        );
+    }
     this.list.push(spec);
     this.byName.set(spec.name, spec);
     return spec;

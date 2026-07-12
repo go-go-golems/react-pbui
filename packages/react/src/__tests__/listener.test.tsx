@@ -2,7 +2,7 @@
  * parse-error recovery. */
 
 import { describe, expect, it } from "vitest";
-import { act, render, screen } from "@testing-library/react";
+import { within, act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { makeEngine, TestApp } from "./fixture.js";
 
@@ -63,7 +63,7 @@ describe("Listener", () => {
 
     await user.type(screen.getByLabelText("listener input"), "abc{Enter}");
 
-    expect(screen.getByText("abc is not a valid NUMBER")).toBeInTheDocument();
+    expect(within(document.querySelector(".pbui-listener-scroll") as HTMLElement).getByText("abc is not a valid NUMBER")).toBeInTheDocument();
     expect(world.log).toEqual([]);
     expect(engine.getState().accept).not.toBeNull();
     expect(promptLabel()).toContain("(interval: a NUMBER");

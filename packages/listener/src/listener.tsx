@@ -24,6 +24,11 @@ export function Listener(props: {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [text, setText] = useState("");
+  // Up/Down input history (Genera listener behavior): ring of submitted
+  // lines; Down past the newest restores the unsent draft
+  const history = useRef<string[]>([]);
+  const histIdx = useRef<number | null>(null);
+  const draft = useRef("");
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -41,7 +46,36 @@ export function Listener(props: {
     if (e.key === "Enter") {
       e.preventDefault();
       const consumed = engine.submitTyped(text);
-      if (consumed) setText("");
+      if (consumed) {
+        if (text.trim()) {
+          history.current.push(text);
+          if (history.current.length > 50) history.current.shift();
+        }
+        histIdx.current = null;
+        setText("");
+      }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      const h = history.current;
+      if (!h.length) return;
+      if (histIdx.current === null) {
+        draft.current = text;
+        histIdx.current = h.length - 1;
+      } else if (histIdx.current > 0) {
+        histIdx.current -= 1;
+      }
+      setText(h[histIdx.current]!);
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      const h = history.current;
+      if (histIdx.current === null) return;
+      if (histIdx.current < h.length - 1) {
+        histIdx.current += 1;
+        setText(h[histIdx.current]!);
+      } else {
+        histIdx.current = null;
+        setText(draft.current);
+      }
     } else if (e.key === "Tab") {
       e.preventDefault();
       if (!info.accepting) {
@@ -62,8 +96,21 @@ export function Listener(props: {
     return `${head}${filled}${filled ? " " : ""}${wanted} ⇒ `;
   })();
 
+  const lastLineText = lines.length
+    ? lines[lines.length - 1]!.parts
+        .map((p) => ("s" in p ? p.s : p.label))
+        .join("")
+    : "";
+
   return (
     <div className={`pbui-listener${props.className ? " " + props.className : ""}`} style={props.style}>
+      {/* screen readers hear the newest output only, not the scrollback */}
+      <div
+        aria-live="polite"
+        style={{ position: "absolute", width: 1, height: 1, overflow: "hidden", clipPath: "inset(50%)" }}
+      >
+        {lastLineText}
+      </div>
       <div className="pbui-listener-scroll" ref={scrollRef} onClick={() => inputRef.current?.focus()}>
         {lines.map((l) => {
           const inv = engine.invocations.byEchoLine(l.id);

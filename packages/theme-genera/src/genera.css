@@ -57,6 +57,12 @@
   pointer-events: none;
 }
 
+/* fallthrough presentations during a foreign accept: visually normal but
+ * gesture-transparent — events reach the canvas beneath */
+.pbui-passthru {
+  pointer-events: none;
+}
+
 .pbui-svg-hover-ring {
   stroke: var(--pbui-ink);
   stroke-width: 2;
@@ -98,7 +104,8 @@
   cursor: default;
 }
 
-.pbui-menu-item:hover {
+.pbui-menu-item:hover,
+.pbui-menu-focus {
   background: var(--pbui-ink);
   color: var(--pbui-paper);
 }
@@ -206,6 +213,8 @@
   overflow-y: auto;
   padding: 4px 6px;
   cursor: text;
+  /* transcript text is copyable, overriding the root's user-select: none */
+  user-select: text;
 }
 
 .pbui-line {

@@ -12,6 +12,7 @@ export interface PresentationProps {
   label: string;
   pane?: string;
   quiet?: boolean;
+  duringAccept?: "gated" | "active" | "fallthrough";
   disabled?: boolean;
   block?: boolean;
   className?: string;
@@ -27,6 +28,7 @@ export function Presentation(props: PresentationProps) {
     label: props.label,
     pane: props.pane,
     quiet: props.quiet,
+    duringAccept: props.duringAccept,
     disabled: props.disabled,
   });
   const cls = `${h.className}${props.className ? " " + props.className : ""}`;
@@ -57,6 +59,7 @@ export function SvgPresentation(props: SvgPresentationProps) {
     label: props.label,
     pane: props.pane,
     quiet: props.quiet,
+    duringAccept: props.duringAccept,
     disabled: props.disabled,
   });
   const cls = `${h.className}${props.className ? " " + props.className : ""}`;

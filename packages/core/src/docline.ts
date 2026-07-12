@@ -15,6 +15,11 @@ export function pointerDoc(engine: PbuiEngine<any>): string {
     if (hover) {
       if (engine.eligible(hover))
         return `⟨${accept.spec.name}⟩${accept.cmd ? " of " + accept.cmd.name : ""} — L: use ${hover.label}   Esc: abort`;
+      if (hover.mode === "active") {
+        const dflt = engine.defaultCommandFor(hover);
+        if (dflt?.duringAccept)
+          return `${hover.label} — L: ${dflt.name} (the pending ${accept.cmd?.name ?? "accept"} keeps waiting).`;
+      }
       return `Accepting a ${wanted} — ${hover.label} is not applicable here. [Escape] aborts.`;
     }
     const pt = engine.ptypes.get(accept.spec.type);
