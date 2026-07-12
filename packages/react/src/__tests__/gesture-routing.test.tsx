@@ -21,7 +21,12 @@ describe("gesture routing", () => {
 
   it("middle click prints the describe line into the transcript", () => {
     const { stage } = setup();
-    fireEvent.auxClick(within(stage).getByText("SITE-ALPHA"), { button: 1 });
+    // fireEvent has no auxClick helper in @testing-library/dom's event map;
+    // dispatch the native auxclick MouseEvent (button 1 = middle) instead
+    fireEvent(
+      within(stage).getByText("SITE-ALPHA"),
+      new MouseEvent("auxclick", { bubbles: true, cancelable: true, button: 1 }),
+    );
     const listener = document.querySelector(".pbui-listener");
     expect(listener).not.toBeNull();
     expect(
