@@ -25,4 +25,25 @@ export const DEMOS: DemoEntry[] = [
     original: "care-examiner.jsx",
     component: lazy(() => import("./demos/care-examiner/CareExaminerDemo.js")),
   },
+  {
+    slug: "scheduler",
+    title: "Dynamic Windows Scheduler",
+    blurb: "SVG Gantt with a MILESTONE ⊂ TASK lattice, partial commands, and forever-live task refs in the interactor",
+    original: "dynamic-windows-scheduler.jsx",
+    component: lazy(() => import("./demos/scheduler/SchedulerDemo.js")),
+  },
+  {
+    slug: "metrics",
+    title: "Presenta Metrics",
+    blurb: "telemetry gauges, strip-chart viewport, readout ports assigned by two-click commands",
+    original: "presentation-metrics.jsx",
+    component: lazy(() => import("./demos/metrics/MetricsDemo.js")),
+  },
+  {
+    slug: "schema",
+    title: "Schema Schematic Editor",
+    blurb: "schematic capture: place components at accepted LOCATIONs, draw rubber-band wires, probe nodes into wave panes",
+    original: "schema-schematic-editor.jsx",
+    component: lazy(() => import("./demos/schema/SchemaDemo.js")),
+  },
 ];

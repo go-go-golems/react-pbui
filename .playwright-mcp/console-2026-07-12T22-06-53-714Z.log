@@ -91,3 +91,26 @@ Visit https://reactjs.org/link/error-boundaries to learn more about error bounda
     at performUnitOfWork (http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:19196:20)
     at workLoopSync (http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:19135:13)
 [  607322ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:21548
+[  665760ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5199/src/demos.ts?t=1783894679446:0
+[  665762ms] [ERROR] [hmr] Failed to reload /src/main.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5199/@vite/client:175
+[  694933ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5199/src/demos.ts?t=1783894708638:0
+[  694935ms] [ERROR] [hmr] Failed to reload /src/main.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5199/@vite/client:175
+[ 1049126ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5199/src/demos.ts?t=1783895062827:0
+[ 1049126ms] [ERROR] [hmr] Failed to reload /src/main.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5199/@vite/client:175
+[ 1079881ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5199/src/demos.ts?t=1783895093586:0
+[ 1079881ms] [ERROR] [hmr] Failed to reload /src/main.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5199/@vite/client:175
+[ 1218776ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5199/src/demos.ts?t=1783895232478:0
+[ 1218778ms] [ERROR] [hmr] Failed to reload /src/main.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5199/@vite/client:175
+[ 1236205ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5199/src/demos.ts?t=1783895249907:0
+[ 1236205ms] [ERROR] [hmr] Failed to reload /src/main.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5199/@vite/client:175
+[ 1359216ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:5199/src/demos.ts?t=1783895372920:0
+[ 1359218ms] [ERROR] [hmr] Failed to reload /src/main.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:5199/@vite/client:175
+[ 1359228ms] [ERROR] Warning: You are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it. @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:518
+[ 1359351ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:21548
+[ 1496848ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:21548
+[ 1521764ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:21548
+[ 1524000ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:21548
+[ 1545565ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:21548
+[ 1546691ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:21548
+[ 1548008ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:21548
+[ 1548058ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:21548

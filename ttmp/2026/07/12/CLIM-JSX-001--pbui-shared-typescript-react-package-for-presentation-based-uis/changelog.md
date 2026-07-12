@@ -29,3 +29,13 @@ Completed five parallel analyses (four prototype families + AITR-794 distillatio
 
 Doctor passed after adding topics vocab (pbui, react, typescript, design); uploaded bundle PDF 'CLIM-JSX-001 PBUI shared package design' (design doc + diary, ToC depth 2) to reMarkable at /ai/2026/07/12/CLIM-JSX-001 and verified listing. All 7 tasks complete.
 
+
+## 2026-07-12
+
+Implementation phases 0-4 complete: pnpm workspace; @pbui/core (28 tests), @pbui/react, @pbui/listener, @pbui/chrome, @pbui/theme-genera; demos app with Hello PBUI and CARE Examiner ports, Playwright-verified (found and fixed docline printer crash + positional-arg validation bypass). Commits 52befca, f3a1800, d7360b4.
+
+### Related Files
+
+- /home/manuel/code/wesen/2026-07-12--clim-jsx/apps/demos/src/demos/care-examiner/CareExaminerDemo.tsx — Phase 4 proving-ground port
+- /home/manuel/code/wesen/2026-07-12--clim-jsx/packages/core/src/engine.ts — Accept-loop FSM, gestures, menus, coercions
+

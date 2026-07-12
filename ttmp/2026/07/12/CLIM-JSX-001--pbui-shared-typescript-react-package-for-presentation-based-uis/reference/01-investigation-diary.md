@@ -498,3 +498,132 @@ command tables, accept-loop engine"
 - Start at `packages/core/src/engine.ts` (FSM) and `core.test.ts` (behavior
   spec). Validate: `pnpm --filter @pbui/core test && pnpm --filter
   @pbui/core typecheck`.
+
+## Step 6: Phases 2–3 — React bindings, chrome, listener, theme
+
+With core green, the React layer went quickly: `@pbui/react` (provider with
+global Escape handling, the headless `usePresentation` hook that registers
+in the registry and returns the full gesture-protocol props plus
+hovered/eligible/inert/related flags, `Presentation`/`SvgPresentation`
+sugar, `usePbuiSurface` for root-level background gestures), `@pbui/chrome`
+(ContextMenuHost with post-measure viewport clamping and an Abort footer,
+MouseDocBar/StatusLine rendering core's pull derivations, Pane),
+`@pbui/listener` (transcript with `PartView` mounting real presentations
+for `pres` parts, morphing prompt line, Tab completion), and
+`@pbui/theme-genera` (tokens + state classes + chrome styles + reduced
+motion).
+
+### Prompt Context
+
+**User prompt (verbatim):** (see Step 5)
+
+**Assistant interpretation / intent:** same implementation drive.
+
+**Commit (code):** f3a1800 — ":sparkles: @pbui/react, @pbui/listener,
+@pbui/chrome, @pbui/theme-genera"
+
+### What I did / Why
+
+- Hover uses `onMouseMove` + `stopPropagation` (innermost presentation
+  wins) rather than enter/leave, because React's non-bubbling mouseenter
+  loses parent hover when leaving a nested child — the same reason
+  care-examiner.jsx used mousemove routing.
+- All state classes (`pbui-hover`, `pbui-eligible`, `pbui-inert`,
+  `pbui-related`) are derived in the hook so HTML/SVG/canvas renderings
+  stay consistent.
+
+### What worked
+
+- Everything typechecked on the first full-workspace run.
+
+### What didn't work
+
+- Nothing at this stage (browser bugs surfaced in Step 7).
+
+### What was tricky to build
+
+- `usePresentation` re-subscribes every engine state change by design; fine
+  at demo scale, flagged for benchmarking under bigger registries.
+
+### What warrants a second pair of eyes
+
+- The `props.ref` callback typing (`as any` casts in the sugar components)
+  — React 18 element ref types vs. `Element` are loose here.
+
+### Code review instructions
+
+- `packages/react/src/use-presentation.ts` is the heart; then
+  `chrome/menu.tsx` clamping and `listener/listener.tsx` prompt states.
+
+## Step 7: Phase 4 — demos app, Hello PBUI, CARE Examiner, browser proof
+
+Built the Vite demos app (hash-routed launcher) with a deliberately small
+"Hello PBUI" tutorial demo and the care-examiner port, then drove both with
+Playwright. The browser session did exactly what a proving ground should:
+it found two real core bugs that 27 unit tests had missed, plus a
+StrictMode double-herald.
+
+### Prompt Context
+
+**User prompt (verbatim):** (see Step 5) — plus mid-flight: "Try playwright
+again, you have access now"
+
+**Assistant interpretation:** browser verification is wanted; use the
+Playwright MCP.
+
+**Commit (code):** d7360b4 — ":sparkles: demos app: launcher, Hello PBUI
+tutorial, CARE Examiner port"
+
+### What I did
+
+- `apps/demos`: launcher (`main.tsx`, hash routing + Suspense for lazy
+  ports), `lib/store.ts` (tiny subscribable store), Hello PBUI (ships,
+  Refuel/Compare/Set Speed, herald), CARE Examiner port (16 dithered
+  queue-load site rows, services table, 8×8 operator torus, LOAD-LEVEL
+  legend swatches, network bars, live tick, threshold inverse labels).
+- Playwright verification transcript (all asserted programmatically):
+  hover doc `#<SHIP AURORA fuel=82% speed=8kn> — L: Refuel Ship; M:
+  Describe; R: menu of 3 commands.`; menu titled `SHIP ⊂ ANY AURORA` with
+  `Compare Ships …`; accept context partitioned 5 eligible / 2 inert with
+  AURORA itself excluded by `distinct`; echo grammar exact; typed command
+  line `set update interval 50` → validation error; legend right-click →
+  Set Load Threshold; and the signature CLIM behavior — a SITE printed in
+  the transcript grew marching ants and supplied a later Compare Sites
+  argument (`transcriptEligible: true`).
+
+### What didn't work (bugs found and fixed)
+
+1. **docline crashed custom printers**: `pointerDoc` called
+   `ptypes.print(hover.type, undefined, …)`; the hello demo's strict
+   printer (`s.name`) threw, unmounting the app (React error in
+   MouseDocBar). Fix: docline resolves the object through the Resolver
+   before printing, and `PTypes.print` falls back to the generic
+   `#<TYPE label>` for undefined objects or printer throws. The core test
+   fixture's defensive `s?.name` had masked this — changed to strict.
+2. **Positional command-line args bypassed validate/distinct**: `set
+   update interval 50` executed despite a 100ms minimum. Fix: validate +
+   distinct enforced during positional parsing; new core test (28 total).
+3. **StrictMode double-herald**: boot effect fired twice; fixed with a
+   `heraldRan` ref guard in both demos.
+- Also: two Playwright timeouts caused by Vite HMR remounting elements
+  mid-click (edits landing while the browser was open) — retried after the
+  files settled; and `page.goto` to the same hash URL is a same-document
+  navigation (no reload), which briefly made transcript state look wrong
+  during verification. `page.reload()` settles it.
+
+### What I learned
+
+- Unit-test fixtures that are "defensive" (optional chaining) can mask real
+  API-contract bugs; fixtures should be as strict as real app code.
+
+### What warrants a second pair of eyes
+
+- The care-examiner port trims 20→16 sites and drops the restart-banner
+  presentations; check nothing else from the original matters.
+
+### Code review instructions
+
+- Run `pnpm demos`, open http://localhost:5199, walk both demos; validate
+  suites with `pnpm test && pnpm typecheck`.
+- Screenshot archived at `various/care-examiner-port-screenshot.png` in the
+  ticket.
