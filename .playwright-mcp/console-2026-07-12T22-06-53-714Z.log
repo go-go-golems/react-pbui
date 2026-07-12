@@ -122,3 +122,41 @@ Visit https://reactjs.org/link/error-boundaries to learn more about error bounda
 [ 2791657ms] [ERROR] Warning: You are calling ReactDOMClient.createRoot() on a container that has already been passed to createRoot() before. Instead, call root.render() on the existing root instead if you want to update it. @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:518
 [ 2791792ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:21548
 [ 2867707ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:21548
+[ 2984186ms] [ERROR] Warning: Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.%s  
+    at tr
+    at thead
+    at table
+    at Table (http://localhost:5199/src/demos/ecommerce/views.tsx:100:18)
+    at div
+    at div
+    at div
+    at Pane (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/chrome/src/pane.tsx:18:71)
+    at div
+    at ProductsView (http://localhost:5199/src/demos/ecommerce/views.tsx:555:32)
+    at ActiveView (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:26:23)
+    at div
+    at div
+    at BackOfficeApp (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:66:26)
+    at PbuiProvider (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/react/src/provider.tsx:27:11)
+    at EcommerceDemo (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:139:29)
+    at Suspense
+    at Launcher (http://localhost:5199/src/main.tsx?t=1783896843024:25:27) @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:518
+[ 2986448ms] [ERROR] Warning: Encountered two children with the same key, `%s`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version.%s  
+    at tr
+    at thead
+    at table
+    at Table (http://localhost:5199/src/demos/ecommerce/views.tsx:100:18)
+    at div
+    at div
+    at div
+    at Pane (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/chrome/src/pane.tsx:18:71)
+    at div
+    at ProductsView (http://localhost:5199/src/demos/ecommerce/views.tsx:555:32)
+    at ActiveView (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:26:23)
+    at div
+    at div
+    at BackOfficeApp (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:66:26)
+    at PbuiProvider (http://localhost:5199/@fs/home/manuel/code/wesen/2026-07-12--clim-jsx/packages/react/src/provider.tsx:27:11)
+    at EcommerceDemo (http://localhost:5199/src/demos/ecommerce/EcommerceDemo.tsx?t=1783896843024:139:29)
+    at Suspense
+    at Launcher (http://localhost:5199/src/main.tsx?t=1783896843024:25:27) @ http://localhost:5199/node_modules/.vite/deps/chunk-X7GEHZVV.js?v=bfcd5405:518
