@@ -25,7 +25,9 @@ export function pointerDoc(engine: PbuiEngine<any>): string {
     const dflt = engine.defaultCommandFor(hover);
     const n = engine.applicableCommands(hover).length;
     const left = dflt ? dflt.name : "Describe";
-    return `${engine.ptypes.print(hover.type, undefined, hover.label)} — L: ${left}; M: Describe; R: menu of ${n} command${n === 1 ? "" : "s"}.`;
+    const obj =
+      "value" in hover.ref ? hover.ref.value : engine.resolver.resolve(hover.ref);
+    return `${engine.ptypes.print(hover.type, obj, hover.label)} — L: ${left}; M: Describe; R: menu of ${n} command${n === 1 ? "" : "s"}.`;
   }
   return engine.idleDoc;
 }

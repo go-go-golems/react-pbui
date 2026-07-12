@@ -374,7 +374,23 @@ export class PbuiEngine<W = unknown> {
             this.transcript.err(r.err);
             return true;
           }
-          values[spec.name] = { type: spec.type, ref: r.ref, label: r.label };
+          const v: ArgValue = { type: spec.type, ref: r.ref, label: r.label };
+          if (spec.distinct) {
+            for (const prev of Object.values(values)) {
+              if (refEquals(prev.ref, v.ref)) {
+                this.transcript.err(`${v.label} was already supplied — pick a distinct ${spec.type.toUpperCase()}.`);
+                return true;
+              }
+            }
+          }
+          if (spec.validate) {
+            const ok = spec.validate(v, values, this.world);
+            if (ok !== true) {
+              this.transcript.err(ok);
+              return true;
+            }
+          }
+          values[spec.name] = v;
         }
         this.startCommandWithValues(m.cmd, values);
         return true;

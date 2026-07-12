@@ -90,7 +90,13 @@ export class PTypes<W = unknown> {
 
   print(type: string, obj: unknown, label?: string): string {
     const def = this.byName.get(type);
-    if (def?.print) return def.print(obj);
+    if (def?.print && obj !== undefined) {
+      try {
+        return def.print(obj);
+      } catch {
+        // fall through to the generic form on printer errors
+      }
+    }
     return `#<${type.toUpperCase()}${label ? " " + label : ""}>`;
   }
 }

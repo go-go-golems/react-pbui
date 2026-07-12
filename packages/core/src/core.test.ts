@@ -41,7 +41,9 @@ function makeEngine(world = makeWorld()) {
   defineBuiltinPtypes(ptypes);
   ptypes.define<Site>({
     name: "site",
-    print: (s) => `#<SITE ${s?.name ?? "?"}>`,
+    // deliberately strict: printers in real apps dereference their object,
+    // so docline/describe must never call them with undefined
+    print: (s) => `#<SITE ${s.name}>`,
     parse: (text, w) => {
       const t = text.trim().toUpperCase();
       for (const s of w.sites.values()) {
@@ -337,6 +339,34 @@ describe("command line", () => {
   it("offers completions", () => {
     const { engine } = makeEngine();
     expect(engine.completions("com")).toEqual(["Compare Sites"]);
+  });
+
+  it("enforces validate and distinct on positional args", () => {
+    const { engine, world, commands } = makeEngine();
+    commands.define({
+      name: "Bounded",
+      args: [
+        {
+          name: "n",
+          type: "number",
+          validate: (v) =>
+            "value" in v.ref && (v.ref.value as number) >= 100
+              ? true
+              : "n must be >= 100",
+        },
+      ],
+      run: (args, api) => {
+        api.world.log.push(`bounded ${args["n"]!.label}`);
+      },
+    });
+    engine.submitCommandLine("bounded 50");
+    expect(world.log).toEqual([]);
+    expect(transcriptText(engine).at(-1)).toBe("n must be >= 100");
+    engine.submitCommandLine("bounded 150");
+    expect(world.log).toEqual(["bounded 150"]);
+
+    engine.submitCommandLine("compare sites site-alpha site-alpha");
+    expect(transcriptText(engine).at(-1)).toContain("already supplied");
   });
 });
 
