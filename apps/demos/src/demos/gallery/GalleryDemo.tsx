@@ -497,10 +497,9 @@ function ImageCard({ img, selected }: { img: Image; selected: boolean }) {
     <Presentation type="image" object={imageRef(img)} label={img.title} block
       style={{
         border: selected ? "3px solid var(--pbui-ink)" : "1px solid var(--pbui-ink)",
-        padding: 6,
+        padding: selected ? 4 : 6,
         width: 148,
         background: "var(--pbui-paper)",
-        boxShadow: selected ? "4px 4px 0 var(--pbui-ink)" : undefined,
       }}>
       <Artwork seed={img.seed} palette={img.palette} size={134} />
       <div style={{ fontWeight: "bold", marginTop: 4, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
