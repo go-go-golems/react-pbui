@@ -4,6 +4,7 @@
 
 import { expect, test, type Page } from "@playwright/test";
 import {
+  docBar,
   eligible,
   expectLastLine,
   menuItem,
@@ -101,4 +102,37 @@ test("Adjust Stock validates against negative inventory", async ({ page }) => {
 
   await submit(page, "24");
   await expectLastLine(page, /stock 2 → 26\./);
+});
+
+test("undo restores fulfillment", async ({ page }) => {
+  await openDemo(page, "ecommerce");
+  await openTab(page, "Orders");
+
+  const order = pres(page, "order", "#1012").first();
+  await order.click({ button: "right" });
+  await menuItem(page, "Mark Paid").click();
+  await expectLastLine(page, /#1012 marked paid — \$[\d.]+ captured\./);
+  await order.click({ button: "right" });
+  await menuItem(page, "Fulfill Order").click();
+  await expectLastLine(page, /#1012 fulfilled — stock decremented\./);
+
+  // snapshot undo restores the whole pre-run state (status AND stock)
+  await submit(page, "undo");
+  await expectLastLine(page, /Undid: Fulfill Order/);
+
+  await order.click({ button: "right" });
+  const labels = await menuLabels(page);
+  expect(labels).toContain("Fulfill Order"); // status is back to paid
+  expect(labels).not.toContain("Mark Paid");
+  await menuItem(page, "Abort").click();
+});
+
+test("SKU cells are product presentations (hover shows the product doc line)", async ({ page }) => {
+  await openDemo(page, "ecommerce");
+  await openTab(page, "Products");
+
+  // the SKU cell is a presentation OF THE PRODUCT, distinct from the name chip
+  const sku = pres(page, "product", "TEE-BLK").first();
+  await sku.hover();
+  expect(await docBar(page)).toContain("#<PRODUCT");
 });

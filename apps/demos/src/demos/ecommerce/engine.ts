@@ -1,13 +1,18 @@
-/* ptypes, parts helpers, and the command table for the e-commerce admin. */
+/* ptypes, parts helpers, and the command table for the e-commerce admin.
+ *
+ * Commands are defined through the typed builder (CLIM-JSX-004): run bodies
+ * receive resolved domain objects, stale presentations abort centrally, and
+ * mutating commands opt into snapshot undo. Ptypes stay v1-style. */
 
 import {
+  arg,
   B,
   CommandTable,
   PbuiEngine,
   PTypes,
+  commandBuilder,
   defineBuiltinPtypes,
-  valueRef,
-  type ArgValue,
+  installUndoCommands,
   type ObjectRef,
   type OutputPart,
   type Resolver,
@@ -22,7 +27,6 @@ import {
   type Order,
   type OrderStatus,
   type Product,
-  type TabId,
   type ViewDef,
   type World,
 } from "./data.js";
@@ -32,16 +36,13 @@ import {
 export const orderRef = (o: Order | string): ObjectRef => ({ kind: "order", id: typeof o === "string" ? o : o.id });
 export const productRef = (p: Product | string): ObjectRef => ({ kind: "product", id: typeof p === "string" ? p : p.id });
 export const customerRef = (c: Customer | string): ObjectRef => ({ kind: "customer", id: typeof c === "string" ? c : c.id });
-export const viewRef = (v: ViewDef | TabId): ObjectRef => ({ kind: "view", id: typeof v === "string" ? v : v.id });
+export const viewRef = (v: ViewDef | string): ObjectRef => ({ kind: "view", id: typeof v === "string" ? v : v.id });
 export const statusRef = (s: OrderStatus): ObjectRef => ({ kind: "status", id: s });
 
 export const orderPart = (o: Order): OutputPart => ({ t: "pres", type: "order", ref: orderRef(o), label: `#${o.number}` });
 export const productPart = (p: Product): OutputPart => ({ t: "pres", type: "product", ref: productRef(p), label: p.name });
 export const customerPart = (c: Customer): OutputPart => ({ t: "pres", type: "customer", ref: customerRef(c), label: c.name });
 export const statusPart = (s: OrderStatus): OutputPart => ({ t: "pres", type: "order-status", ref: statusRef(s), label: s });
-
-const val = (v: ArgValue): unknown => ("value" in v.ref ? v.ref.value : undefined);
-const refId = (v: ArgValue): string => ("id" in v.ref ? v.ref.id : "");
 
 /* --------------------------------- engine ---------------------------------- */
 
@@ -143,403 +144,371 @@ export function makeEngine(world: World) {
   });
 
   const commands = new CommandTable<World>();
+  const c = commandBuilder(commands);
 
-  const resolveOrder = (v: ArgValue) => world.order(refId(v));
-  const resolveProduct = (v: ArgValue) => world.product(refId(v));
-  const resolveCustomer = (v: ArgValue) => world.customer(refId(v));
-  const orderIs = (statuses: OrderStatus[]) => (pres: { ref: ObjectRef }, w: World) =>
-    "id" in pres.ref ? statuses.includes(w.order(pres.ref.id)?.status as OrderStatus) : false;
+  /* ------------------------------ navigation ------------------------------ */
 
-  commands.defineAll([
-    /* ------------------------------ navigation ------------------------------ */
-    {
-      name: "Switch To View",
-      doc: "Open a tab.",
-      args: [{ name: "view", type: "view" }],
-      isDefaultFor: ["view"],
-      run: (args, api) => {
-        const id = refId(args["view"]!) as TabId;
-        world.store.update((s) => ({ ...s, activeTab: id }));
-        api.print(`Switched to ${args["view"]!.label}.`);
-      },
+  c.define({
+    name: "Switch To View",
+    doc: "Open a tab.",
+    args: { view: arg.presentation<ViewDef>("view") },
+    isDefaultFor: ["view"],
+    run: ({ view }, api) => {
+      world.store.update((s) => ({ ...s, activeTab: view.id }));
+      api.print(`Switched to ${view.name}.`);
     },
-    {
-      name: "Show Order",
-      args: [{ name: "order", type: "order" }],
-      isDefaultFor: ["order"],
-      run: (args, api) => {
-        const o = resolveOrder(args["order"]!);
-        if (!o) return api.printErr("That order is gone — presentation was stale.");
-        world.store.update((s) => ({ ...s, activeTab: "orders", selectedOrderId: o.id }));
-        api.print("Opened ", orderPart(o), " in the Orders tab.");
-      },
-    },
-    {
-      name: "Show Product",
-      args: [{ name: "product", type: "product" }],
-      isDefaultFor: ["product"],
-      run: (args, api) => {
-        const p = resolveProduct(args["product"]!);
-        if (!p) return api.printErr("Stale product presentation.");
-        world.store.update((s) => ({ ...s, activeTab: "products", selectedProductId: p.id }));
-        api.print("Opened ", productPart(p), " in the Products tab.");
-      },
-    },
-    {
-      name: "Show Customer",
-      args: [{ name: "customer", type: "customer" }],
-      isDefaultFor: ["customer"],
-      run: (args, api) => {
-        const c = resolveCustomer(args["customer"]!);
-        if (!c) return api.printErr("Stale customer presentation.");
-        world.store.update((s) => ({ ...s, activeTab: "customers", selectedCustomerId: c.id }));
-        api.print("Opened ", customerPart(c), " in the Customers tab.");
-      },
-    },
+  });
 
-    /* ---------------------------- order lifecycle ---------------------------- */
-    {
-      name: "Mark Paid",
-      doc: "Record payment for a pending order.",
-      args: [{ name: "order", type: "order" }],
-      appliesTo: orderIs(["pending"]),
-      run: (args, api) => {
-        const o = resolveOrder(args["order"]!);
-        if (!o) return api.printErr("Stale order presentation.");
-        world.updateOrder(o.id, (x) => ({ ...x, status: "paid" }));
-        api.print(orderPart(o), " marked ", statusPart("paid"), ` — ${fmtMoney(orderTotal(o))} captured.`);
-      },
+  c.define({
+    name: "Show Order",
+    args: { order: arg.presentation<Order>("order") },
+    isDefaultFor: ["order"],
+    run: ({ order }, api) => {
+      world.store.update((s) => ({ ...s, activeTab: "orders", selectedOrderId: order.id }));
+      api.print("Opened ", orderPart(order), " in the Orders tab.");
     },
-    {
-      name: "Fulfill Order",
-      doc: "Ship it; decrements stock per line.",
-      args: [{ name: "order", type: "order" }],
-      appliesTo: orderIs(["paid"]),
-      run: (args, api) => {
-        const o = resolveOrder(args["order"]!);
-        if (!o) return api.printErr("Stale order presentation.");
-        const short = o.lines.filter((l) => (world.product(l.productId)?.stock ?? 0) < l.qty);
-        if (short.length) {
-          const parts: OutputPart[] = [{ t: "text", s: "Cannot fulfill — insufficient stock for " }];
-          short.forEach((l, i) => {
-            const p = world.product(l.productId);
-            if (i) parts.push({ t: "text", s: ", " });
-            if (p) parts.push(productPart(p));
-          });
-          parts.push({ t: "text", s: ". Adjust Stock first." });
-          return api.printErr(...parts);
-        }
-        for (const l of o.lines) world.updateProduct(l.productId, (p) => ({ ...p, stock: p.stock - l.qty }));
-        world.updateOrder(o.id, (x) => ({ ...x, status: "fulfilled" }));
-        api.print(orderPart(o), " ", statusPart("fulfilled"), " — stock decremented.");
-      },
-    },
-    {
-      name: "Refund Order",
-      doc: "Refund and restock.",
-      args: [
-        { name: "order", type: "order" },
-        { name: "reason", type: "string", input: "typed", prompt: "the refund reason" },
-      ],
-      appliesTo: orderIs(["paid", "fulfilled"]),
-      run: (args, api) => {
-        const o = resolveOrder(args["order"]!);
-        if (!o) return api.printErr("Stale order presentation.");
-        const wasFulfilled = o.status === "fulfilled";
-        if (wasFulfilled)
-          for (const l of o.lines) world.updateProduct(l.productId, (p) => ({ ...p, stock: p.stock + l.qty }));
-        world.updateOrder(o.id, (x) => ({ ...x, status: "refunded" }));
-        api.print(orderPart(o), " ", statusPart("refunded"), ` (${String(val(args["reason"]!))})${wasFulfilled ? " — stock restored" : ""}.`);
-      },
-    },
-    {
-      name: "Cancel Order",
-      args: [{ name: "order", type: "order" }],
-      appliesTo: orderIs(["pending"]),
-      run: (args, api) => {
-        const o = resolveOrder(args["order"]!);
-        if (!o) return api.printErr("Stale order presentation.");
-        world.updateOrder(o.id, (x) => ({ ...x, status: "cancelled" }));
-        api.print(orderPart(o), " ", statusPart("cancelled"), ".");
-      },
-    },
-    {
-      name: "New Order",
-      doc: "Create a pending single-line order: customer, product, quantity.",
-      global: true,
-      args: [
-        { name: "customer", type: "customer" },
-        { name: "product", type: "product", where: (pres, _s, w) => ("id" in pres.ref ? !(w as World).product(pres.ref.id)?.archived : false) },
-        {
-          name: "qty",
-          type: "number",
-          input: "typed",
-          default: () => ({ type: "number", ref: valueRef(1), label: "1" }),
-          validate: (v) => {
-            const n = Number(val(v));
-            return Number.isInteger(n) && n >= 1 && n <= 99 ? true : "quantity must be an integer 1–99";
-          },
-        },
-      ],
-      run: (args, api) => {
-        const c = resolveCustomer(args["customer"]!);
-        const p = resolveProduct(args["product"]!);
-        if (!c || !p) return api.printErr("A participant vanished — presentation was stale.");
-        const qty = Number(val(args["qty"]!));
-        const s = world.store.get();
-        const order: Order = {
-          id: `o-${s.nextOrderNumber}`,
-          number: s.nextOrderNumber,
-          customerId: c.id,
-          lines: [{ productId: p.id, qty, unitCents: p.priceCents }],
-          status: "pending",
-          day: "Jul 12",
-        };
-        world.store.update((x) => ({
-          ...x,
-          orders: [...x.orders, order],
-          nextOrderNumber: x.nextOrderNumber + 1,
-          activeTab: "orders",
-          selectedOrderId: order.id,
-        }));
-        api.print("Created ", orderPart(order), ": ", `${qty}× `, productPart(p), " for ", customerPart(c), ` — ${fmtMoney(orderTotal(order))}, `, statusPart("pending"), ".");
-      },
-    },
-    {
-      name: "Add Line",
-      doc: "Add a product line to a pending order.",
-      args: [
-        { name: "order", type: "order" },
-        {
-          name: "product",
-          type: "product",
-          where: (pres, soFar, w) => {
-            if (!("id" in pres.ref)) return false;
-            const o = soFar["order"] && "id" in soFar["order"].ref ? (w as World).order(soFar["order"].ref.id) : undefined;
-            return !!o && !o.lines.some((l) => l.productId === (pres.ref as { id: string }).id);
-          },
-        },
-        {
-          name: "qty",
-          type: "number",
-          input: "typed",
-          default: () => ({ type: "number", ref: valueRef(1), label: "1" }),
-          validate: (v) => (Number.isInteger(Number(val(v))) && Number(val(v)) >= 1 ? true : "quantity must be a positive integer"),
-        },
-      ],
-      appliesTo: orderIs(["pending"]),
-      run: (args, api) => {
-        const o = resolveOrder(args["order"]!);
-        const p = resolveProduct(args["product"]!);
-        if (!o || !p) return api.printErr("A participant vanished — presentation was stale.");
-        const qty = Number(val(args["qty"]!));
-        world.updateOrder(o.id, (x) => ({ ...x, lines: [...x.lines, { productId: p.id, qty, unitCents: p.priceCents }] }));
-        const after = world.order(o.id)!;
-        api.print("Added ", `${qty}× `, productPart(p), " to ", orderPart(after), ` — now ${fmtMoney(orderTotal(after))}.`);
-      },
-    },
+  });
 
-    /* ------------------------------- products -------------------------------- */
-    {
-      name: "Set Price",
-      args: [
-        { name: "product", type: "product" },
-        {
-          name: "price",
-          type: "number",
-          input: "typed",
-          prompt: "the new price in dollars",
-          validate: (v) => (Number(val(v)) > 0 ? true : "price must be positive"),
-        },
-      ],
-      run: (args, api) => {
-        const p = resolveProduct(args["product"]!);
-        if (!p) return api.printErr("Stale product presentation.");
-        const cents = Math.round(Number(val(args["price"]!)) * 100);
-        world.updateProduct(p.id, (x) => ({ ...x, priceCents: cents }));
-        api.print(productPart(p), " price ", B(fmtMoney(p.priceCents)), " → ", B(fmtMoney(cents)), ".");
-      },
+  c.define({
+    name: "Show Product",
+    args: { product: arg.presentation<Product>("product") },
+    isDefaultFor: ["product"],
+    run: ({ product }, api) => {
+      world.store.update((s) => ({ ...s, activeTab: "products", selectedProductId: product.id }));
+      api.print("Opened ", productPart(product), " in the Products tab.");
     },
-    {
-      name: "Adjust Stock",
-      doc: "Positive receives stock, negative writes it off.",
-      args: [
-        { name: "product", type: "product" },
-        {
-          name: "delta",
-          type: "number",
-          input: "typed",
-          prompt: "the stock adjustment (e.g. 10 or -3)",
-          validate: (v, soFar, w) => {
-            const p = soFar["product"] && "id" in soFar["product"].ref ? (w as World).product(soFar["product"].ref.id) : undefined;
-            const n = Number(val(v));
-            if (!Number.isInteger(n) || n === 0) return "adjustment must be a non-zero integer";
-            if (p && p.stock + n < 0) return `only ${p.stock} in stock — cannot go negative`;
-            return true;
-          },
-        },
-      ],
-      run: (args, api) => {
-        const p = resolveProduct(args["product"]!);
-        if (!p) return api.printErr("Stale product presentation.");
-        const n = Number(val(args["delta"]!));
-        world.updateProduct(p.id, (x) => ({ ...x, stock: x.stock + n }));
-        const after = world.product(p.id)!;
-        api.print(productPart(p), ` stock ${p.stock} → ${after.stock}${after.stock <= LOW_STOCK ? " (LOW)" : ""}.`);
-      },
-    },
-    {
-      name: "Rename Product",
-      args: [
-        { name: "product", type: "product" },
-        { name: "new-name", type: "string", input: "typed", prompt: "the new product name" },
-      ],
-      run: (args, api) => {
-        const p = resolveProduct(args["product"]!);
-        if (!p) return api.printErr("Stale product presentation.");
-        const name = String(val(args["new-name"]!)).trim();
-        world.updateProduct(p.id, (x) => ({ ...x, name }));
-        api.print(`Renamed "${p.name}" to `, productPart({ ...p, name }), ".");
-      },
-    },
-    {
-      name: "Set Category",
-      args: [
-        { name: "product", type: "product" },
-        {
-          name: "category",
-          type: "string",
-          input: "menu",
-          prompt: "Which category?",
-          options: (_s, w) => (w as World).categories().map((c) => ({ label: c, ref: valueRef(c) })),
-        },
-      ],
-      run: (args, api) => {
-        const p = resolveProduct(args["product"]!);
-        if (!p) return api.printErr("Stale product presentation.");
-        const cat = String(val(args["category"]!));
-        world.updateProduct(p.id, (x) => ({ ...x, category: cat }));
-        api.print(productPart(p), " categorized ", B(cat), ".");
-      },
-    },
-    {
-      name: "Archive Product",
-      args: [{ name: "product", type: "product" }],
-      appliesTo: (pres, w) => ("id" in pres.ref ? !w.product(pres.ref.id)?.archived : false),
-      run: (args, api) => {
-        const p = resolveProduct(args["product"]!);
-        if (!p) return api.printErr("Stale product presentation.");
-        world.updateProduct(p.id, (x) => ({ ...x, archived: true }));
-        api.print(productPart(p), " archived — hidden from New Order.");
-      },
-    },
-    {
-      name: "Restore Product",
-      args: [{ name: "product", type: "product" }],
-      appliesTo: (pres, w) => ("id" in pres.ref ? w.product(pres.ref.id)?.archived === true : false),
-      run: (args, api) => {
-        const p = resolveProduct(args["product"]!);
-        if (!p) return api.printErr("Stale product presentation.");
-        world.updateProduct(p.id, (x) => ({ ...x, archived: false }));
-        api.print(productPart(p), " restored.");
-      },
-    },
+  });
 
-    /* ------------------------------- customers ------------------------------- */
-    {
-      name: "Email Customer",
-      args: [
-        { name: "customer", type: "customer" },
-        { name: "subject", type: "string", input: "typed", prompt: "the subject line" },
-      ],
-      run: (args, api) => {
-        const c = resolveCustomer(args["customer"]!);
-        if (!c) return api.printErr("Stale customer presentation.");
-        api.print("✉ queued to ", customerPart(c), ` <${c.email}>: "${String(val(args["subject"]!))}" (demo — nothing is sent).`);
-      },
+  c.define({
+    name: "Show Customer",
+    args: { customer: arg.presentation<Customer>("customer") },
+    isDefaultFor: ["customer"],
+    run: ({ customer }, api) => {
+      world.store.update((s) => ({ ...s, activeTab: "customers", selectedCustomerId: customer.id }));
+      api.print("Opened ", customerPart(customer), " in the Customers tab.");
     },
-    {
-      name: "Orders For Customer",
-      args: [{ name: "customer", type: "customer" }],
-      run: (args, api) => {
-        const c = resolveCustomer(args["customer"]!);
-        if (!c) return api.printErr("Stale customer presentation.");
-        world.store.update((s) => ({ ...s, activeTab: "orders", orderFilter: { kind: "customer", customerId: c.id } }));
-        const n = world.store.get().orders.filter((o) => o.customerId === c.id).length;
-        api.print(`Orders tab filtered to `, customerPart(c), ` — ${n} order${n === 1 ? "" : "s"}.`);
-      },
-    },
-    {
-      name: "Orders For Product",
-      args: [{ name: "product", type: "product" }],
-      run: (args, api) => {
-        const p = resolveProduct(args["product"]!);
-        if (!p) return api.printErr("Stale product presentation.");
-        world.store.update((s) => ({ ...s, activeTab: "orders", orderFilter: { kind: "product", productId: p.id } }));
-        const n = world.store.get().orders.filter((o) => o.lines.some((l) => l.productId === p.id)).length;
-        api.print(`Orders tab filtered to `, productPart(p), ` — ${n} order${n === 1 ? "" : "s"}.`);
-      },
-    },
-    {
-      name: "Filter By Status",
-      args: [{ name: "status", type: "order-status" }],
-      isDefaultFor: ["order-status"],
-      run: (args, api) => {
-        const st = refId(args["status"]!) as OrderStatus;
-        world.store.update((s) => ({ ...s, activeTab: "orders", orderFilter: { kind: "status", status: st } }));
-        const n = world.store.get().orders.filter((o) => o.status === st).length;
-        api.print("Orders tab filtered to ", statusPart(st), ` — ${n} order${n === 1 ? "" : "s"}.`);
-      },
-    },
-    {
-      name: "Clear Order Filter",
-      global: true,
-      run: (_a, api) => {
-        world.store.update((s) => ({ ...s, orderFilter: null }));
-        api.print("Order filter cleared.");
-      },
-    },
+  });
 
-    /* -------------------------------- reports -------------------------------- */
-    {
-      name: "Low Stock Report",
-      global: true,
-      run: (_a, api) => {
-        const low = world.store.get().products.filter((p) => !p.archived && p.stock <= LOW_STOCK);
-        if (!low.length) return api.print("No products at or below the low-stock threshold.");
-        const parts: OutputPart[] = [B(`${low.length} low-stock product${low.length === 1 ? "" : "s"}: `)];
-        low.forEach((p, i) => {
+  /* ---------------------------- order lifecycle ---------------------------- */
+
+  c.define({
+    name: "Mark Paid",
+    doc: "Record payment for a pending order.",
+    args: { order: arg.presentation<Order>("order") },
+    appliesTo: (o: Order) => o.status === "pending",
+    run: ({ order }, api) => {
+      api.snapshotUndo(world.store);
+      world.updateOrder(order.id, (x) => ({ ...x, status: "paid" }));
+      api.print(orderPart(order), " marked ", statusPart("paid"), ` — ${fmtMoney(orderTotal(order))} captured.`);
+    },
+  });
+
+  c.define({
+    name: "Fulfill Order",
+    doc: "Ship it; decrements stock per line.",
+    args: { order: arg.presentation<Order>("order") },
+    appliesTo: (o: Order) => o.status === "paid",
+    run: ({ order }, api) => {
+      const short = order.lines.filter((l) => (world.product(l.productId)?.stock ?? 0) < l.qty);
+      if (short.length) {
+        const parts: OutputPart[] = [{ t: "text", s: "Cannot fulfill — insufficient stock for " }];
+        short.forEach((l, i) => {
+          const p = world.product(l.productId);
           if (i) parts.push({ t: "text", s: ", " });
-          parts.push(productPart(p));
-          parts.push({ t: "text", s: ` (${p.stock})` });
+          if (p) parts.push(productPart(p));
         });
-        parts.push({ t: "text", s: " — right-click one → Adjust Stock." });
-        api.print(...parts);
-      },
+        parts.push({ t: "text", s: ". Adjust Stock first." });
+        api.printErr(...parts);
+        return;
+      }
+      api.snapshotUndo(world.store);
+      for (const l of order.lines) world.updateProduct(l.productId, (p) => ({ ...p, stock: p.stock - l.qty }));
+      world.updateOrder(order.id, (x) => ({ ...x, status: "fulfilled" }));
+      api.print(orderPart(order), " ", statusPart("fulfilled"), " — stock decremented.");
     },
-    {
-      name: "Sales Summary",
-      global: true,
-      run: (_a, api) => {
-        const s = world.store.get();
-        const by = (st: OrderStatus) => s.orders.filter((o) => o.status === st);
-        const rev = [...by("paid"), ...by("fulfilled")].reduce((t, o) => t + orderTotal(o), 0);
-        api.print(B("Sales summary: "), `revenue ${fmtMoney(rev)} across ${by("paid").length + by("fulfilled").length} paid/fulfilled orders; `, `${by("pending").length} pending, ${by("refunded").length} refunded, ${by("cancelled").length} cancelled.`);
-      },
-    },
+  });
 
-    /* --------------------------------- misc ---------------------------------- */
-    { name: "Clear Listener", global: true, run: () => engine.transcript.clear() },
-    {
-      name: "Show Herald",
-      global: true,
-      run: (_a, api) => {
-        api.print(B("STOREFRONT BACK OFFICE 1.0"), " — orders, products, customers, statuses and tabs are all live presentations.");
-        api.print("Try: right-click a ", B("pending"), " order → Mark Paid → Fulfill; click a status chip to filter; ", B("New Order"), " from the background menu accepts a customer, a product and a quantity — click any mention of them on screen.");
-        api.print("Command line works too: ", B("orders for customer ada"), ", ", B("set price tee-blk 35"), ", ", B("low stock report"), ".");
-      },
+  c.define({
+    name: "Refund Order",
+    doc: "Refund and restock.",
+    args: {
+      order: arg.presentation<Order>("order"),
+      reason: arg.text({ prompt: "the refund reason" }),
     },
-  ]);
+    appliesTo: (o) => {
+      const s = (o as Order).status;
+      return s === "paid" || s === "fulfilled";
+    },
+    run: ({ order, reason }, api) => {
+      api.snapshotUndo(world.store);
+      const wasFulfilled = order.status === "fulfilled";
+      if (wasFulfilled)
+        for (const l of order.lines) world.updateProduct(l.productId, (p) => ({ ...p, stock: p.stock + l.qty }));
+      world.updateOrder(order.id, (x) => ({ ...x, status: "refunded" }));
+      api.print(orderPart(order), " ", statusPart("refunded"), ` (${reason})${wasFulfilled ? " — stock restored" : ""}.`);
+    },
+  });
+
+  c.define({
+    name: "Cancel Order",
+    args: { order: arg.presentation<Order>("order") },
+    appliesTo: (o: Order) => o.status === "pending",
+    run: ({ order }, api) => {
+      api.snapshotUndo(world.store);
+      world.updateOrder(order.id, (x) => ({ ...x, status: "cancelled" }));
+      api.print(orderPart(order), " ", statusPart("cancelled"), ".");
+    },
+  });
+
+  c.define({
+    name: "New Order",
+    doc: "Create a pending single-line order: customer, product, quantity.",
+    global: true,
+    args: {
+      customer: arg.presentation<Customer>("customer"),
+      product: arg.presentation<Product>("product", { where: (p: Product) => !p.archived }),
+      qty: arg.number({ default: 1, min: 1, max: 99, integer: true }),
+    },
+    run: ({ customer, product, qty }, api) => {
+      api.snapshotUndo(world.store);
+      const s = world.store.get();
+      const order: Order = {
+        id: `o-${s.nextOrderNumber}`,
+        number: s.nextOrderNumber,
+        customerId: customer.id,
+        lines: [{ productId: product.id, qty, unitCents: product.priceCents }],
+        status: "pending",
+        day: "Jul 12",
+      };
+      world.store.update((x) => ({
+        ...x,
+        orders: [...x.orders, order],
+        nextOrderNumber: x.nextOrderNumber + 1,
+        activeTab: "orders",
+        selectedOrderId: order.id,
+      }));
+      api.print("Created ", orderPart(order), ": ", `${qty}× `, productPart(product), " for ", customerPart(customer), ` — ${fmtMoney(orderTotal(order))}, `, statusPart("pending"), ".");
+    },
+  });
+
+  c.define({
+    name: "Add Line",
+    doc: "Add a product line to a pending order.",
+    args: {
+      order: arg.presentation<Order>("order"),
+      product: arg.presentation<Product>("product", {
+        where: (p: Product, soFar: { order?: Order }) =>
+          !!soFar.order && !soFar.order.lines.some((l) => l.productId === p.id),
+      }),
+      qty: arg.number({ default: 1, min: 1, integer: true }),
+    },
+    appliesTo: (o) => (o as Order).status === "pending",
+    run: ({ order, product, qty }, api) => {
+      api.snapshotUndo(world.store);
+      world.updateOrder(order.id, (x) => ({ ...x, lines: [...x.lines, { productId: product.id, qty, unitCents: product.priceCents }] }));
+      const after = world.order(order.id)!;
+      api.print("Added ", `${qty}× `, productPart(product), " to ", orderPart(after), ` — now ${fmtMoney(orderTotal(after))}.`);
+    },
+  });
+
+  /* ------------------------------- products -------------------------------- */
+
+  c.define({
+    name: "Set Price",
+    args: {
+      product: arg.presentation<Product>("product"),
+      price: arg.number({
+        prompt: "the new price in dollars",
+        validate: (n: number) => (n > 0 ? true : "price must be positive"),
+      }),
+    },
+    run: ({ product, price }, api) => {
+      api.snapshotUndo(world.store);
+      const cents = Math.round(price * 100);
+      world.updateProduct(product.id, (x) => ({ ...x, priceCents: cents }));
+      api.print(productPart(product), " price ", B(fmtMoney(product.priceCents)), " → ", B(fmtMoney(cents)), ".");
+    },
+  });
+
+  c.define({
+    name: "Adjust Stock",
+    doc: "Positive receives stock, negative writes it off.",
+    args: {
+      product: arg.presentation<Product>("product"),
+      delta: arg.number({
+        prompt: "the stock adjustment (e.g. 10 or -3)",
+        validate: (n: number, soFar: { product?: Product }) => {
+          if (!Number.isInteger(n) || n === 0) return "adjustment must be a non-zero integer";
+          if (soFar.product && soFar.product.stock + n < 0) return `only ${soFar.product.stock} in stock — cannot go negative`;
+          return true;
+        },
+      }),
+    },
+    run: ({ product, delta }, api) => {
+      api.snapshotUndo(world.store);
+      world.updateProduct(product.id, (x) => ({ ...x, stock: x.stock + delta }));
+      const after = world.product(product.id)!;
+      api.print(productPart(product), ` stock ${product.stock} → ${after.stock}${after.stock <= LOW_STOCK ? " (LOW)" : ""}.`);
+    },
+  });
+
+  c.define({
+    name: "Rename Product",
+    args: {
+      product: arg.presentation<Product>("product"),
+      "new-name": arg.text({ prompt: "the new product name" }),
+    },
+    run: ({ product, "new-name": newName }, api) => {
+      api.snapshotUndo(world.store);
+      const name = newName.trim();
+      world.updateProduct(product.id, (x) => ({ ...x, name }));
+      api.print(`Renamed "${product.name}" to `, productPart({ ...product, name }), ".");
+    },
+  });
+
+  c.define({
+    name: "Set Category",
+    args: {
+      product: arg.presentation<Product>("product"),
+      category: arg.choice({
+        prompt: "Which category?",
+        options: (_s, w: World) => w.categories().map((cat) => ({ label: cat, value: cat })),
+      }),
+    },
+    run: ({ product, category }, api) => {
+      api.snapshotUndo(world.store);
+      world.updateProduct(product.id, (x) => ({ ...x, category }));
+      api.print(productPart(product), " categorized ", B(category), ".");
+    },
+  });
+
+  c.define({
+    name: "Archive Product",
+    args: { product: arg.presentation<Product>("product") },
+    appliesTo: (p: Product) => !p.archived,
+    run: ({ product }, api) => {
+      api.snapshotUndo(world.store);
+      world.updateProduct(product.id, (x) => ({ ...x, archived: true }));
+      api.print(productPart(product), " archived — hidden from New Order.");
+    },
+  });
+
+  c.define({
+    name: "Restore Product",
+    args: { product: arg.presentation<Product>("product") },
+    appliesTo: (p: Product) => p.archived,
+    run: ({ product }, api) => {
+      api.snapshotUndo(world.store);
+      world.updateProduct(product.id, (x) => ({ ...x, archived: false }));
+      api.print(productPart(product), " restored.");
+    },
+  });
+
+  /* ------------------------------- customers ------------------------------- */
+
+  c.define({
+    name: "Email Customer",
+    args: {
+      customer: arg.presentation<Customer>("customer"),
+      subject: arg.text({ prompt: "the subject line" }),
+    },
+    run: ({ customer, subject }, api) => {
+      api.print("✉ queued to ", customerPart(customer), ` <${customer.email}>: "${subject}" (demo — nothing is sent).`);
+    },
+  });
+
+  c.define({
+    name: "Orders For Customer",
+    args: { customer: arg.presentation<Customer>("customer") },
+    run: ({ customer }, api) => {
+      world.store.update((s) => ({ ...s, activeTab: "orders", orderFilter: { kind: "customer", customerId: customer.id } }));
+      const n = world.store.get().orders.filter((o) => o.customerId === customer.id).length;
+      api.print(`Orders tab filtered to `, customerPart(customer), ` — ${n} order${n === 1 ? "" : "s"}.`);
+    },
+  });
+
+  c.define({
+    name: "Orders For Product",
+    args: { product: arg.presentation<Product>("product") },
+    run: ({ product }, api) => {
+      world.store.update((s) => ({ ...s, activeTab: "orders", orderFilter: { kind: "product", productId: product.id } }));
+      const n = world.store.get().orders.filter((o) => o.lines.some((l) => l.productId === product.id)).length;
+      api.print(`Orders tab filtered to `, productPart(product), ` — ${n} order${n === 1 ? "" : "s"}.`);
+    },
+  });
+
+  c.define({
+    name: "Filter By Status",
+    args: { status: arg.presentation<OrderStatus>("order-status") },
+    isDefaultFor: ["order-status"],
+    run: ({ status }, api) => {
+      world.store.update((s) => ({ ...s, activeTab: "orders", orderFilter: { kind: "status", status } }));
+      const n = world.store.get().orders.filter((o) => o.status === status).length;
+      api.print("Orders tab filtered to ", statusPart(status), ` — ${n} order${n === 1 ? "" : "s"}.`);
+    },
+  });
+
+  c.define({
+    name: "Clear Order Filter",
+    global: true,
+    run: (_a, api) => {
+      world.store.update((s) => ({ ...s, orderFilter: null }));
+      api.print("Order filter cleared.");
+    },
+  });
+
+  /* -------------------------------- reports -------------------------------- */
+
+  c.define({
+    name: "Low Stock Report",
+    global: true,
+    run: (_a, api) => {
+      const low = world.store.get().products.filter((p) => !p.archived && p.stock <= LOW_STOCK);
+      if (!low.length) {
+        api.print("No products at or below the low-stock threshold.");
+        return;
+      }
+      const parts: OutputPart[] = [B(`${low.length} low-stock product${low.length === 1 ? "" : "s"}: `)];
+      low.forEach((p, i) => {
+        if (i) parts.push({ t: "text", s: ", " });
+        parts.push(productPart(p));
+        parts.push({ t: "text", s: ` (${p.stock})` });
+      });
+      parts.push({ t: "text", s: " — right-click one → Adjust Stock." });
+      api.print(...parts);
+    },
+  });
+
+  c.define({
+    name: "Sales Summary",
+    global: true,
+    run: (_a, api) => {
+      const s = world.store.get();
+      const by = (st: OrderStatus) => s.orders.filter((o) => o.status === st);
+      const rev = [...by("paid"), ...by("fulfilled")].reduce((t, o) => t + orderTotal(o), 0);
+      api.print(B("Sales summary: "), `revenue ${fmtMoney(rev)} across ${by("paid").length + by("fulfilled").length} paid/fulfilled orders; `, `${by("pending").length} pending, ${by("refunded").length} refunded, ${by("cancelled").length} cancelled.`);
+    },
+  });
+
+  /* --------------------------------- misc ---------------------------------- */
+
+  c.define({
+    name: "Clear Listener",
+    global: true,
+    run: () => {
+      engine.transcript.clear();
+    },
+  });
+
+  c.define({
+    name: "Show Herald",
+    global: true,
+    run: (_a, api) => {
+      api.print(B("STOREFRONT BACK OFFICE 1.0"), " — orders, products, customers, statuses and tabs are all live presentations.");
+      api.print("Try: right-click a ", B("pending"), " order → Mark Paid → Fulfill; click a status chip to filter; ", B("New Order"), " from the background menu accepts a customer, a product and a quantity — click any mention of them on screen.");
+      api.print("Command line works too: ", B("orders for customer ada"), ", ", B("set price tee-blk 35"), ", ", B("low stock report"), ".");
+    },
+  });
 
   const resolver: Resolver = {
     resolve: (ref) => {
@@ -562,5 +531,6 @@ export function makeEngine(world: World) {
     resolver,
     idleDoc: "BACK OFFICE — L: open/filter; M: Describe; R: menu. Background R: New Order, reports …",
   });
+  installUndoCommands(engine);
   return engine;
 }

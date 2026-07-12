@@ -3,7 +3,7 @@
 
 import type { CSSProperties, ReactNode } from "react";
 import { Presentation } from "@pbui/react";
-import { Pane } from "@pbui/chrome";
+import { ActivityPane, Pane } from "@pbui/chrome";
 import { useStore } from "../../lib/store.js";
 import {
   fmtMoney,
@@ -171,6 +171,9 @@ export function DashboardView({ world }: { world: World }) {
             })}
           </Table>
         </Pane>
+        <div style={{ flex: 2, minWidth: 220, display: "grid", minHeight: 0 }}>
+          <ActivityPane limit={12} />
+        </div>
       </div>
     </div>
   );
@@ -266,7 +269,9 @@ export function ProductsView({ world }: { world: World }) {
         <Table head={["sku", "product", "category", "price", "stock", ""]}>
           {s.products.map((p) => (
             <tr key={p.id} style={{ ...rowStyle(p.id === s.selectedProductId), opacity: p.archived ? 0.45 : 1 }}>
-              <td style={{ ...td, fontSize: 11 }}>{p.sku}</td>
+              <td style={{ ...td, fontSize: 11 }}>
+              <Presentation type="product" object={productRef(p)} label={p.name}>{p.sku}</Presentation>
+            </td>
               <td style={td}><ProductChip p={p} /></td>
               <td style={td}>{p.category}</td>
               <td style={num}>{fmtMoney(p.priceCents)}</td>
@@ -357,7 +362,9 @@ export function InventoryView({ world }: { world: World }) {
             <td style={{ ...num, fontWeight: p.stock <= LOW_STOCK ? "bold" : undefined, background: p.stock <= LOW_STOCK ? "var(--pbui-ink)" : undefined, color: p.stock <= LOW_STOCK ? "var(--pbui-paper)" : undefined }}>
               {p.stock}
             </td>
-            <td style={{ ...td, fontSize: 11 }}>{p.sku}</td>
+            <td style={{ ...td, fontSize: 11 }}>
+              <Presentation type="product" object={productRef(p)} label={p.name}>{p.sku}</Presentation>
+            </td>
             <td style={td}><ProductChip p={p} /></td>
             <td style={td}>{p.category}</td>
             <td style={num}>{fmtMoney(p.priceCents)}</td>
