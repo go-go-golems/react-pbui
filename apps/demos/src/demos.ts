@@ -40,6 +40,13 @@ export const DEMOS: DemoEntry[] = [
     component: lazy(() => import("./demos/metrics/MetricsDemo.js")),
   },
   {
+    slug: "ecommerce",
+    title: "Storefront Back Office",
+    blurb: "e-commerce admin with five tabs — orders, products, customers, statuses and tabs are all presentations; lifecycle menus are state-sensitive",
+    original: "(new app, no original)",
+    component: lazy(() => import("./demos/ecommerce/EcommerceDemo.js")),
+  },
+  {
     slug: "gallery",
     title: "Gallery (are.na style)",
     blurb: "image browser with tags, channels, and attribute editing — cards, chips and channels are all presentations",
