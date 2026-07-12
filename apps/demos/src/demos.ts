@@ -6,6 +6,8 @@ export interface DemoEntry {
   blurb: string;
   original: string;
   component: LazyExoticComponent<ComponentType> | ComponentType;
+  /** not listed in the launcher (bench harness) */
+  hidden?: boolean;
 }
 
 import HelloDemo from "./demos/hello/HelloDemo.js";
@@ -52,6 +54,14 @@ export const DEMOS: DemoEntry[] = [
     blurb: "image browser with tags, channels, and attribute editing — cards, chips and channels are all presentations",
     original: "(new app, no original)",
     component: lazy(() => import("./demos/gallery/GalleryDemo.js")),
+  },
+  {
+    slug: "bench",
+    title: "Bench",
+    blurb: "render-budget harness",
+    original: "(perf harness)",
+    hidden: true,
+    component: lazy(() => import("./demos/bench/BenchDemo.js")),
   },
   {
     slug: "schema",

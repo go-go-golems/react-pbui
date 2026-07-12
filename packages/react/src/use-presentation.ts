@@ -1,13 +1,17 @@
-/* The headless presentation hook (design decision D3).
+/* The headless presentation hook (design decisions D3 of CLIM-JSX-001 and
+ * §6.2 of CLIM-JSX-005).
  *
  * Registers a PresentationRecord in the engine's registry for the lifetime
  * of the component and returns gesture-protocol props plus derived state
- * flags. <Presentation> and <SvgPresentation> are thin sugar over this.
+ * flags. Subscription is TARGETED: the component listens to its own
+ * presentation id only (registry.subscribePres), so a hover transition
+ * re-renders exactly the presentations whose flags changed — not the whole
+ * screen. Accept transitions broadcast via registry.notifyAllPres().
  */
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useReducer, useRef } from "react";
 import type { ObjectRef, PresentationRecord } from "@pbui/core";
-import { useEngine, useEngineState } from "./provider.js";
+import { useEngine } from "./provider.js";
 
 export interface UsePresentationInput {
   type: string;
@@ -15,7 +19,7 @@ export interface UsePresentationInput {
   label: string;
   pane?: string;
   /** container presentations: still menuable, but don't flash hover
-   * outlines over their contents (metrics(3)'s quiet flag) */
+   * outlines over their contents, and never dim inert (metrics(3) quiet) */
   quiet?: boolean;
   /** render-only: no registration, no gestures */
   disabled?: boolean;
@@ -43,11 +47,20 @@ function refKey(r: ObjectRef): string {
   return "value" in r ? `v:${String(r.value)}` : `${r.kind}:${r.id}`;
 }
 
+declare global {
+  interface Window {
+    /** presentation render counter, read by the perf budget spec */
+    __pbuiRenders?: number;
+  }
+}
+
 export function usePresentation(input: UsePresentationInput): PresentationHandle {
   const engine = useEngine();
-  const state = useEngineState();
+  if (typeof window !== "undefined")
+    window.__pbuiRenders = (window.__pbuiRenders ?? 0) + 1;
   const elRef = useRef<Element | null>(null);
   const idRef = useRef<string | null>(null);
+  const [, force] = useReducer((n: number) => n + 1, 0);
 
   const { type, ref, label, pane, quiet, disabled } = input;
   const key = refKey(ref);
@@ -67,82 +80,86 @@ export function usePresentation(input: UsePresentationInput): PresentationHandle
       },
     });
     idRef.current = id;
+    const unsub = engine.registry.subscribePres(id, force);
+    force(); // flags may differ now that the record exists
     return () => {
+      unsub();
       idRef.current = null;
       engine.registry.unregister(id);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [engine, type, key, label, pane, disabled]);
 
-  return useMemo(() => {
-    const rec = (): PresentationRecord => ({
-      id: idRef.current ?? `anon:${type}:${key}`,
-      type,
-      ref,
-      label,
-      paneId: pane,
-    });
-    const hovered = !disabled && state.hover?.id === (idRef.current ?? "");
-    const eligible = !disabled && engine.eligible({ type, ref, label });
-    const inert = !disabled && !quiet && engine.inert({ type, ref, label });
-    const relatedHover =
-      !disabled &&
-      !hovered &&
-      state.hover != null &&
-      refKey(state.hover.ref) === key;
+  const rec = (): PresentationRecord => ({
+    id: idRef.current ?? `anon:${type}:${key}`,
+    type,
+    ref,
+    label,
+    paneId: pane,
+  });
 
-    const props: PresentationHandle["props"] = {
-      ref: (el) => {
-        elRef.current = el;
-      },
-      onMouseMove: (e) => {
-        if (disabled) return;
-        e.stopPropagation(); // innermost presentation wins
-        const r = rec();
-        if (state.hover?.id !== r.id) engine.gesture("enter", r, e.clientX, e.clientY);
-        else engine.notePointer(e.clientX, e.clientY);
-      },
-      onMouseLeave: () => {
-        if (disabled) return;
-        engine.gesture("leave", rec());
-      },
-      onClick: (e) => {
-        if (disabled) return;
-        e.stopPropagation();
-        engine.closeMenu();
-        engine.gesture("click", rec(), e.clientX, e.clientY);
-      },
-      onAuxClick: (e) => {
-        if (disabled || e.button !== 1) return;
-        e.stopPropagation();
-        engine.gesture("aux", rec(), e.clientX, e.clientY);
-      },
-      onContextMenu: (e) => {
-        if (disabled) return;
-        e.preventDefault();
-        e.stopPropagation();
-        engine.gesture("context", rec(), e.clientX, e.clientY);
-      },
-      "data-pbui-type": type,
-    };
+  const st = engine.getState();
+  const id = idRef.current;
+  const hovered = !disabled && id != null && st.hover?.id === id;
+  const eligible =
+    !disabled && engine.eligible({ id: id ?? undefined, type, ref, label });
+  const inert =
+    !disabled && !quiet && !eligible && st.accept != null;
+  const relatedHover =
+    !disabled && !hovered && st.hover != null && refKey(st.hover.ref) === key;
 
-    const className = [
-      "pbui-pres",
-      hovered && !quiet ? "pbui-hover" : "",
-      eligible ? "pbui-eligible" : "",
-      inert ? "pbui-inert" : "",
-      relatedHover && !quiet ? "pbui-related" : "",
-    ]
-      .filter(Boolean)
-      .join(" ");
+  const props: PresentationHandle["props"] = {
+    ref: (el) => {
+      elRef.current = el;
+    },
+    onMouseMove: (e) => {
+      if (disabled) return;
+      e.stopPropagation(); // innermost presentation wins
+      const r = rec();
+      if (engine.getState().hover?.id !== r.id)
+        engine.gesture("enter", r, e.clientX, e.clientY);
+      else engine.notePointer(e.clientX, e.clientY);
+    },
+    onMouseLeave: () => {
+      if (disabled) return;
+      engine.gesture("leave", rec());
+    },
+    onClick: (e) => {
+      if (disabled) return;
+      e.stopPropagation();
+      engine.closeMenu();
+      engine.gesture("click", rec(), e.clientX, e.clientY);
+    },
+    onAuxClick: (e) => {
+      if (disabled || e.button !== 1) return;
+      e.stopPropagation();
+      engine.gesture("aux", rec(), e.clientX, e.clientY);
+    },
+    onContextMenu: (e) => {
+      if (disabled) return;
+      e.preventDefault();
+      e.stopPropagation();
+      engine.gesture("context", rec(), e.clientX, e.clientY);
+    },
+    "data-pbui-type": type,
+  };
 
-    return {
-      props,
-      isHovered: hovered,
-      isEligible: eligible,
-      isInert: inert,
-      isRelatedHover: relatedHover,
-      className,
-    };
-  }, [engine, state, type, key, label, pane, quiet, disabled]);
+  const className = [
+    "pbui-pres",
+    hovered && !quiet ? "pbui-hover" : "",
+    eligible ? "pbui-eligible" : "",
+    inert ? "pbui-inert" : "",
+    relatedHover && !quiet ? "pbui-related" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return {
+    props,
+    isHovered: hovered,
+    isEligible: eligible,
+    isInert: inert,
+    isRelatedHover: relatedHover,
+    className,
+  };
 }

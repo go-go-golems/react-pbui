@@ -32,7 +32,7 @@ function Launcher() {
         command arguments.
       </p>
       <ul>
-        {DEMOS.map((d) => (
+        {DEMOS.filter((d) => !d.hidden).map((d) => (
           <li key={d.slug}>
             <a href={`#${d.slug}`}>{d.title}</a> — {d.blurb}
             <span className="launcher-src"> (original: sources/{d.original})</span>

@@ -99,6 +99,9 @@ export class PbuiEngine<W = unknown> {
 
   private coercions: Coercion[] = [];
   private listeners = new Set<() => void>();
+  /** ids of registered presentations eligible for the current accept
+   * (CLIM-JSX-005 §6.3); null when no accept is active */
+  private eligibleIds: Set<string> | null = null;
   private state: EngineState = {
     accept: null,
     hover: null,
@@ -115,6 +118,18 @@ export class PbuiEngine<W = unknown> {
     this.idleDoc =
       opts.idleDoc ??
       "Mouse-L: default action; Mouse-M: Describe; Mouse-R: menu of commands.";
+    // presentations registered mid-accept (e.g. transcript prints) join the
+    // eligible set incrementally — no full recompute on the hot path
+    this.registry.subscribe((ev) => {
+      if (!this.eligibleIds) return;
+      if (ev.kind === "unregister") {
+        this.eligibleIds.delete(ev.id);
+        return;
+      }
+      if (this.eligibleUncached(ev.rec)) this.eligibleIds.add(ev.rec.id);
+      else this.eligibleIds.delete(ev.rec.id);
+      this.registry.notifyPres(ev.rec.id);
+    });
   }
 
   /* ------------------------------ subscription ----------------------------- */
@@ -131,6 +146,25 @@ export class PbuiEngine<W = unknown> {
   private setState(patch: Partial<EngineState>): void {
     this.state = { ...this.state, ...patch };
     for (const fn of this.listeners) fn();
+  }
+
+  /** hover transitions notify exactly the affected presentations: the old
+   * and new hover targets plus every presentation of the same objects
+   * (related-hover outlines). This is the mouse-frequency hot path. */
+  private setHover(next: PresentationRecord | null): void {
+    const prev = this.state.hover;
+    if (prev?.id === next?.id) {
+      if (next) this.setState({ hover: next });
+      return;
+    }
+    this.setState({ hover: next });
+    const affected = new Set<string>();
+    for (const p of [prev, next]) {
+      if (!p) continue;
+      affected.add(p.id);
+      for (const r of this.registry.byRef(p.ref)) affected.add(r.id);
+    }
+    for (const id of affected) this.registry.notifyPres(id);
   }
 
   /* -------------------------------- printing ------------------------------- */
@@ -172,8 +206,9 @@ export class PbuiEngine<W = unknown> {
 
   /* ------------------------------ eligibility ------------------------------ */
 
-  /** would clicking this presentation supply the currently wanted arg? */
-  eligible(pres: Pick<PresentationRecord, "type" | "ref" | "label">): boolean {
+  /** the full predicate — used to (re)build the cache and for ad-hoc
+   * (unregistered) records such as test fixtures */
+  private eligibleUncached(pres: Pick<PresentationRecord, "type" | "ref" | "label">): boolean {
     const acc = this.state.accept;
     if (!acc) return false;
     const rec = pres as PresentationRecord;
@@ -186,6 +221,47 @@ export class PbuiEngine<W = unknown> {
         if (refEquals(prev.ref, v.ref)) return false;
     }
     return true;
+  }
+
+  /** would clicking this presentation supply the currently wanted arg?
+   * O(1) for registered presentations via the eligible-set cache. */
+  eligible(
+    pres: Pick<PresentationRecord, "type" | "ref" | "label"> & { id?: string },
+  ): boolean {
+    if (!this.state.accept) return false;
+    if (pres.id && this.eligibleIds && this.registry.get(pres.id))
+      return this.eligibleIds.has(pres.id);
+    return this.eligibleUncached(pres);
+  }
+
+  /** registered presentations eligible right now (keyboard Tab-cycling) */
+  eligibleList(): PresentationRecord[] {
+    if (!this.eligibleIds) return [];
+    const out: PresentationRecord[] = [];
+    for (const id of this.eligibleIds) {
+      const r = this.registry.get(id);
+      if (r) out.push(r);
+    }
+    return out;
+  }
+
+  private recomputeEligible(): void {
+    if (!this.state.accept) {
+      this.eligibleIds = null;
+      return;
+    }
+    const ids = new Set<string>();
+    for (const rec of this.registry.all())
+      if (this.eligibleUncached(rec)) ids.add(rec.id);
+    this.eligibleIds = ids;
+  }
+
+  /** accept transitions recompute the cache and broadcast (D3: accept
+   * changes are user-paced; hover changes are the targeted hot path) */
+  private setAccept(accept: AcceptState | null): void {
+    this.setState({ accept });
+    this.recomputeEligible();
+    this.registry.notifyAllPres();
   }
 
   /** an input context is active and this presentation does not match */
@@ -240,11 +316,11 @@ export class PbuiEngine<W = unknown> {
     const specs = cmd.args ?? [];
     const next = specs.find((s) => !(s.name in values));
     if (!next) {
-      this.setState({ accept: null });
+      this.setAccept(null);
       void this.execute(cmd, values);
       return;
     }
-    this.setState({ accept: { cmd, values, spec: next } });
+    this.setAccept({ cmd, values, spec: next });
     if ((next.input ?? "presentation") === "menu") this.openChoiceMenu(next, values);
   }
 
@@ -282,7 +358,7 @@ export class PbuiEngine<W = unknown> {
       { t: "pres", type: v.type, ref: v.ref, label: v.label },
     );
     if (acc.resolveAdhoc) {
-      this.setState({ accept: null });
+      this.setAccept(null);
       acc.resolveAdhoc(v);
       return;
     }
@@ -296,7 +372,7 @@ export class PbuiEngine<W = unknown> {
     const acc = this.state.accept;
     this.closeMenu();
     if (!acc) return;
-    this.setState({ accept: null });
+    this.setAccept(null);
     if (acc.resolveAdhoc) acc.resolveAdhoc(null);
     if (!silent) this.transcript.echo("[Abort]");
   }
@@ -359,9 +435,7 @@ export class PbuiEngine<W = unknown> {
   acceptAdhoc(spec: ArgSpec): Promise<ArgValue | null> {
     if (this.state.accept) this.abort(true);
     return new Promise((resolve) => {
-      this.setState({
-        accept: { cmd: null, values: {}, spec, resolveAdhoc: resolve },
-      });
+      this.setAccept({ cmd: null, values: {}, spec, resolveAdhoc: resolve });
       if ((spec.input ?? "presentation") === "menu") this.openChoiceMenu(spec, {});
     });
   }
@@ -464,10 +538,10 @@ export class PbuiEngine<W = unknown> {
     if (x != null && y != null) this.notePointer(x, y);
     switch (kind) {
       case "enter":
-        this.setState({ hover: pres });
+        this.setHover(pres);
         break;
       case "leave":
-        if (this.state.hover?.id === pres.id) this.setState({ hover: null });
+        if (this.state.hover?.id === pres.id) this.setHover(null);
         break;
       case "click": {
         if (this.state.accept) {
