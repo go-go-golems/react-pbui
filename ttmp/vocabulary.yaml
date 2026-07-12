@@ -5,6 +5,14 @@ topics:
       description: Backend services
     - slug: websocket
       description: WebSocket lifecycle & events
+    - slug: pbui
+      description: Presentation-based user interfaces (CLIM/Genera-style)
+    - slug: react
+      description: React frontend work
+    - slug: typescript
+      description: TypeScript language/tooling
+    - slug: design
+      description: Architecture and design documents
 docTypes:
     - slug: design-doc
       description: Structured rationale and architecture notes
