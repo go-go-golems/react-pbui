@@ -1,6 +1,6 @@
 {
   "name": "@go-go-golems/pbui-theme-genera",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "exports": {
     "./genera.css": "./src/genera.css"
