@@ -179,8 +179,9 @@ export class PbuiEngine<W = unknown> {
     this.transcript.err(...parts);
   }
 
-  /** standardized command failure (stale arguments etc.): prints the error;
-   * the invocation log (CLIM-JSX-004 §7) also records it once it exists */
+  /** standardized command failure (stale arguments etc.): prints the
+   * error line only. api.fail (the wrapper commands receive) additionally
+   * marks the current invocation as failed — prefer it inside commands. */
   failInvocation(cmdName: string, ...reason: PartLike[]): void {
     this.transcript.err(...reason, ` ${cmdName} aborted.`);
   }

@@ -21,8 +21,10 @@ export interface ArgSpec {
   name: string;
   /** ptype name; "number"/"string" use typed input by default */
   type: string;
-  /** how the value is acquired; default: "presentation" for object ptypes,
-   * "typed" for ptypes with a parse function and no on-screen instances */
+  /** how the value is acquired. Default: "presentation" (supply by
+   * pointing). Typed entry at the prompt works regardless whenever the
+   * ptype has a parse function; "typed" additionally focuses the input
+   * and skips presentation supply. */
   input?: "presentation" | "typed" | "menu";
   prompt?: string;
   /** dependent choices for menu-valued args (design-kit.jsx:253) */
@@ -44,7 +46,9 @@ export interface CommandApi<W> {
   fail: (...parts: PartLike[]) => void;
   /** opt this invocation into undo: capture runs now, returns the inverse */
   undoable: (capture: () => () => void | Promise<void>) => void;
-  /** snapshot-undo sugar for immutable stores: undo restores the pre-run state */
+  /** snapshot-undo sugar for immutable stores: captures the store state AT
+   * THE MOMENT OF THE CALL (put it before mutations, after guard clauses);
+   * undo replaces the whole store with that snapshot */
   snapshotUndo: <S>(store: { get(): S; set(state: S): void }) => void;
   world: W;
   /** resolve a collected ArgValue to the live domain object (undefined = stale) */

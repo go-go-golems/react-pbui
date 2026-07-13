@@ -14,6 +14,13 @@ AITR-794, 1984) and twelve hand-written JSX prototypes preserved in
 `sources/`. Full analysis and design doc in the CLIM-JSX-001 ticket under
 `ttmp/`.
 
+## Documentation
+
+- [`docs/getting-started.md`](docs/getting-started.md) — build a complete app from an empty file; every concept introduced as you need it.
+- [`docs/user-guide.md`](docs/user-guide.md) — the developer reference: the model, each mechanism's purpose and boundaries, how the packages relate, performance and testing.
+- [`docs/api-reference.md`](docs/api-reference.md) — every public export, exact signatures and contracts.
+- Each package has a README covering its role, a minimal example, and its key exports; `apps/demos/README.md` gives a reading order through the seven example apps.
+
 ## Packages
 
 | package | what |
