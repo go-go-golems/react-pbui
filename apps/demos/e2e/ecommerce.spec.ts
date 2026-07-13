@@ -1,5 +1,5 @@
 /* STOREFRONT BACK OFFICE: state-sensitive order lifecycle menus, status
- * filtering, the three-argument New Order accept chain (with inert VIEW
+ * filtering, the three-argument New Order accept chain (with LIVE view
  * tabs), and Adjust Stock validation (CLIM-JSX-003 diary, Step 3). */
 
 import { expect, test, type Page } from "@playwright/test";
@@ -73,11 +73,18 @@ test("New Order: customer by pointing, product typed, qty by default", async ({ 
 
   expect(await statusMode(page)).toBe("Accept CUSTOMER");
   expect(await eligible(page, "customer").count()).toBeGreaterThan(0);
-  // the VIEW tabs go inert mid-command (the recorded PORTING-GAP)
+  // the VIEW tabs stay LIVE mid-command (participation mode "active" —
+  // this closed the PORTING-GAP recorded in CLIM-JSX-005 §3.1)
   expect(
     await page.locator('.pbui-pres.pbui-inert[data-pbui-type="view"]').count(),
-  ).toBeGreaterThanOrEqual(5);
+  ).toBe(0);
 
+  // navigate to the Customers tab WITHOUT aborting the pending New Order
+  await pres(page, "view", "Customers").click();
+  await expectLastLine(page, "Switched to Customers.");
+  expect(await statusMode(page)).toBe("Accept CUSTOMER"); // context survived!
+
+  // supply the customer from the Customers tab itself
   await eligible(page, "customer").first().click();
   expect(await statusMode(page)).toBe("Accept PRODUCT");
   await submit(page, "mug");

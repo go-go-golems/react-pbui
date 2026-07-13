@@ -8,11 +8,11 @@
  * a status chip to filter the Orders tab; run "New Order" and supply the
  * customer and product by clicking any mention of them on screen.
  *
- * PORTING-GAPS: switching tabs while an input context is active is not
- * possible — the engine swallows clicks on non-matching presentations, so
- * VIEW tabs are inert mid-command. CLIM allowed some commands (like frame
- * navigation) to stay live during accepts; a core "alwaysActive"
- * presentation mode / command-during-accept translator would fix this.
+ * Navigation stays live during input contexts: the VIEW tabs are
+ * duringAccept="active" presentations and Switch To View / Show * are
+ * duringAccept commands, so mid-New-Order you can flip to Customers,
+ * click the customer there, and continue — the pending context survives
+ * (CLIM-JSX-005 §5; this closed the former PORTING-GAPS entry).
  *
  * Order lifecycle is state-sensitive: the context menu on a pending order
  * offers Mark Paid / Cancel; a paid one offers Fulfill / Refund — driven by

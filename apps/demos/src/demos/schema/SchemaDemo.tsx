@@ -6,13 +6,15 @@
  * canvas crosshair (the "location accepts" technique from PORTING-NOTES);
  * probed nodes plot in two stacked wave panes after Run Spice.
  *
+ * Schematic presentations use duringAccept="fallthrough": while a LOCATION
+ * (or any foreign type) is being accepted they go gesture-transparent, so
+ * clicks on an instance body reach the canvas and place at that point —
+ * the original SPres behavior, restored by CLIM-JSX-005 §5.4 (this closed
+ * the former click-swallowing PORTING-GAPS entry). Eligible presentations
+ * (pins during node/location accepts, via the pin→location coercion kept
+ * for UX) still supply by click as usual.
+ *
  * PORTING-GAPS:
- *  - The original's SPres let clicks/moves fall through to the canvas while
- *    a LOCATION was being accepted; @pbui presentations stop propagation, so
- *    clicks on an instance body during a location accept are swallowed. As a
- *    workaround pins carry a pin→location coercion, so wire endpoints can
- *    still be supplied by clicking a pin; the crosshair ghost also freezes
- *    while hovering a presentation (its onMouseMove stops propagation).
  *  - The 5-corner sweep is reduced to one corner (allowed by the brief), so
  *    each probe draws one trace instead of a five-trace bundle.
  *  - The original's canvas context menu ("Draw NMOS here …") is replaced by
@@ -654,6 +656,7 @@ function SchematicCanvas() {
             type="wire"
             object={wireRef(w.id)}
             label={`${w.id} (node ${nn})`}
+            duringAccept="fallthrough"
             hitRect={{
               x: Math.min(w.x1, w.x2) - 3,
               y: Math.min(w.y1, w.y2) - 3,
@@ -675,6 +678,7 @@ function SchematicCanvas() {
             type="instance"
             object={instRef(inst)}
             label={instLabel(inst)}
+            duringAccept="fallthrough"
             hitRect={{ x: b.x, y: b.y, width: b.w, height: b.h }}
           >
             <SchemaSymbol inst={inst} />
@@ -693,6 +697,7 @@ function SchematicCanvas() {
               type="pin"
               object={{ kind: "pin", id: `${inst.id}.${p.name}` }}
               label={`${nn} (pin ${inst.id}.${p.name})`}
+              duringAccept="fallthrough"
               hitRect={{ x: p.x - 4, y: p.y - 4, width: 8, height: 8 }}
             >
               <rect x={p.x - 2.5} y={p.y - 2.5} width={5} height={5} fill="var(--pbui-ink)" />

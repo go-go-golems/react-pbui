@@ -90,6 +90,7 @@ export function TabBar({ world }: { world: World }) {
         const active = s.activeTab === v.id;
         return (
           <Presentation key={v.id} type="view" object={viewRef(v)} label={v.name} block
+            duringAccept="active"
             style={{
               border: "2px solid var(--pbui-ink)",
               borderBottom: active ? "2px solid var(--pbui-paper)" : "2px solid var(--pbui-ink)",

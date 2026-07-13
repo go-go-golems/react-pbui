@@ -150,6 +150,7 @@ export function makeEngine(world: World) {
 
   c.define({
     name: "Switch To View",
+    duringAccept: true,
     doc: "Open a tab.",
     args: { view: arg.presentation<ViewDef>("view") },
     isDefaultFor: ["view"],
@@ -161,6 +162,7 @@ export function makeEngine(world: World) {
 
   c.define({
     name: "Show Order",
+    duringAccept: true,
     args: { order: arg.presentation<Order>("order") },
     isDefaultFor: ["order"],
     run: ({ order }, api) => {
@@ -171,6 +173,7 @@ export function makeEngine(world: World) {
 
   c.define({
     name: "Show Product",
+    duringAccept: true,
     args: { product: arg.presentation<Product>("product") },
     isDefaultFor: ["product"],
     run: ({ product }, api) => {
@@ -181,6 +184,7 @@ export function makeEngine(world: World) {
 
   c.define({
     name: "Show Customer",
+    duringAccept: true,
     args: { customer: arg.presentation<Customer>("customer") },
     isDefaultFor: ["customer"],
     run: ({ customer }, api) => {

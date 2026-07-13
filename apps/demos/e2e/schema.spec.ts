@@ -67,3 +67,21 @@ test("Draw Instance: choice menu → RES → LOCATION accept → placed", async 
   await canvas(page).click({ position: await emptySpot(page) });
   await expectLastLine(page, /Placed R\d+ \(RES 10\) at \(-?\d+,-?\d+\)\./);
 });
+
+test("fallthrough: placing a component by clicking ON an existing instance", async ({ page }) => {
+  await openDemo(page, "schema");
+
+  await canvas(page).click({ button: "right", position: await emptySpot(page) });
+  await menuItem(page, "Draw Instance …").click();
+  await menuItem(page, "CAP").click();
+  expect(await docBar(page)).toContain("Accepting a LOCATION");
+
+  // schematic presentations are duringAccept="fallthrough": the click on an
+  // instance body passes through to the canvas and places at that point
+  // (this was the recorded PORTING-GAP; CLIM-JSX-005 §5.4 closed it)
+  const inst = page.locator('g.pbui-pres[data-pbui-type="instance"]').first();
+  await expect(inst).toHaveClass(/pbui-passthru/);
+  const box = (await inst.boundingBox())!;
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  await expectLastLine(page, /Placed C\d+ \(CAP .*\) at \(-?\d+,-?\d+\)\./);
+});
