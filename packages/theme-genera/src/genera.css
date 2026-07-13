@@ -40,6 +40,16 @@
   outline: 2px dotted var(--pbui-ink);
 }
 
+/* the keyboard focus cursor: distinct from hover (double line) */
+.pbui-kbd-target {
+  outline: 3px double var(--pbui-ink);
+}
+
+.pbui-pres:focus {
+  /* focus ring is the kbd-target outline; suppress the UA ring */
+  outline-offset: 0px;
+}
+
 @keyframes pbui-ants {
   to {
     outline-offset: 2px;

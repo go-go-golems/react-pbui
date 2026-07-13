@@ -8,7 +8,9 @@ export const GENERA_IDLE_DOC =
   "To see other commands, press Shift, Control, Meta-Shift, or Super.";
 
 export function pointerDoc(engine: PbuiEngine<any>): string {
-  const { accept, hover, menu } = engine.getState();
+  const { accept, menu } = engine.getState();
+  // the keyboard focus cursor documents itself exactly like hover
+  const hover = engine.getState().hover ?? engine.focusRecord();
   if (menu) return "Choose an item — Mouse-L selects; [Escape] dismisses.";
   if (accept) {
     const wanted = accept.spec.type.toUpperCase();

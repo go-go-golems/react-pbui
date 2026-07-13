@@ -52,6 +52,8 @@ export interface EngineState {
   hover: PresentationRecord | null;
   menu: MenuState | null;
   pointer: { x: number; y: number };
+  /** keyboard focus cursor over presentations (CLIM-JSX-004 §6.1) */
+  focus: string | null;
 }
 
 export interface Coercion {
@@ -107,6 +109,7 @@ export class PbuiEngine<W = unknown> {
     hover: null,
     menu: null,
     pointer: { x: 0, y: 0 },
+    focus: null,
   };
 
   constructor(opts: EngineOptions<W>) {
@@ -751,6 +754,53 @@ export class PbuiEngine<W = unknown> {
 
   closeMenu(): void {
     if (this.state.menu) this.setState({ menu: null });
+  }
+
+  /* ------------------------------ keyboard focus ---------------------------- */
+
+  /** set the keyboard focus cursor; targeted notification like hover */
+  setFocus(id: string | null): void {
+    const prev = this.state.focus;
+    if (prev === id) return;
+    this.setState({ focus: id });
+    for (const p of [prev, id]) if (p) this.registry.notifyPres(p);
+  }
+
+  /** the presentation that should carry tabIndex=0: the focus cursor if it
+   * still exists, else the first registered presentation */
+  focusTarget(): string | null {
+    const f = this.state.focus;
+    if (f && this.registry.get(f)) return f;
+    const first = this.registry.all()[0];
+    return first ? first.id : null;
+  }
+
+  /** the focused presentation record, for the doc line */
+  focusRecord(): PresentationRecord | null {
+    const f = this.state.focus;
+    return f ? (this.registry.get(f) ?? null) : null;
+  }
+
+  /** move the focus cursor through registry order (arrow keys) */
+  moveFocus(dir: 1 | -1): string | null {
+    const all = this.registry.all();
+    if (!all.length) return null;
+    const cur = this.state.focus;
+    const idx = cur ? all.findIndex((r) => r.id === cur) : -1;
+    const next = all[(idx + dir + all.length) % all.length]!;
+    this.setFocus(next.id);
+    return next.id;
+  }
+
+  /** Tab during an accept: cycle the eligible presentations */
+  moveFocusEligible(dir: 1 | -1): string | null {
+    const els = this.eligibleList();
+    if (!els.length) return null;
+    const cur = this.state.focus;
+    const idx = cur ? els.findIndex((r) => r.id === cur) : -1;
+    const next = els[(idx + dir + els.length) % els.length]!;
+    this.setFocus(next.id);
+    return next.id;
   }
 
   /* ---------------------------------- undo ---------------------------------- */

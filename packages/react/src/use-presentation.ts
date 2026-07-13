@@ -38,8 +38,12 @@ export interface PresentationHandle {
     onClick: (e: React.MouseEvent) => void;
     onAuxClick: (e: React.MouseEvent) => void;
     onContextMenu: (e: React.MouseEvent) => void;
+    onFocus: () => void;
+    onKeyDown: (e: React.KeyboardEvent) => void;
+    tabIndex: number;
     "data-pbui-type": string;
   };
+  isFocused: boolean;
   isHovered: boolean;
   isEligible: boolean;
   isInert: boolean;
@@ -97,6 +101,20 @@ export function usePresentation(input: UsePresentationInput): PresentationHandle
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [engine, type, key, label, pane, mode, disabled]);
 
+  // when the engine's focus cursor lands here (arrow keys / Tab-cycling),
+  // move real DOM focus so the browser's a11y tree follows
+  useEffect(() => {
+    if (disabled) return;
+    const el = elRef.current as HTMLElement | null;
+    if (
+      idRef.current &&
+      engine.getState().focus === idRef.current &&
+      el &&
+      document.activeElement !== el
+    )
+      el.focus?.();
+  });
+
   const rec = (): PresentationRecord => ({
     id: idRef.current ?? `anon:${type}:${key}`,
     type,
@@ -109,6 +127,9 @@ export function usePresentation(input: UsePresentationInput): PresentationHandle
   const st = engine.getState();
   const id = idRef.current;
   const hovered = !disabled && id != null && st.hover?.id === id;
+  const focused = !disabled && id != null && st.focus === id;
+  // roving cursor: exactly one presentation is Tab-reachable
+  const isTabTarget = !disabled && id != null && engine.focusTarget() === id;
   const eligible =
     !disabled && engine.eligible({ id: id ?? undefined, type, ref, label });
   const inContext = !disabled && !eligible && st.accept != null;
@@ -152,12 +173,55 @@ export function usePresentation(input: UsePresentationInput): PresentationHandle
       e.stopPropagation();
       engine.gesture("context", rec(), e.clientX, e.clientY);
     },
+    onFocus: () => {
+      if (disabled || !idRef.current) return;
+      engine.setFocus(idRef.current);
+    },
+    onKeyDown: (e) => {
+      if (disabled) return;
+      const el = elRef.current;
+      const center = () => {
+        const b = el?.getBoundingClientRect();
+        return b ? { x: b.x + b.width / 2, y: b.y + b.height / 2 } : { x: 0, y: 0 };
+      };
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        e.stopPropagation();
+        engine.closeMenu();
+        const c = center();
+        engine.gesture("click", rec(), c.x, c.y);
+      } else if (e.key === "m" || e.key === "ContextMenu" || (e.key === "F10" && e.shiftKey)) {
+        e.preventDefault();
+        e.stopPropagation();
+        const c = center();
+        engine.gesture("context", rec(), c.x, c.y);
+      } else if (e.key === "d") {
+        e.preventDefault();
+        e.stopPropagation();
+        engine.gesture("aux", rec());
+      } else if (e.key === "Tab" && engine.getState().accept) {
+        // cycle the eligible presentations during an accept (§6.2)
+        e.preventDefault();
+        e.stopPropagation();
+        engine.moveFocusEligible(e.shiftKey ? -1 : 1);
+      } else if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        e.stopPropagation();
+        engine.moveFocus(1);
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        e.stopPropagation();
+        engine.moveFocus(-1);
+      }
+    },
+    tabIndex: isTabTarget || focused ? 0 : -1,
     "data-pbui-type": type,
   };
 
   const className = [
     "pbui-pres",
     hovered && !quiet ? "pbui-hover" : "",
+    focused && !quiet ? "pbui-kbd-target" : "",
     eligible ? "pbui-eligible" : "",
     inert ? "pbui-inert" : "",
     passthru ? "pbui-passthru" : "",
@@ -169,6 +233,7 @@ export function usePresentation(input: UsePresentationInput): PresentationHandle
   return {
     props,
     isHovered: hovered,
+    isFocused: focused,
     isEligible: eligible,
     isInert: inert,
     isRelatedHover: relatedHover,
