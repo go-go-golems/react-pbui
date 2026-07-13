@@ -14,6 +14,9 @@ AITR-794, 1984) and twelve hand-written JSX prototypes preserved in
 `sources/`. Full analysis and design doc in the CLIM-JSX-001 ticket under
 `ttmp/`.
 
+![Schema Schematic Editor — a presentation-based schematic capture tool with a toy switch-level SPICE; every instance, wire, pin, and node name (including the ones printed to the listener) is a live typed presentation](docs/screenshots/schema.png)
+*The schematic editor after `Run Spice`: waveforms plotted per probed node, and the "Nodes:" line in the listener is made of clickable NODE presentations.*
+
 ## Documentation
 
 - [`docs/getting-started.md`](docs/getting-started.md) — build a complete app from an empty file; every concept introduced as you need it.
@@ -25,11 +28,11 @@ AITR-794, 1984) and twelve hand-written JSX prototypes preserved in
 
 | package | what |
 |---|---|
-| `@pbui/core` | framework-free engine: ptype lattice with print/parse codecs, presentation registry (the "presentation data base"), command tables with typed args, accept-loop FSM, coercions, output records, pull-derived pointer doc |
-| `@pbui/react` | `PbuiProvider`, headless `usePresentation`, `<Presentation>` / `<SvgPresentation>`, `usePbuiSurface` |
-| `@pbui/listener` | transcript + morphing prompt line + command line (prefix match, completion) |
-| `@pbui/chrome` | context menus, mouse-doc bar, status line, pane frames |
-| `@pbui/theme-genera` | the monochrome look: `import "@pbui/theme-genera/genera.css"` |
+| `@go-go-golems/pbui-core` | framework-free engine: ptype lattice with print/parse codecs, presentation registry (the "presentation data base"), command tables with typed args, accept-loop FSM, coercions, output records, pull-derived pointer doc |
+| `@go-go-golems/pbui-react` | `PbuiProvider`, headless `usePresentation`, `<Presentation>` / `<SvgPresentation>`, `usePbuiSurface` |
+| `@go-go-golems/pbui-listener` | transcript + morphing prompt line + command line (prefix match, completion) |
+| `@go-go-golems/pbui-chrome` | context menus, mouse-doc bar, status line, pane frames |
+| `@go-go-golems/pbui-theme-genera` | the monochrome look: `import "@go-go-golems/pbui-theme-genera/genera.css"` |
 
 ## Demos
 
@@ -38,10 +41,20 @@ pnpm install
 pnpm demos          # http://localhost:5199
 ```
 
-Five demos in `apps/demos`: **Hello PBUI** (tutorial), plus ports of the
-original prototypes — **CARE Examiner**, **Dynamic Windows Scheduler**,
-**Presenta Metrics**, **Schema Schematic Editor**. See
-`apps/demos/PORTING-NOTES.md` for the porting recipe.
+Seven demos in `apps/demos`: a tutorial, four ports of the original
+prototypes, and two product-shaped applications. `apps/demos/README.md`
+gives a reading order; `apps/demos/PORTING-NOTES.md` is the recipe for
+writing your own.
+
+| | |
+|---|---|
+| ![Hello PBUI](docs/screenshots/hello.png) **Hello PBUI** — the smallest complete app, caught mid-command: *Compare Ships* is accepting its second SHIP, the eligible ships carry marching-ants outlines, and the doc bar explains the hovered candidate. | ![CARE Examiner](docs/screenshots/care-examiner.png) **CARE Examiner** — a live multiprocessor console; dithered queue-load strips keep ticking during input contexts, and the legend swatches are LOAD-LEVEL presentations (a threshold was just set by right-clicking one). |
+| ![Dynamic Windows Scheduler](docs/screenshots/scheduler.png) **Dynamic Windows Scheduler** — an SVG Gantt with a real type lattice; the open menu is titled `TASK ⊂ ANY` and every task name ever printed to the interactor stays mouse-sensitive. | ![Presenta Metrics](docs/screenshots/metrics.png) **Presenta Metrics** — the classic two-click flow: a readout port was clicked, so every gauge (including the plotted lane labels in the viewport) is glowing, waiting to be wired. |
+| ![Gallery](docs/screenshots/gallery.png) **Gallery** — an are.na-style image browser; cards, tag chips, and channels are presentations, tags are created on the fly from typed input, and editing runs through the command loop. | ![Storefront Back Office](docs/screenshots/ecommerce.png) **Storefront Back Office** — a five-tab e-commerce admin; the open lifecycle menu is derived from the order's state, tabs stay usable mid-command, and `undo` restores fulfillments (stock included). |
+
+The launcher at `/` lists them all:
+
+![Launcher](docs/screenshots/launcher.png)
 
 ## Develop
 
