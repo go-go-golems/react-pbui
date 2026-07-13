@@ -39,6 +39,15 @@ original prototypes — **CARE Examiner**, **Dynamic Windows Scheduler**,
 ## Develop
 
 ```sh
-pnpm test        # core unit tests (vitest)
+pnpm test        # unit tests: core (53) + react RTL (19)
 pnpm typecheck   # strict tsc across the workspace
+cd apps/demos && pnpm exec playwright test --project=chromium  # 26 e2e
+cd apps/demos && pnpm exec playwright test --project=perf      # render budget
 ```
+
+CI runs all four (`.github/workflows/ci.yml`). Command authoring uses the
+typed builder (`commandBuilder`/`arg.*` — resolved args, central staleness,
+`api.snapshotUndo` for undo); the full recipe is in
+`apps/demos/PORTING-NOTES.md`. Everything is keyboard-operable: Tab/arrows
+move the focus cursor, Enter clicks, `m` opens menus, Tab cycles eligible
+presentations during accepts, Up/Down recalls listener input.

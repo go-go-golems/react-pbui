@@ -14,13 +14,23 @@ reference port. Then skim the package sources you'll use:
    `number`/`string`), then `ptypes.define<T>({name, supertypes?, print,
    describe?, parse?, defaultCommand?})`. `print` receives the RESOLVED
    object (never undefined). `parse` is the keyboard supply path.
-3. **Commands**: `new CommandTable<World>()`, `.defineAll([...])`. Args:
-   `{name, type, input?: "presentation"|"typed"|"menu", distinct?, where?,
-   validate?, default?, options?}`. `run(args, api)` must return
-   void/Promise<void> — wrap `array.push(...)` in braces. Resolve refs with
-   `api.resolve(args["x"]!)` and handle `undefined` (stale) with
-   `api.printErr("... presentation was stale.")`. `global: true` puts a
-   command on the background menu instead of object menus.
+3. **Commands — use the typed builder** (`packages/core/src/builder.ts`;
+   the e-commerce demo is the reference):
+   `const c = commandBuilder(commands); c.define({name, args: {order:
+   arg.presentation<Order>("order"), qty: arg.number({default: 1, min: 1,
+   integer: true}), reason: arg.text(), kind: arg.choice({options})},
+   appliesTo: (order: Order, w) => ..., run: ({order, qty}, api) => ...})`.
+   `run` receives RESOLVED objects (never refs, never stale — stale
+   entities abort centrally); `where`/`validate` also receive resolved
+   values, with `soFar` loosely typed (annotate its param:
+   `(p: Product, soFar: {order?: Order}) => ...`). Arg-object key order =
+   accept order; the key is the display name in prompts/echo. Mutating
+   commands opt into undo with `api.snapshotUndo(world.store)` as their
+   first line (call `installUndoCommands(engine)` once). `global: true`
+   puts a command on the background menu; `duringAccept: true` (single
+   presentation arg only) lets it run without aborting a pending accept.
+   The v1 `defineAll([...])` style still works (see the Genera ports) but
+   new code should use the builder.
 4. **Engine**: `new PbuiEngine<World>({ptypes, commands, world, resolver,
    idleDoc})`. The `resolver` maps `ObjectRef {kind, id}` → live object.
    Use `valueRef(v)` for immediates (numbers, month indices, levels).
@@ -53,13 +63,25 @@ reference port. Then skim the package sources you'll use:
   derived state.
 - **quiet**: pass `quiet` on container presentations (whole panes/windows)
   so they don't flash hover outlines over their contents.
+- **Participation modes**: presentations default to `gated` (dim + swallow
+  during foreign accepts). Navigation chrome (tabs) should be
+  `duringAccept="active"` with `duringAccept: true` on its single-arg
+  command; canvas overlays that must not block location clicks should be
+  `duringAccept="fallthrough"`. Use sparingly — the gated default is what
+  makes accepts legible.
+- **Keyboard**: free with the wrapper — Tab reaches the roving focus
+  cursor, arrows move it, Enter clicks, `m` menus, `d` describes, Tab
+  cycles eligible presentations during accepts. Don't add your own key
+  handlers on presentations.
 
 ## Rules
 
 - Do NOT modify anything under `packages/` or other demos' directories, and
   do NOT edit `src/demos.ts` (entries are pre-registered). Your demo lives
   entirely in `src/demos/<slug>/`.
-- `pnpm --filter @pbui/demos typecheck` must pass (strict TS,
+- `pnpm --filter @pbui/demos typecheck` AND the e2e suite
+  (`cd apps/demos && pnpm exec playwright test --project=chromium`) must
+  pass (strict TS,
   noUncheckedIndexedAccess: index access yields `T | undefined` — use `!`
   judiciously after bounds checks).
 - Match the original prototype's feel: Genera monochrome (theme classes do

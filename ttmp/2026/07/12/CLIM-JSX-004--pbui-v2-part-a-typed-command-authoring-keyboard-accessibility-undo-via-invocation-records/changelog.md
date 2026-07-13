@@ -13,3 +13,8 @@ Wrote the intern-level design doc for part A: typed command builder (compile-to-
 
 - /home/manuel/code/wesen/2026-07-12--clim-jsx/ttmp/2026/07/12/CLIM-JSX-004--pbui-v2-part-a-typed-command-authoring-keyboard-accessibility-undo-via-invocation-records/design-doc/01-typed-commands-keyboard-a11y-and-undo-analysis-design-and-implementation-guide.md — Primary deliverable
 
+
+## 2026-07-12
+
+Implemented all phases: A1 typed builder (73fde62), A3 invocations+undo+ActivityPane+live history (017b51d), A2 ecommerce migration -150 lines/zero unwraps + SKU presentations (2255ae5), A4 ARIA menus/live regions/listener history (00774ff), A5 roving focus + keyboard accepts + keyboard-only e2e (2eabad5). Deviations recorded in diary: soFar loosely typed in descriptor callbacks; snapshot-after-guards convention.
+

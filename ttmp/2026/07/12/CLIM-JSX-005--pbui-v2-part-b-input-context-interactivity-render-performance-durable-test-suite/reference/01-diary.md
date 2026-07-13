@@ -196,3 +196,67 @@ eligible-set cache, bench budget"
 - Diff of registry.ts + engine.ts (setAccept/setHover) +
   use-presentation.ts; then `e2e/bench.spec.ts`. Validate: full suite +
   `pnpm --filter @pbui/demos exec playwright test --project=perf`.
+
+## Step 4: Phase B3 — the modal wall comes down
+
+Participation modes landed exactly on the design's §5: core first
+(commit 00774ff — modes on PresentationRecord, `duringAccept` on
+CommandSpec with the D2 define-time seed-complete refusal,
+`executeImmediate` that runs a command WITHOUT touching the pending
+context and recomputes eligibility after, reduced during-accept menus on
+active presentations, the doc-line "keeps waiting" affordance, and the
+`.pbui-passthru` class), then applied to the demos (commit 46610ca).
+
+Both PORTING-GAPS that motivated this ticket are now closed and
+e2e-proven:
+
+- **E-commerce:** VIEW tabs are `active`, the four navigation commands
+  are `duringAccept: true`. The New Order e2e now asserts the inverse of
+  its old assertion — zero inert tabs — then switches to the Customers
+  tab mid-accept, confirms `Accept CUSTOMER` survived, and supplies the
+  customer from the newly opened tab.
+- **Schema:** instances/wires/pins are `fallthrough`. The new e2e starts
+  Draw Instance → CAP, asserts an instance body carries `pbui-passthru`,
+  clicks dead-center ON that instance, and the component places at that
+  point — the original SPres behavior restored. The pin→location
+  coercion stays as UX (pins remain eligible, so wire endpoints still
+  snap to pins).
+
+### Prompt Context
+
+**User prompt (verbatim):** (see Step 1)
+
+**Commit (code):** 00774ff (core, shared with 004-A4) and 46610ca
+(application).
+
+### What worked
+
+- The gating-matrix test file (8 cases) wrote itself from the design's
+  §5.1 table; all passed first run after the engine edits.
+- The e2e suite caught a self-inflicted regression before it shipped:
+  relabeling the menu footer "Dismiss" broke three exact-content
+  assertions instantly (decision D5 earning its keep).
+
+### What was tricky to build
+
+- `fallthrough` turned out to be pure CSS (`pointer-events: none`
+  without the inert dimming) — the DOM does the fall-through natively,
+  no handler changes needed. The subtle part was flag precedence in the
+  hook: eligible presentations behave normally in every mode.
+- `executeImmediate` must recompute the eligible set after the command
+  runs (its effects may change `where` results — switching tabs mounts
+  new presentations), but only if a context is still pending.
+
+### What warrants a second pair of eyes
+
+- Reduced menus on active presentations show only duringAccept commands;
+  if none apply the menu renders "(no applicable commands)" + Abort —
+  check that reads OK in practice.
+- Design doc §5.4's open question (does fallthrough suppress hover?):
+  resolved as yes — passthru elements get no pointer events at all, so
+  no doc-line claims. The crosshair no longer freezes over instances.
+
+### Code review instructions
+
+- `modes.test.ts` is the spec; then the two demo diffs and their e2e
+  extensions. Full suite: 53 core + 19 RTL + 26 e2e + perf, all green.

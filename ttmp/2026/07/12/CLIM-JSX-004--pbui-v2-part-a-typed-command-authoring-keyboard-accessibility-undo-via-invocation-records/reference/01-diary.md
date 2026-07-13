@@ -183,3 +183,93 @@ undo, ActivityPane, live command history"
 - `core/src/invocation.ts` + engine execute/makeApi diff +
   `invocation.test.ts`; then `listener.tsx` line-wrapping and
   `chrome/activity.tsx`.
+
+## Step 3: Phase A2 — the e-commerce migration (delegated, measured)
+
+An agent migrated all 23 e-commerce commands to the builder against a
+hard contract: byte-identical narration and echo grammar, the e2e suite
+as referee. Results: engine.ts 566 → 536 lines, `args["x"]!` unwraps
+31 → 0, manual resolve calls 20 → 0, `val`/`refId`/`orderIs` deleted;
+the only remaining `as World` casts live in the v1-style ptype bodies
+(kept by design) plus two `(o as Order)` in multi-arg `appliesTo` — the
+known union-typed first-arg wart. Undo wired (`snapshotUndo` on all
+twelve mutating commands, `installUndoCommands`, ActivityPane on the
+dashboard), and the user's SKU request landed: SKU cells are product
+presentations, related-highlighting their name chips via byRef.
+
+### Prompt Context
+
+**User prompt (verbatim):** (see Step 1) — plus, mid-stream: "in the
+ecommerce, SKU is also a presentation oft he product (not just the
+product name)."
+
+**Commit (code):** 2255ae5 — ":recycle: A2: e-commerce on the typed
+builder, snapshot undo, SKU presentations"
+
+### What worked / What I learned
+
+- The agent's one judgment call was right: Fulfill Order's snapshot is
+  taken *after* the insufficient-stock check (still before mutation), so
+  refused fulfills don't register no-op undos. Worth encoding as
+  guidance: "snapshot after guards, before mutations."
+- New e2e: undo-restores-fulfillment (status AND stock) and
+  SKU-hover-shows-product-doc.
+
+### What warrants a second pair of eyes
+
+- The two `(o as Order)` appliesTo casts — the builder could grow a
+  `FirstArg<A>` helper type to remove them.
+
+## Step 4: Phases A4 + A5 — menus, announcements, history, keyboard
+
+A4 (commit 00774ff, shared with B3-core): ContextMenuHost rewritten as a
+real ARIA menu — `role="menu"/menuitem"`, focus moves in on open and
+returns to the invoker on close, ArrowUp/Down wrap, Home/End,
+Enter/Space, 800ms type-ahead, and a `.pbui-menu-focus` highlight shared
+with hover. Doc bar became a polite live region; the listener mirrors
+its newest line for screen readers, gained Up/Down history with draft
+restore, and its transcript is selectable (scoped `user-select: text`).
+
+A5 (commit 2eabad5): engine focus cursor with hover-style targeted
+notification; the doc line documents the focused presentation exactly
+like a hover; presentations carry a roving tabIndex (one Tab stop,
+arrows move the cursor, DOM focus follows), Enter/Space = click, `m` /
+Shift+F10 = menu, `d` = Describe, and Tab during an accept cycles
+`eligibleList()` (delivered by 005's B2 cache, as planned) with a
+double-outline kbd-target style.
+
+### Prompt Context
+
+**User prompt (verbatim):** (see Step 1)
+
+### What didn't work
+
+- The new aria-live transcript mirror broke four RTL tests with
+  "Found multiple elements" — `getByText` had been implicitly relying on
+  text uniqueness. Fixed by scoping the queries to
+  `.pbui-listener-scroll`; behavior unchanged, structure intentionally
+  duplicated for AT.
+- First menu rewrite relabeled the footer "Dismiss" outside accepts —
+  reverted immediately: three e2e specs pin exact menu contents
+  including "Abort". The suite did its job before the code even ran.
+
+### What was tricky to build
+
+- Focus-follows-cursor without fighting React: a per-render effect moves
+  DOM focus only when the engine cursor points at this presentation and
+  the element isn't already active — no focus wars with menus (which
+  capture and restore focus themselves).
+- Single-letter gesture keys (`m`, `d`) are bound only while a
+  presentation has DOM focus, resolving the design doc's open question
+  in favor of scoped bindings.
+
+### Code review instructions
+
+- Keyboard proof: `e2e/keyboard.spec.ts` — a complete Compare Sites in
+  care-examiner with zero mouse events, including menu type-ahead.
+- `pnpm --filter @pbui/react test` (19) and axe-follow-ups noted below.
+
+### What should be done in the future
+
+- A real screen-reader session (the design doc's own caveat) and an
+  axe-core pass in CI; both deferred, tracked in the design doc §10.5.
