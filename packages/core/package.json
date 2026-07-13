@@ -13,6 +13,7 @@
     "build:dist": "node ../../scripts/packages/build-dist.mjs"
   },
   "devDependencies": {
+    "@types/node": "^22.20.1",
     "typescript": "^5.5.4",
     "vitest": "^2.0.5"
   },
