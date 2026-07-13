@@ -1,0 +1,12 @@
+.git
+.github
+.idea
+node_modules
+**/node_modules
+dist
+**/dist
+.pnpm-store
+.playwright-mcp
+coverage
+playwright-report
+test-results

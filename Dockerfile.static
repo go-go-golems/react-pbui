@@ -1,0 +1,19 @@
+# syntax=docker/dockerfile:1
+FROM node:24-alpine AS build
+
+WORKDIR /workspace
+RUN corepack enable && corepack prepare pnpm@10.13.1 --activate
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
+COPY packages ./packages
+COPY apps ./apps
+COPY tsconfig.base.json ./
+RUN pnpm install --frozen-lockfile
+RUN pnpm --filter @go-go-golems/pbui-demos build
+
+FROM alpine:3.21
+LABEL org.opencontainers.image.title="PBUI demo static site"
+LABEL org.opencontainers.image.description="Vite-built PBUI demos for pbui.yolo.scapegoat.dev"
+LABEL org.opencontainers.image.source="https://github.com/go-go-golems/react-pbui"
+
+COPY --from=build /workspace/apps/demos/dist/ /site/
+RUN test -f /site/index.html && find /site -type f | sort > /site-manifest.txt
