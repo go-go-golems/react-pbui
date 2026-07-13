@@ -4,6 +4,11 @@ import { spawnSync } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 
+// npm Trusted Publishing must use the GitHub OIDC token, never a token injected by
+// setup-node or a caller's shell.
+delete process.env.NODE_AUTH_TOKEN;
+delete process.env.NPM_TOKEN;
+
 const root = path.resolve(import.meta.dirname, '..', '..');
 const packageDirs = ['packages/core', 'packages/react', 'packages/listener', 'packages/chrome', 'packages/theme-genera'];
 const args = process.argv.slice(2);
