@@ -1,4 +1,4 @@
-/* SCHEMA — port of sources/schema-schematic-editor.jsx onto @pbui.
+/* SCHEMA — port of sources/schema-schematic-editor.jsx onto PBUI.
  *
  * A Genera / NS-CAD style schematic-capture editor with a toy switch-level
  * SPICE. Every transistor, wire and pin is a typed presentation; Draw
@@ -34,7 +34,7 @@ import {
   type ObjectRef,
   type PartLike,
   type Resolver,
-} from "@pbui/core";
+} from "@go-go-golems/pbui-core";
 import {
   PbuiProvider,
   Presentation,
@@ -42,9 +42,9 @@ import {
   useEngine,
   useEngineState,
   usePbuiSurface,
-} from "@pbui/react";
-import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@pbui/chrome";
-import { Listener } from "@pbui/listener";
+} from "@go-go-golems/pbui-react";
+import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@go-go-golems/pbui-chrome";
+import { Listener } from "@go-go-golems/pbui-listener";
 import { Store, useStore } from "../../lib/store.js";
 import {
   DEFAULT_PARAMS,
@@ -484,7 +484,7 @@ function makeEngine(world: World) {
       run: (_a, api) => {
         api.print(
           B("SCHEMA 1.4"),
-          " — presentation-based schematic capture with a toy switch-level SPICE, on @pbui.",
+          " — presentation-based schematic capture with a toy switch-level SPICE, on PBUI.",
         );
         api.print(
           "right-click the canvas background for global commands; ",

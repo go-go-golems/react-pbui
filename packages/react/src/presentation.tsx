@@ -2,7 +2,7 @@
  * (<SvgPresentation>) renderings of the same gesture protocol. */
 
 import type { CSSProperties, ReactNode } from "react";
-import type { ObjectRef } from "@pbui/core";
+import type { ObjectRef } from "@go-go-golems/pbui-core";
 import { usePresentation } from "./use-presentation.js";
 
 export interface PresentationProps {

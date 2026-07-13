@@ -2,8 +2,8 @@
  * objects mentioned in the transcript stay mouse-sensitive forever
  * (decision D7; scheduler:103). */
 
-import type { OutputPart } from "@pbui/core";
-import { Presentation } from "@pbui/react";
+import type { OutputPart } from "@go-go-golems/pbui-core";
+import { Presentation } from "@go-go-golems/pbui-react";
 
 export function PartView({ part }: { part: OutputPart }) {
   switch (part.t) {

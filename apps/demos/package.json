@@ -1,5 +1,5 @@
 {
-  "name": "@pbui/demos",
+  "name": "@go-go-golems/pbui-demos",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -12,11 +12,11 @@
     "e2e:install": "playwright install chromium"
   },
   "dependencies": {
-    "@pbui/chrome": "workspace:*",
-    "@pbui/core": "workspace:*",
-    "@pbui/listener": "workspace:*",
-    "@pbui/react": "workspace:*",
-    "@pbui/theme-genera": "workspace:*",
+    "@go-go-golems/pbui-chrome": "workspace:*",
+    "@go-go-golems/pbui-core": "workspace:*",
+    "@go-go-golems/pbui-listener": "workspace:*",
+    "@go-go-golems/pbui-react": "workspace:*",
+    "@go-go-golems/pbui-theme-genera": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

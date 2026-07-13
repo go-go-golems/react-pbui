@@ -2,8 +2,8 @@
  * presentation; tables are just rows of them. */
 
 import type { CSSProperties, ReactNode } from "react";
-import { Presentation } from "@pbui/react";
-import { ActivityPane, Pane } from "@pbui/chrome";
+import { Presentation } from "@go-go-golems/pbui-react";
+import { ActivityPane, Pane } from "@go-go-golems/pbui-chrome";
 import { useStore } from "../../lib/store.js";
 import {
   fmtMoney,

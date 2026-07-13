@@ -3,7 +3,7 @@
  * "accepting TYPE (point at a highlighted object)" banner. */
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { Presentation, useEngine, useEngineState, useTranscript } from "@pbui/react";
+import { Presentation, useEngine, useEngineState, useTranscript } from "@go-go-golems/pbui-react";
 import { PartView } from "./parts.js";
 
 export function Listener(props: {

@@ -1,4 +1,4 @@
-# Porting a prototype from sources/ onto @pbui
+# Porting a prototype from sources/ onto PBUI
 
 Read `src/demos/care-examiner/CareExaminerDemo.tsx` first — it is the
 reference port. Then skim the package sources you'll use:
@@ -79,13 +79,13 @@ reference port. Then skim the package sources you'll use:
 - Do NOT modify anything under `packages/` or other demos' directories, and
   do NOT edit `src/demos.ts` (entries are pre-registered). Your demo lives
   entirely in `src/demos/<slug>/`.
-- `pnpm --filter @pbui/demos typecheck` AND the e2e suite
+- `pnpm --filter @go-go-golems/pbui-demos typecheck` AND the e2e suite
   (`cd apps/demos && pnpm exec playwright test --project=chromium`) must
   pass (strict TS,
   noUncheckedIndexedAccess: index access yields `T | undefined` — use `!`
   judiciously after bounds checks).
 - Match the original prototype's feel: Genera monochrome (theme classes do
   it), CLIM echo/prompt conventions, `#<TYPE NAME>` printed reps.
-- If you hit a genuine gap in @pbui (something the port cannot express),
+- If you hit a genuine gap in PBUI (something the port cannot express),
   work around it locally and record it in a `PORTING-GAPS` comment at the
   top of your demo file — do not patch the packages.

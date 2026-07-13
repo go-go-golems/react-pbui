@@ -1,5 +1,5 @@
 {
-  "name": "@pbui/core",
+  "name": "@go-go-golems/pbui-core",
   "version": "0.1.0",
   "type": "module",
   "main": "src/index.ts",
@@ -9,10 +9,27 @@
   },
   "scripts": {
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:dist": "node ../../scripts/packages/build-dist.mjs"
   },
   "devDependencies": {
     "typescript": "^5.5.4",
     "vitest": "^2.0.5"
+  },
+  "private": false,
+  "description": "PBUI core package.",
+  "license": "MIT",
+  "author": "Manuel Odendahl",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/go-go-golems/react-pbui.git",
+    "directory": "packages/core"
+  },
+  "homepage": "https://github.com/go-go-golems/react-pbui/tree/main/packages/core#readme",
+  "bugs": {
+    "url": "https://github.com/go-go-golems/react-pbui/issues"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

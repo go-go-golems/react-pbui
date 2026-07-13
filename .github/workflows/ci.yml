@@ -39,8 +39,8 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-1.61.1
-      - run: pnpm --filter @pbui/demos exec playwright install --with-deps chromium
-      - run: pnpm --filter @pbui/demos exec playwright test --project=chromium
+      - run: pnpm --filter @go-go-golems/pbui-demos exec playwright install --with-deps chromium
+      - run: pnpm --filter @go-go-golems/pbui-demos exec playwright test --project=chromium
 
   perf:
     needs: e2e
@@ -62,5 +62,5 @@ jobs:
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-1.61.1
-      - run: pnpm --filter @pbui/demos exec playwright install --with-deps chromium
-      - run: pnpm --filter @pbui/demos exec playwright test --project=perf
+      - run: pnpm --filter @go-go-golems/pbui-demos exec playwright install --with-deps chromium
+      - run: pnpm --filter @go-go-golems/pbui-demos exec playwright test --project=perf

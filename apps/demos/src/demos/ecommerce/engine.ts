@@ -16,7 +16,7 @@ import {
   type ObjectRef,
   type OutputPart,
   type Resolver,
-} from "@pbui/core";
+} from "@go-go-golems/pbui-core";
 import {
   fmtMoney,
   orderTotal,

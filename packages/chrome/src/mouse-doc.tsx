@@ -2,8 +2,8 @@
  * renderings of core's pull derivations (decision D8). */
 
 import { useEffect, useState } from "react";
-import { modeLabel, pointerDoc } from "@pbui/core";
-import { useEngine, useEngineState } from "@pbui/react";
+import { modeLabel, pointerDoc } from "@go-go-golems/pbui-core";
+import { useEngine, useEngineState } from "@go-go-golems/pbui-react";
 
 export function MouseDocBar(props: { right?: string }) {
   const engine = useEngine();

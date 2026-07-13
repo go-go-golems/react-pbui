@@ -9,7 +9,7 @@
  *     a brand-new tag name at the prompt (created on the fly)
  *   - everything printed to the listener stays live: filter from there too
  *
- * PORTING-GAPS: none — built directly on @pbui.
+ * PORTING-GAPS: none — built directly on PBUI.
  */
 
 import { useEffect, useMemo, useRef } from "react";
@@ -24,10 +24,10 @@ import {
   type ObjectRef,
   type OutputPart,
   type Resolver,
-} from "@pbui/core";
-import { PbuiProvider, Presentation, useEngine, usePbuiSurface } from "@pbui/react";
-import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@pbui/chrome";
-import { Listener } from "@pbui/listener";
+} from "@go-go-golems/pbui-core";
+import { PbuiProvider, Presentation, useEngine, usePbuiSurface } from "@go-go-golems/pbui-react";
+import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@go-go-golems/pbui-chrome";
+import { Listener } from "@go-go-golems/pbui-listener";
 import { Store, useStore } from "../../lib/store.js";
 import { Artwork, PALETTES, mulberry32 } from "./art.js";
 

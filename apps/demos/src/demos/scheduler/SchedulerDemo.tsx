@@ -1,5 +1,5 @@
 /* Dynamic Windows Scheduler — port of sources/dynamic-windows-scheduler.jsx
- * onto @pbui.
+ * onto PBUI.
  *
  * A Symbolics Genera / CLIM-style Gantt scheduler for the NASA STS-31
  * payload-integration flow. The signature features survive the port:
@@ -16,11 +16,11 @@
  *     object has since been deleted (e.g. via Combine Tasks / Delete Task).
  *
  * PORTING-GAPS:
- *   - @pbui has no accepting-values dialog primitive, so the original's
+ *   - PBUI has no accepting-values dialog primitive, so the original's
  *     Look/Modify and Create Task dialogs (dynamic-windows-scheduler.jsx:709)
  *     are not ported; left-click now defaults to "Inspect Task" and edits
  *     happen through commands (Move/Swap/Combine/Convert/…).
- *   - No function-key strip in @pbui/chrome; the original FKEYS row
+ *   - No function-key strip in @go-go-golems/pbui-chrome; the original FKEYS row
  *     (RESHAPE/CREATE/…/EXIT) is dropped — its verbs are reachable from
  *     context menus and the command line instead.
  */
@@ -39,15 +39,15 @@ import {
   type ParseResult,
   type PartLike,
   type Resolver,
-} from "@pbui/core";
+} from "@go-go-golems/pbui-core";
 import {
   PbuiProvider,
   SvgPresentation,
   useEngine,
   usePbuiSurface,
-} from "@pbui/react";
-import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@pbui/chrome";
-import { Listener } from "@pbui/listener";
+} from "@go-go-golems/pbui-react";
+import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@go-go-golems/pbui-chrome";
+import { Listener } from "@go-go-golems/pbui-listener";
 import { Store, useStore } from "../../lib/store.js";
 
 /* --------------------------------- domain ---------------------------------- */

@@ -13,10 +13,10 @@ import {
   PTypes,
   defineBuiltinPtypes,
   type Resolver,
-} from "@pbui/core";
-import { PbuiProvider, Presentation, usePbuiSurface } from "@pbui/react";
-import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@pbui/chrome";
-import { Listener } from "@pbui/listener";
+} from "@go-go-golems/pbui-core";
+import { PbuiProvider, Presentation, usePbuiSurface } from "@go-go-golems/pbui-react";
+import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@go-go-golems/pbui-chrome";
+import { Listener } from "@go-go-golems/pbui-listener";
 
 interface Item {
   id: string;

@@ -1,12 +1,12 @@
-# @pbui API Reference
+# PBUI API Reference
 
-This reference documents every public export of the @pbui monorepo (all packages at version 0.1.0). The system is layered: `@pbui/core` is a framework-free interaction engine (presentation registry, ptype lattice, command tables, accept loop, transcript, invocation log); `@pbui/react` binds it to React via context and a headless presentation hook; `@pbui/listener` and `@pbui/chrome` are ready-made components over that binding; `@pbui/theme-genera` is a plain CSS file whose class names and custom properties are the styling contract. Presentations hold `ObjectRef`s, never live objects; refs are resolved through a `Resolver` at gesture and execution time, so stale presentations degrade to an error message instead of acting on dead state.
+This reference documents every public export of the PBUI monorepo (all packages at version 0.1.0). The system is layered: `@go-go-golems/pbui-core` is a framework-free interaction engine (presentation registry, ptype lattice, command tables, accept loop, transcript, invocation log); `@go-go-golems/pbui-react` binds it to React via context and a headless presentation hook; `@go-go-golems/pbui-listener` and `@go-go-golems/pbui-chrome` are ready-made components over that binding; `@go-go-golems/pbui-theme-genera` is a plain CSS file whose class names and custom properties are the styling contract. Presentations hold `ObjectRef`s, never live objects; refs are resolved through a `Resolver` at gesture and execution time, so stale presentations degrade to an error message instead of acting on dead state.
 
 **Stability.** Two surfaces are pinned by tests and must be treated as frozen contracts: the echo grammar — the text rendering produced by `renderRecord`/`renderTranscript` and the echo lines the engine writes (`Command: <name> (arg) {type label}`, `argname (a TYPE) ⇒ …`, `[Abort]`, `Undid: <name>`) — is golden-tested (`packages/core/src/golden.test.ts`, regenerate only deliberately with `GOLDEN_UPDATE=1`); and the presentation state-class names (`pbui-pres`, `pbui-hover`, `pbui-eligible`, `pbui-inert`, `pbui-passthru`, `pbui-related`, `pbui-kbd-target`) are asserted by the e2e/state-class tests. Renaming either is a breaking change even though it compiles.
 
 ## Contents
 
-- [@pbui/core](#pbuicore)
+- [@go-go-golems/pbui-core](#pbuicore)
   - [types](#coretypes) — `ObjectRef`, `valueRef`, `refEquals`, `Resolver`, `Rect`, `PresId`, `PresentationRecord`, `ArgValue`, `ArgValues`, `OutputPart`, `OutputKind`, `OutputRecord`, `PartLike`, `toPart`, `S`, `B`, `E`, `P`, `Unsubscribe`
   - [ptype](#coreptype) — `ParseResult`, `PTypeSpec`, `PType`, `PTypes`, `defineBuiltinPtypes`
   - [registry](#coreregistry) — `RegistryEvent`, `refKey`, `PresentationRegistry`
@@ -17,14 +17,14 @@ This reference documents every public export of the @pbui monorepo (all packages
   - [transcript-text](#coretranscript-text) — `renderRecord`, `renderTranscript`
   - [builder](#corebuilder) — `arg`, `ArgDesc`, `PresOpts`, `TextOpts`, `NumOpts`, `ChoiceOpts`, `ResolvedArgs`, `BuiltCommand`, `CommandBuilder`, `commandBuilder`
   - [invocation](#coreinvocation) — `InvocationStatus`, `CommandInvocation`, `InvocationLog`
-- [@pbui/react](#pbuireact) — `PbuiProvider`, `useEngine`, `useEngineState`, `useTranscript`, `usePbuiSurface`, `usePresentation`, `Presentation`, `SvgPresentation`
-- [@pbui/listener](#pbuilistener) — `Listener`, `PartView`
-- [@pbui/chrome](#pbuichrome) — `ContextMenuHost`, `MouseDocBar`, `StatusLine`, `Pane`, `ActivityPane`
-- [@pbui/theme-genera](#pbuitheme-genera) — CSS custom properties and classes
+- [@go-go-golems/pbui-react](#pbuireact) — `PbuiProvider`, `useEngine`, `useEngineState`, `useTranscript`, `usePbuiSurface`, `usePresentation`, `Presentation`, `SvgPresentation`
+- [@go-go-golems/pbui-listener](#pbuilistener) — `Listener`, `PartView`
+- [@go-go-golems/pbui-chrome](#pbuichrome) — `ContextMenuHost`, `MouseDocBar`, `StatusLine`, `Pane`, `ActivityPane`
+- [@go-go-golems/pbui-theme-genera](#pbuitheme-genera) — CSS custom properties and classes
 
 ---
 
-# @pbui/core
+# @go-go-golems/pbui-core
 
 `packages/core/src/index.ts` re-exports every module below in full.
 
@@ -776,7 +776,7 @@ class InvocationLog {
 
 ---
 
-# @pbui/react
+# @go-go-golems/pbui-react
 
 ### PbuiProvider
 
@@ -907,7 +907,7 @@ The SVG rendering of the same protocol: a `<g>` carrying the gesture props and s
 
 ---
 
-# @pbui/listener
+# @go-go-golems/pbui-listener
 
 ### Listener
 
@@ -931,7 +931,7 @@ Renders one output part: `text` as `<span>`, `bold` as `<b>`, `err` as `<span cl
 
 ---
 
-# @pbui/chrome
+# @go-go-golems/pbui-chrome
 
 ### ContextMenuHost
 
@@ -983,7 +983,7 @@ The invocation log rendered inside a `Pane` (default title `"Activity"`) as a li
 
 ---
 
-# @pbui/theme-genera
+# @go-go-golems/pbui-theme-genera
 
 `packages/theme-genera/src/genera.css` — the shared monochrome Genera/Dynamic-Windows look. Import it once; apply `pbui-root` to the app's outermost element. Chrome stays monochrome; the accent color tokens are intended for text only. These class names and custom properties are the theming API: components reference the classes, applications override the properties.
 

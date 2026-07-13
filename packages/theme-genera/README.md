@@ -1,11 +1,11 @@
-# @pbui/theme-genera
+# @go-go-golems/pbui-theme-genera
 
-This package is a stylesheet, and the stylesheet is a contract. The @pbui components emit structure and class names; every visual decision — what "eligible" looks like, what "inert" looks like, what a menu looks like — lives here as CSS. The shipped look is the monochrome Symbolics Genera / Dynamic Windows aesthetic: ink on paper, monospace, hard borders, marching-ants dashes, inverse-video bars. An alternative theme is an alternative stylesheet implementing the same class vocabulary.
+This package is a stylesheet, and the stylesheet is a contract. The PBUI components emit structure and class names; every visual decision — what "eligible" looks like, what "inert" looks like, what a menu looks like — lives here as CSS. The shipped look is the monochrome Symbolics Genera / Dynamic Windows aesthetic: ink on paper, monospace, hard borders, marching-ants dashes, inverse-video bars. An alternative theme is an alternative stylesheet implementing the same class vocabulary.
 
 ## Use
 
 ```ts
-import "@pbui/theme-genera/genera.css";
+import "@go-go-golems/pbui-theme-genera/genera.css";
 ```
 
 and put `className="pbui-root"` on your application's outermost element.
@@ -24,7 +24,7 @@ These class names are applied by `usePresentation` and asserted by the end-to-en
 | `pbui-passthru` | fallthrough mode during a foreign accept | `pointer-events: none`, no dimming |
 | `pbui-kbd-target` | the keyboard focus cursor | double outline |
 
-Chrome classes (`pbui-menu*`, `pbui-docbar*`, `pbui-status*`, `pbui-pane*`, `pbui-listener*`, `pbui-line*`, `pbui-prompt*`) style the components from `@pbui/chrome` and `@pbui/listener`.
+Chrome classes (`pbui-menu*`, `pbui-docbar*`, `pbui-status*`, `pbui-pane*`, `pbui-listener*`, `pbui-line*`, `pbui-prompt*`) style the components from `@go-go-golems/pbui-chrome` and `@go-go-golems/pbui-listener`.
 
 ## Tokens
 

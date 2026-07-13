@@ -1,4 +1,4 @@
-/* PRESENTA — Metrics II: port of sources/presentation-metrics.jsx onto @pbui.
+/* PRESENTA — Metrics II: port of sources/presentation-metrics.jsx onto PBUI.
  *
  * A Genera-style telemetry dashboard: 6 metrics × 3 nodes = 18 gauge dials,
  * a strip-chart viewport plotting selected histories, and 8 readout ports
@@ -9,14 +9,14 @@
  *
  * Deviations from the original:
  * - The menubar (FILE/TELEM/PLOT/HELP) is subsumed by the background
- *   right-click global-command menu, per the @pbui shell conventions.
+ *   right-click global-command menu, per the PBUI shell conventions.
  * - The alarm event-log pane is dropped; alarm state still shows as hatched
  *   gauge cells and "!ALARM" flags in the viewport lane labels.
  * - "Set Metric Value" and "Inspect" are dropped; "Hardcopy Window" becomes
  *   "Hardcopy" (gauge → unicode sparkline of its history).
  * - The "window" ptype (viewport/listener panes as presentations) is
  *   omitted — no command consumed it after the Hardcopy re-targeting.
- * (No PORTING-GAPS: everything the port needed was expressible in @pbui.)
+ * (No PORTING-GAPS: everything the port needed was expressible in PBUI.)
  */
 
 import { useEffect, useMemo, useRef } from "react";
@@ -29,16 +29,16 @@ import {
   valueRef,
   type ObjectRef,
   type Resolver,
-} from "@pbui/core";
+} from "@go-go-golems/pbui-core";
 import {
   PbuiProvider,
   Presentation,
   SvgPresentation,
   useEngine,
   usePbuiSurface,
-} from "@pbui/react";
-import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@pbui/chrome";
-import { Listener } from "@pbui/listener";
+} from "@go-go-golems/pbui-react";
+import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@go-go-golems/pbui-chrome";
+import { Listener } from "@go-go-golems/pbui-listener";
 import { Store, useStore } from "../../lib/store.js";
 
 /* --------------------------------- domain ---------------------------------- */

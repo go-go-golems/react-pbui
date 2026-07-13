@@ -8,7 +8,7 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
-import type { EngineState, PbuiEngine } from "@pbui/core";
+import type { EngineState, PbuiEngine } from "@go-go-golems/pbui-core";
 
 const EngineCtx = createContext<PbuiEngine<any> | null>(null);
 

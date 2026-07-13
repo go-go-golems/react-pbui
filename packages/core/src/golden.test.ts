@@ -1,6 +1,6 @@
 /* Golden-transcript tests: scripted engine interactions rendered to text
  * and compared against checked-in .txt files. Regenerate deliberately with
- *   GOLDEN_UPDATE=1 pnpm --filter @pbui/core test
+ *   GOLDEN_UPDATE=1 pnpm --filter @go-go-golems/pbui-core test
  * and review the diff like a snapshot. */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";

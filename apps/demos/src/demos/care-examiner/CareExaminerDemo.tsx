@@ -1,4 +1,4 @@
-/* CARE Examiner — port of sources/care-examiner.jsx onto @pbui.
+/* CARE Examiner — port of sources/care-examiner.jsx onto PBUI.
  *
  * A live multiprocessor-simulator console in the Genera style: 16 sites
  * with dithered queue-load strips, a service table, an 8x8 operator torus,
@@ -18,10 +18,10 @@ import {
   valueRef,
   type ObjectRef,
   type Resolver,
-} from "@pbui/core";
-import { PbuiProvider, Presentation, usePbuiSurface } from "@pbui/react";
-import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@pbui/chrome";
-import { Listener } from "@pbui/listener";
+} from "@go-go-golems/pbui-core";
+import { PbuiProvider, Presentation, usePbuiSurface } from "@go-go-golems/pbui-react";
+import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@go-go-golems/pbui-chrome";
+import { Listener } from "@go-go-golems/pbui-listener";
 import { Store, useStore } from "../../lib/store.js";
 
 /* --------------------------------- domain ---------------------------------- */
@@ -478,7 +478,7 @@ function NetworkPane() {
 }
 
 /* small hack: expose the typed engine through context without re-plumbing */
-import { useEngine } from "@pbui/react";
+import { useEngine } from "@go-go-golems/pbui-react";
 function useEngineWorld(): PbuiEngine<World> {
   return useEngine<World>();
 }

@@ -1,6 +1,6 @@
-# The @pbui User Guide
+# The PBUI User Guide
 
-This guide is a textbook for the @pbui framework. It has two parts. Part I explains the presentation-based interface model on its own terms — the model comes from Eugene Ciccarelli's 1984 MIT thesis (*Presentation Based User Interfaces*, AI-TR-794; a transcription lives in this repository, and this guide cites it by line as `aitr-794.md:NN`) and from its descendants, Symbolics Genera's Dynamic Windows and CLIM, the Common Lisp Interface Manager. Part II explains the framework: what each package and module is, which part of the model it implements, and how the parts interlock.
+This guide is a textbook for the PBUI framework. It has two parts. Part I explains the presentation-based interface model on its own terms — the model comes from Eugene Ciccarelli's 1984 MIT thesis (*Presentation Based User Interfaces*, AI-TR-794; a transcription lives in this repository, and this guide cites it by line as `aitr-794.md:NN`) and from its descendants, Symbolics Genera's Dynamic Windows and CLIM, the Common Lisp Interface Manager. Part II explains the framework: what each package and module is, which part of the model it implements, and how the parts interlock.
 
 The order matters. The framework's programming interface is small, and nearly every question about it — why does a command receive already-looked-up objects? why is the right-click menu computed instead of written? why is there a registry when React already keeps a tree of the interface? — has the same kind of answer: because the model requires it. A reader who understands the model can extend the framework; a reader who only knows the function names can copy the demos.
 
@@ -16,7 +16,7 @@ This guide assumes you know React and TypeScript. It does not assume you know an
 5. [The presenter, decomposed](#5-the-presenter-decomposed)
 6. [The recognizer, decomposed](#6-the-recognizer-decomposed)
 7. [The coherence invariant](#7-the-coherence-invariant)
-8. [From the thesis to CLIM to @pbui](#8-from-the-thesis-to-clim-to-pbui)
+8. [From the thesis to CLIM to PBUI](#8-from-the-thesis-to-clim-to-pbui)
 
 **Part II — The framework**
 9. [The package map and the model-to-module map](#9-the-package-map)
@@ -72,7 +72,7 @@ The presentation-based tradition comes with words that this guide uses constantl
 
 **Echo.** When a command is invoked or an argument supplied, the system prints a bold line to the transcript restating what just happened (`Command: Assign Order (order) #1012`). This restatement is called echoing, and the fixed textual shape of these lines is the **echo grammar**.
 
-**Chrome.** The parts of a window that are furniture rather than content: menus, title bars, status bars, borders. In this framework, "the chrome" specifically means the components in the `@pbui/chrome` package — the context menu, the documentation bar, the status line, and pane frames.
+**Chrome.** The parts of a window that are furniture rather than content: menus, title bars, status bars, borders. In this framework, "the chrome" specifically means the components in the `@go-go-golems/pbui-chrome` package — the context menu, the documentation bar, the status line, and pane frames.
 
 **The documentation line** (or **doc line / doc bar**). A one-line strip, usually at the bottom of the screen, that continuously describes what the mouse buttons would do to whatever the pointer is currently over. It is a fixture of Genera's interfaces and of this framework.
 
@@ -134,7 +134,7 @@ The thesis develops a taxonomy of presentations that the framework inherits almo
 
 The thesis splits the presenter into three parts, classified "by the kind of knowledge the functions depend upon" (aitr-794.md:695-697). The split is the single most useful tool this guide can offer for organizing render code, because the three parts map onto three different kinds of code in a React application — and code becomes hard to change exactly when two of them fuse.
 
-**The domain collector** "finds and interprets the relevant part of the data base … It is the part of the presenter that connects with the data base. Given the specification of what is to be selected, it constructs the needed queries" — and, pointedly, it "does not … know anything about the way such information will be presented" (aitr-794.md:713-715). In a @pbui application, the domain collector is your data-selection code: the `useStore(world.store)` subscription, the filter that narrows orders to the current view, the derived totals. It knows the shape of your state and nothing about pixels.
+**The domain collector** "finds and interprets the relevant part of the data base … It is the part of the presenter that connects with the data base. Given the specification of what is to be selected, it constructs the needed queries" — and, pointedly, it "does not … know anything about the way such information will be presented" (aitr-794.md:713-715). In a PBUI application, the domain collector is your data-selection code: the `useStore(world.store)` subscription, the filter that narrows orders to the current view, the derived totals. It knows the shape of your state and nothing about pixels.
 
 **The semantic presenter** "embodies the primary mapping from data base domain to visual domain, the kind of mapping specified by a map legend" (aitr-794.md:717). A map legend says: this line style means a highway; this color means this rainfall. The semantic presenter decides *which visual forms carry which facts*: this order becomes a table row; the customer's name appears as text wrapped in a customer presentation; the status appears as a badge. In the framework, this is the body of your component — the JSX and the `<Presentation>` wrappers.
 
@@ -142,7 +142,7 @@ The thesis splits the presenter into three parts, classified "by the kind of kno
 
 The review heuristic that falls out: when a component resists change, look for fused parts. A component that filters the world *and* chooses visual forms *and* computes layout positions resists all three kinds of change at once. Keep the collector in hooks and selectors, the semantic mapping in the component body, and the organization in reusable containers, and each can vary independently — which is precisely the thesis's argument for the decomposition.
 
-Notice, finally, what this chapter implies about the framework's size: **@pbui contains no presenter machinery at all.** All three presenter parts are ordinary React code that you write. The framework's sole demand on the render side is registration — telling the registry what each form presents — and that is one hook. The framework's real obligations begin where React's end: on the input side.
+Notice, finally, what this chapter implies about the framework's size: **PBUI contains no presenter machinery at all.** All three presenter parts are ordinary React code that you write. The framework's sole demand on the render side is registration — telling the registry what each form presents — and that is one hook. The framework's real obligations begin where React's end: on the input side.
 
 ## 6. The recognizer, decomposed
 
@@ -175,17 +175,17 @@ The framework encodes the invariant in two concrete places:
 - **Per presentation type.** Every ptype can declare two functions: `print`, which produces the canonical text for an object (this is P restricted to text), and `parse`, which reads user-typed text back into an object (R restricted to text). The pair is called the type's **codec** — a coder/decoder pair, the term borrowed from data encoding. The tolerance contract is exactly the thesis's: everything `print` emits, `parse` must accept; `parse` should also accept reasonable variants (a prefix of the name, `1012` for `#1012`); and parsing normalizes to one canonical label. The repository holds this as an executable property: for generated objects `x`, `parse(print(x))` must recover `x`.
 - **For the command loop as a whole.** The echo grammar — the exact text of the lines the engine prints when commands are invoked, arguments supplied, and aborts happen — is pinned by *golden tests*: tests that render scripted interactions to text and compare the result byte-for-byte against checked-in files. The transcript is the observable trace of the recognizer's behavior; freezing its text form is how the implementation keeps the invariant from quietly eroding during refactors.
 
-## 8. From the thesis to CLIM to @pbui
+## 8. From the thesis to CLIM to PBUI
 
 Between 1984 and this framework lie two translations. Knowing which idea entered at which step explains several API shapes that otherwise look arbitrary.
 
 **What CLIM added.** CLIM (the Common Lisp Interface Manager, the 1990s standardization of Genera's Dynamic Windows) made the input side systematic for *command-driven* applications — interfaces where the user's vocabulary is a set of named operations. Presentation types became a **lattice**: a hierarchy with subtyping, so that `milestone` can be declared a subtype of `task` and anything asking for a task accepts a milestone. Commands declared typed parameters. And the **input context** was born — though the thesis had already seen it coming. Describing its command-first control structure, where "the parameter descriptions have control of the selection, prompting the user with the parameter name and documentation, and checking that the argument selected is of the proper type," the thesis remarks: "it would be a relatively simple matter to tailor the mouse-tracking mechanism so that only presentations of the correct type would be sensitive to selection" (aitr-794.md:2067). That sentence *is* the accept loop: make the question visible by making only the possible answers respond. CLIM built it. The framework's marching-ants eligibility is its direct descendant. CLIM also contributed **translators** — rules mapping (gesture, presentation type, context) to commands, which is what makes right-click menus computed rather than written — and elevated **output records** to a central position: everything printed to the interactor stays sensitive, indefinitely.
 
-**What the React translation required and what it paid back.** The required judgment: React's reconciler — the diffing machinery behind the virtual DOM — is a complete, superior implementation of the thesis's *graphics redisplay* process, and of nothing else. It keeps pixels in sync with a declarative description, exactly as the thesis's timestamp-and-dirty-subtree layer did. But the virtual DOM records elements and props — *how to draw* — and is deliberately opaque to semantic queries; it cannot answer "which regions of the screen present order #1012?" So the presentation database must be rebuilt as an explicit store (the registry), and the recognizer as an explicit engine. The dividend: because rendering *is* the presenter (Chapter 5), the framework needs no presenter machinery at all, and the whole of @pbui is the input half of the model plus one store.
+**What the React translation required and what it paid back.** The required judgment: React's reconciler — the diffing machinery behind the virtual DOM — is a complete, superior implementation of the thesis's *graphics redisplay* process, and of nothing else. It keeps pixels in sync with a declarative description, exactly as the thesis's timestamp-and-dirty-subtree layer did. But the virtual DOM records elements and props — *how to draw* — and is deliberately opaque to semantic queries; it cannot answer "which regions of the screen present order #1012?" So the presentation database must be rebuilt as an explicit store (the registry), and the recognizer as an explicit engine. The dividend: because rendering *is* the presenter (Chapter 5), the framework needs no presenter machinery at all, and the whole of PBUI is the input half of the model plus one store.
 
 The full correspondence, which Part II unpacks module by module:
 
-| Model element | Thesis anchor | @pbui |
+| Model element | Thesis anchor | PBUI |
 |---|---|---|
 | application database | :349 | your world; `api.world` in commands |
 | presentation database | :80, :1515-1517 | `PresentationRegistry` |
@@ -209,11 +209,11 @@ The full correspondence, which Part II unpacks module by module:
 
 ```mermaid
 flowchart TD
-    CORE["@pbui/core — the recognizer + the presentation database<br/>ptypes, registry, commands, engine, builder,<br/>transcript, invocations (zero dependencies)"]
-    REACT["@pbui/react — registration for presenters<br/>+ gesture capture for the editor"]
-    LIS["@pbui/listener — the interactor:<br/>transcript display + typed input"]
-    CHR["@pbui/chrome — renderings of engine state:<br/>menus, doc bar, status, activity"]
-    THEME["@pbui/theme-genera — the visual contract<br/>(state classes, tokens)"]
+    CORE["@go-go-golems/pbui-core — the recognizer + the presentation database<br/>ptypes, registry, commands, engine, builder,<br/>transcript, invocations (zero dependencies)"]
+    REACT["@go-go-golems/pbui-react — registration for presenters<br/>+ gesture capture for the editor"]
+    LIS["@go-go-golems/pbui-listener — the interactor:<br/>transcript display + typed input"]
+    CHR["@go-go-golems/pbui-chrome — renderings of engine state:<br/>menus, doc bar, status, activity"]
+    THEME["@go-go-golems/pbui-theme-genera — the visual contract<br/>(state classes, tokens)"]
     APP["your application — world (application database),<br/>ptypes, commands (domain changers), components (presenters)"]
     CORE --> REACT
     REACT --> LIS
@@ -596,5 +596,5 @@ Three mechanisms from the thesis are deliberately absent from the framework. Eac
 | focus cursor / roving tabindex | the keyboard's pointer / one movable Tab stop for the whole layer | Ch. 19 |
 | stale | the presented object no longer exists; defined, handled centrally | Ch. 2, 12 |
 | echo grammar / golden test | the transcript's canonical text form / a test comparing output byte-for-byte against a checked-in file | Ch. 2, 7 |
-| chrome | menus, bars, frames — window furniture; the `@pbui/chrome` package | Ch. 2 |
+| chrome | menus, bars, frames — window furniture; the `@go-go-golems/pbui-chrome` package | Ch. 2 |
 | engine | `PbuiEngine`: the recognizer's implementation and the owner of interaction state | Ch. 2, 9 |

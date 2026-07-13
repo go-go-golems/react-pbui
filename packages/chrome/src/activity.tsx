@@ -3,8 +3,8 @@
  * Describe). Mount it anywhere; requires installUndoCommands(engine). */
 
 import { useSyncExternalStore } from "react";
-import type { CommandInvocation, InvocationStatus } from "@pbui/core";
-import { Presentation, useEngine } from "@pbui/react";
+import type { CommandInvocation, InvocationStatus } from "@go-go-golems/pbui-core";
+import { Presentation, useEngine } from "@go-go-golems/pbui-react";
 import { Pane } from "./pane.js";
 
 const GLYPH: Record<InvocationStatus, string> = {

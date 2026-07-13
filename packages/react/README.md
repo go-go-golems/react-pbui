@@ -1,13 +1,13 @@
-# @pbui/react
+# @go-go-golems/pbui-react
 
-This package binds a `@pbui/core` engine to React. It is deliberately small, because the division of labor is strict: the engine owns every interaction semantic (what a click means, what is eligible, what the menu contains), and React owns rendering. The binding's job is to register what each component presents, route DOM gestures into the engine, and re-render exactly the components whose presentation flags changed.
+This package binds a `@go-go-golems/pbui-core` engine to React. It is deliberately small, because the division of labor is strict: the engine owns every interaction semantic (what a click means, what is eligible, what the menu contains), and React owns rendering. The binding's job is to register what each component presents, route DOM gestures into the engine, and re-render exactly the components whose presentation flags changed.
 
 ## What a presentation is, in React terms
 
 Wrapping rendered content in `<Presentation>` registers a record in the engine's registry for the component's lifetime and attaches the full gesture protocol:
 
 ```tsx
-import { PbuiProvider, Presentation, usePbuiSurface } from "@pbui/react";
+import { PbuiProvider, Presentation, usePbuiSurface } from "@go-go-golems/pbui-react";
 
 <Presentation type="customer" object={{ kind: "customer", id: c.id }} label={c.name}>
   {c.name}

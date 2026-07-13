@@ -1,6 +1,6 @@
-# @pbui/demos
+# @go-go-golems/pbui-demos
 
-Seven applications that exercise the @pbui packages, one Vite app, one launcher. Each demo is a complete, self-contained example of the pattern; together they are also the integration test bed — the `e2e/` suite drives every one of them in a real browser.
+Seven applications that exercise the PBUI packages, one Vite app, one launcher. Each demo is a complete, self-contained example of the pattern; together they are also the integration test bed — the `e2e/` suite drives every one of them in a real browser.
 
 ```sh
 pnpm demos          # from the repo root → http://localhost:5199

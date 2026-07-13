@@ -1,11 +1,11 @@
-# @pbui/chrome
+# @go-go-golems/pbui-chrome
 
 This package supplies the window furniture every presentation-based application needs and none should rebuild: the context menu, the pointer documentation bar, the status line, pane frames, and the activity (command-history) pane. Each component is a rendering of engine state — the chrome contains no interaction logic of its own, which is why swapping or restyling it cannot change what gestures mean.
 
 ## The standard shell
 
 ```tsx
-import { ContextMenuHost, MouseDocBar, StatusLine, Pane, ActivityPane } from "@pbui/chrome";
+import { ContextMenuHost, MouseDocBar, StatusLine, Pane, ActivityPane } from "@go-go-golems/pbui-chrome";
 
 <div className="pbui-root" {...surface}>
   <Pane title="Orders" subtitle="12 of 12">{/* your presentations */}</Pane>
@@ -37,6 +37,6 @@ import { ContextMenuHost, MouseDocBar, StatusLine, Pane, ActivityPane } from "@p
 | `Pane` | bordered titled frame |
 | `ActivityPane` | command history as presentations |
 
-Styling comes entirely from `@pbui/theme-genera` class names (`pbui-menu`, `pbui-docbar`, `pbui-pane`, …); the components emit structure, not appearance.
+Styling comes entirely from `@go-go-golems/pbui-theme-genera` class names (`pbui-menu`, `pbui-docbar`, `pbui-pane`, …); the components emit structure, not appearance.
 
 Deeper material: `docs/user-guide.md`, `docs/api-reference.md`.

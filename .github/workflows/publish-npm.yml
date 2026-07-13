@@ -1,0 +1,83 @@
+name: publish-npm
+
+on:
+  workflow_dispatch:
+    inputs:
+      npm_tag:
+        description: npm dist-tag to publish under
+        required: true
+        default: next
+        type: string
+      dry_run:
+        description: Run npm publish with --dry-run
+        required: true
+        default: true
+        type: boolean
+      skip_existing:
+        description: Skip versions that already exist on npm
+        required: true
+        default: true
+        type: boolean
+      confirm_latest_publish:
+        description: Required for a real latest publish; type CONFIRM_LATEST
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    environment: npm-production
+    permissions:
+      contents: read
+      id-token: write
+    concurrency:
+      group: npm-publish-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      - name: Upgrade npm for trusted publishing
+        run: npm install -g npm@^11.10.0
+
+      - name: Validate release request
+        env:
+          NPM_TAG: ${{ inputs.npm_tag }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          CONFIRM_LATEST: ${{ inputs.confirm_latest_publish }}
+        run: |
+          set -euo pipefail
+          test -n "$NPM_TAG"
+          if [ "$DRY_RUN" = false ] && [ "$NPM_TAG" = latest ] && [ "$CONFIRM_LATEST" != CONFIRM_LATEST ]; then
+            echo 'Real latest publishes require confirm_latest_publish=CONFIRM_LATEST.' >&2
+            exit 1
+          fi
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm run build:publish
+      - run: pnpm run pack:smoke
+
+      - name: Publish packages through npm Trusted Publishing
+        env:
+          NPM_TAG: ${{ inputs.npm_tag }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          SKIP_EXISTING: ${{ inputs.skip_existing }}
+          CONFIRM_LATEST_PUBLISH: ${{ inputs.confirm_latest_publish == 'CONFIRM_LATEST' && 'true' || 'false' }}
+        run: |
+          set -euo pipefail
+          ARGS=(--tag "$NPM_TAG")
+          [ "$DRY_RUN" = true ] && ARGS+=(--dry-run)
+          [ "$SKIP_EXISTING" = true ] && ARGS+=(--skip-existing)
+          pnpm run publish:npm -- "${ARGS[@]}"

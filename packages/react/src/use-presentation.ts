@@ -10,7 +10,7 @@
  */
 
 import { useEffect, useReducer, useRef } from "react";
-import type { ObjectRef, PresentationRecord } from "@pbui/core";
+import type { ObjectRef, PresentationRecord } from "@go-go-golems/pbui-core";
 import { useEngine } from "./provider.js";
 
 export interface UsePresentationInput {

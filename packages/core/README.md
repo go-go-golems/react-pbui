@@ -1,4 +1,4 @@
-# @pbui/core
+# @go-go-golems/pbui-core
 
 This package is the interaction engine for presentation-based UIs, and it has no dependencies — not even React. Everything that gives the paradigm its semantics lives here: the presentation-type lattice, the presentation registry, command tables, the accept loop, undo, and the transcript. The React packages are thin bindings over this one, which is why the entire engine can be unit-tested in Node and why the same engine drives HTML, SVG, and canvas renderers.
 
@@ -18,7 +18,7 @@ The design premise is that a UI framework's render tree records *how to draw*, n
 import {
   PTypes, defineBuiltinPtypes, CommandTable, commandBuilder, arg,
   PbuiEngine, installUndoCommands, renderTranscript, type Resolver,
-} from "@pbui/core";
+} from "@go-go-golems/pbui-core";
 
 const ptypes = new PTypes<World>();
 defineBuiltinPtypes(ptypes);                       // "number", "string"
@@ -48,7 +48,7 @@ console.log(renderTranscript(engine.transcript.lines()));
 // [out ] Refuelled AURORA.
 ```
 
-The engine is driven entirely through methods (`gesture`, `startCommand`, `submitTyped`, `escape`, `undoInvocation`) and observed through subscriptions (`subscribe`, `registry.subscribePres`, `transcript.subscribe`, `invocations.subscribe`) — which is exactly how the tests exercise it and how `@pbui/react` binds it.
+The engine is driven entirely through methods (`gesture`, `startCommand`, `submitTyped`, `escape`, `undoInvocation`) and observed through subscriptions (`subscribe`, `registry.subscribePres`, `transcript.subscribe`, `invocations.subscribe`) — which is exactly how the tests exercise it and how `@go-go-golems/pbui-react` binds it.
 
 ## Key exports
 

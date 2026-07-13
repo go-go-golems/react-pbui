@@ -14,19 +14,19 @@ importers:
 
   apps/demos:
     dependencies:
-      '@pbui/chrome':
+      '@go-go-golems/pbui-chrome':
         specifier: workspace:*
         version: link:../../packages/chrome
-      '@pbui/core':
+      '@go-go-golems/pbui-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@pbui/listener':
+      '@go-go-golems/pbui-listener':
         specifier: workspace:*
         version: link:../../packages/listener
-      '@pbui/react':
+      '@go-go-golems/pbui-react':
         specifier: workspace:*
         version: link:../../packages/react
-      '@pbui/theme-genera':
+      '@go-go-golems/pbui-theme-genera':
         specifier: workspace:*
         version: link:../../packages/theme-genera
       react:
@@ -57,10 +57,10 @@ importers:
 
   packages/chrome:
     dependencies:
-      '@pbui/core':
+      '@go-go-golems/pbui-core':
         specifier: workspace:*
         version: link:../core
-      '@pbui/react':
+      '@go-go-golems/pbui-react':
         specifier: workspace:*
         version: link:../react
     devDependencies:
@@ -85,10 +85,10 @@ importers:
 
   packages/listener:
     dependencies:
-      '@pbui/core':
+      '@go-go-golems/pbui-core':
         specifier: workspace:*
         version: link:../core
-      '@pbui/react':
+      '@go-go-golems/pbui-react':
         specifier: workspace:*
         version: link:../react
     devDependencies:
@@ -104,14 +104,14 @@ importers:
 
   packages/react:
     dependencies:
-      '@pbui/core':
+      '@go-go-golems/pbui-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:
-      '@pbui/chrome':
+      '@go-go-golems/pbui-chrome':
         specifier: workspace:*
         version: link:../chrome
-      '@pbui/listener':
+      '@go-go-golems/pbui-listener':
         specifier: workspace:*
         version: link:../listener
       '@testing-library/dom':

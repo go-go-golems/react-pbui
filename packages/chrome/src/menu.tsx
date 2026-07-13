@@ -7,7 +7,7 @@
  * Home/End jump, Enter/Space activate, printable keys type-ahead. */
 
 import { useEffect, useRef, useState } from "react";
-import { useEngine, useEngineState } from "@pbui/react";
+import { useEngine, useEngineState } from "@go-go-golems/pbui-react";
 
 export function ContextMenuHost() {
   const engine = useEngine();

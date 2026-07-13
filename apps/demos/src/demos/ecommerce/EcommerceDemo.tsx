@@ -20,10 +20,10 @@
  */
 
 import { useEffect, useMemo, useRef } from "react";
-import type { PbuiEngine } from "@pbui/core";
-import { PbuiProvider, usePbuiSurface } from "@pbui/react";
-import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@pbui/chrome";
-import { Listener } from "@pbui/listener";
+import type { PbuiEngine } from "@go-go-golems/pbui-core";
+import { PbuiProvider, usePbuiSurface } from "@go-go-golems/pbui-react";
+import { ContextMenuHost, MouseDocBar, Pane, StatusLine } from "@go-go-golems/pbui-chrome";
+import { Listener } from "@go-go-golems/pbui-listener";
 import { useStore } from "../../lib/store.js";
 import { makeWorld, type World } from "./data.js";
 import { makeEngine } from "./engine.js";

@@ -1,11 +1,11 @@
-# @pbui/listener
+# @go-go-golems/pbui-listener
 
 This package renders the interactor: the scrolling transcript of everything commands print, plus the prompt line that doubles as the command line and the typed-argument input. In a presentation-based UI the transcript is not a log — it is an interaction surface. Objects printed to it remain live presentations, and past commands can be undone from their own echo lines. This package is where those properties become visible.
 
 ## Use
 
 ```tsx
-import { Listener } from "@pbui/listener";
+import { Listener } from "@go-go-golems/pbui-listener";
 
 <Pane title="Listener" bodyStyle={{ padding: 0, display: "flex" }}>
   <Listener style={{ flex: 1 }} prompt="SHOP> " />

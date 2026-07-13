@@ -1,8 +1,27 @@
 {
-  "name": "@pbui/theme-genera",
+  "name": "@go-go-golems/pbui-theme-genera",
   "version": "0.1.0",
   "type": "module",
   "exports": {
     "./genera.css": "./src/genera.css"
+  },
+  "private": false,
+  "description": "PBUI theme-genera package.",
+  "license": "MIT",
+  "author": "Manuel Odendahl",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/go-go-golems/react-pbui.git",
+    "directory": "packages/theme-genera"
+  },
+  "homepage": "https://github.com/go-go-golems/react-pbui/tree/main/packages/theme-genera#readme",
+  "bugs": {
+    "url": "https://github.com/go-go-golems/react-pbui/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build:dist": "node ../../scripts/packages/build-dist.mjs"
   }
 }

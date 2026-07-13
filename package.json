@@ -6,7 +6,10 @@
   "scripts": {
     "test": "pnpm -r --if-present test",
     "typecheck": "pnpm -r --if-present typecheck",
-    "demos": "pnpm --filter @pbui/demos dev"
+    "demos": "pnpm --filter @go-go-golems/pbui-demos dev",
+    "build:publish": "pnpm -r --filter './packages/*' run build:dist",
+    "pack:smoke": "pnpm run build:publish && node scripts/packages/pack-smoke.mjs",
+    "publish:npm": "node scripts/packages/publish-npm.mjs"
   },
   "devDependencies": {
     "typescript": "^5.5.4"

@@ -10,9 +10,9 @@ import {
   valueRef,
   type PresentationRecord,
   type Resolver,
-} from "@pbui/core";
-import { ContextMenuHost, MouseDocBar } from "@pbui/chrome";
-import { Listener } from "@pbui/listener";
+} from "@go-go-golems/pbui-core";
+import { ContextMenuHost, MouseDocBar } from "@go-go-golems/pbui-chrome";
+import { Listener } from "@go-go-golems/pbui-listener";
 import { PbuiProvider, Presentation } from "../index.js";
 
 export interface Site {
